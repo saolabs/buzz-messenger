@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<theme app="Y!Msgr" version="2">
+  <section id="SlotManagerControls" layered="false" caption="false" maximizable="false" minimizable="false" systemmenu="false">
+    <dockpanel id="Main" width="100%" imagefile="BottomPluginPanel.png" resizemargin="5,0,5,5" margin="5,0,3,3">
+      <dockpanel id="UpDownPanel" height="100%" dock="right" >
+        <textbutton id="UpButton" font="defaultfontnormal" dock="top" text=" " type="toggle" height="15" 
+                    iconalign_x="center" iconalign_y="center" icondock="fill" iconfile="..\images\single_arrow_up.png" onestate="true"
+                    imagefile="..\images\btn-single-toolbar.png" resizemargin="5,5,5,5" margin="8,1,8,1" BkgndInvisibleOnNormal="true" />
+        <textbutton id="DownButton" font="defaultfontnormal" dock="bottom" text=" " type="toggle" height="15"
+                    iconalign_x="center" iconalign_y="center" icondock="fill" iconfile="..\images\single_arrow_down.png" onestate="true"
+                    imagefile="..\images\btn-single-toolbar.png" resizemargin="5,5,5,5" margin="8,1,8,1" BkgndInvisibleOnNormal="true" />
+      </dockpanel>
+      <dockpanel id="AddPluginsPanel" dock="left" >
+        <textbutton id="AddPlugins" font="defaultfontnormal" dock="left" align_y="center" text="[Add plugins" type="toggle" margin="10,4,10,4"
+                    iconalign_x="center" iconalign_y="center" iconfile="..\images\addbuddy.png"
+                    textalign_x="center" textalign_y="center" imagefile="..\images\btn-single-small.png" resizemargin="2,11,2,9" BkgndInvisibleOnNormal="true" />
+      </dockpanel>
+    </dockpanel>
+  </section>
+</theme>

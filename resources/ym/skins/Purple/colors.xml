@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<theme>
+<!-- Purple -->
+
+  <syscolors>
+    <!-- system colors (YMJ) -->
+    <color id="3dshadow"		 value="887EA4"/> <!-- TextHost, sunken border -->
+    <!-- COLOR_BTNSHADOW, COLOR_3DSHADOW, COLOR_3DDKSHADOW -->
+    <color id="3dhighlight"  	 value="887EA4"/> <!-- TextHost, sunken border -->
+    <!-- COLOR_3DLIGHT, COLOR_3DHILIGHT, COLOR_3DHIGHLIGHT, COLOR_BTNHILIGHT, COLOR_BTNHIGHLIGHT -->
+    <color id="border"			 value="94,114,139"/> <!-- Toolbar separator, if there is no image -->
+    <!-- COLOR_ACTIVEBORDER -->
+    <color id="border_inactive"  value=""/> <!-- Toolbar shadow pen, Groupbox (if there is no image) -->
+    <!-- COLOR_INACTIVEBORDER -->
+    <color id="caption"			 value=""/> <!-- not found; we use images for caption -->
+    <!-- COLOR_ACTIVECAPTION -->
+    <color id="caption_text"	 value="ff0000"/> <!-- caption text color, if not spec'ed in the font -->
+    <!-- COLOR_CAPTIONTEXT -->
+    <color id="caption_right"	 value=""/>
+    <!-- COLOR_GRADIENTACTIVECAPTION -->
+    <color id="caption_inactive" value="0000ff"/>
+    <!-- COLOR_INACTIVECAPTION -->
+    <color id="caption_inactive_text" value="ff00ff"/>
+    <!-- COLOR_INACTIVECAPTIONTEXT -->
+    <color id="caption_inactive_right" value=""/>
+    <!-- COLOR_GRADIENTINACTIVECAPTION -->
+    <color id="dialog"			 value="249,249,242"/> <!-- ********** login panel, banner ad and status message background ********** -->
+    <!-- Dialog Back COLOR_BTNFACE, COLOR_3DFACE [used for main wnd background] --> 
+    <color id="dialog_text"		 value="333333"/> <!-- Pref/category/selected text and title, chat room selected text and me pane/user ID text -->
+    <!-- COLOR_BTNTEXT -->
+    <color id="disabled_text"	 value="9EA1C4"/> <!-- label for disabled buttons, disabled menu text, menu separator (if no image), menu arrow (if no image) -->
+    <!-- COLOR_GRAYTEXT -->
+    <color id="hot_text"		 value="333333"/> <!-- toolbar / menu / tab highlight text -->
+    <!-- COLOR_HOTLIGHT -->
+    <color id="menubar"			 value=""/> 
+    <!-- COLOR_MENUBAR -->
+    <color id="menu"			 value="FCFCF6"/>
+    <!-- COLOR_MENU -->
+    <color id="menu_text"		 value="48585f"/> <!-- drop down menu text -->
+    <!-- COLOR_MENUTEXT -->
+    <color id="menu_selection"   value=""/> 
+    <!-- COLOR_MENUHILIGHT -->
+    <color id="scrollbar"		 value=""/>
+    <!-- COLOR_SCROLLBAR -->    
+	<color id="selection"		 value="8362d3"/> <!-- ********** group name, pref/category menu highlight - on hover ********** -->
+    <!-- COLOR_HIGHLIGHT -->
+    <color id="selection_text"	 value="ffffff"/> <!-- ********** Pref/category menu text - on hover ********** -->
+    <!-- COLOR_HIGHLIGHTTEXT -->
+    <color id="tooltip"			 value=""/> <!-- Tooltip background -->
+    <!-- COLOR_INFOBK -->
+    <color id="tooltip_text"	 value=""/> <!-- Tooltip text -->
+    <!-- COLOR_INFOTEXT -->
+    <color id="window"			 value="ffffff"/> <!-- Pref/category_privacy, input fields background and IM wnd send input field background -->
+    <!-- COLOR_WINDOW -->
+    <color id="window_text"		 value="333333"/> <!-- Pref, chat room and plug-ins (at the bottom) wnds text -->
+    <!-- COLOR_WINDOWTEXT -->
+    <color id="window_frame"     value="94,114,139"/>
+    <!-- COLOR_WINDOWFRAME -->
+    <color id="workspace"		 value=""/>
+    <!-- COLOR_APPWORKSPACE -->
+
+  </syscolors>
+
+  <!-- ************************************************************************************************* -->
+  <!-- for backward compatibility with YbSkin, these are used to get free-floating objects from the skin -->
+  <colors>
+    <!--color id="servdrawer_b"  value="ff0000"/>
+		<color id="servdrawer_hs" value="00ff00"/>
+		<color id="servdrawer_s"  value="0000ff"/-->
+    <!--color id="progresscolor" value="73b34f"/-->
+    <color id="search_g1" value="ffffff" />
+    <color id="search_g2" value="E2E2E2" /> 
+    <color id="sc_border_color" value="9d9e9f" /> 
+    <color id="fw_bordercolor" value="ffffff" /> 
+    <color id="lvrow_n" value="ffffff" /> 
+    <color id="lvrow_a" value="f4f6fa" /> 
+    <color id="lv_selcolor" value="CBDDF9" />
+    <color id="lv_seltextcolor" value="343233" /> 
+    <color id="lv_insertline" value="6a6a6a" /> 
+    <color id="nplvrow_n" value="ffffff" />
+    <color id="nplvrow_a" value="f4f6fa" /> 
+
+    <!-- colors (Indigo) -->
+    <color id="back" value="249,249,242"/> <!-- ********** Login panel smiley, text and Yahoo! Wed Search background ********** -->
+    <color id="frame_h" value="ffffff"/> 
+    <color id="frame_shadow" value="b3b6b0"/> 
+    <color id="text" value="0"/>  <!-- Pref, chat room, plug-ins (at the bottom) wnds text - same as id="window_text" -->
+    <color id="groupbox_border" value="b3b6b0"/>
+    <color id="groupbox" value="eff0e6"/>
+	
+	<color id="button" value="333333"/> <!-- Button text -->
+    <color id="button_h" value="51,51,51"/> <!-- Button text - on hover -->
+    <color id="button_dh" value="999999"/> <!-- Button text - disabled -->
+    <color id="button_ds" value="999999"/>
+	
+	<color id="menuitem" value="333333"/> <!-- drop down menu text - same as id = "menu_text" -->
+    <!--<color id="menuitem_b" value="999999"/>--> <!-- vlad - drop down menu background! -->
+    <color id="menuitem_h" value="FFFFFF"/> <!-- drop down menu text  - on hover -->
+    <color id="menuitem_d" value="999999"/> <!-- drop down menu disabled text -->
+    <color id="menuitem_dh" value="FFFFFF"/> <!-- drop down menu disabled text - on hover -->
+    <color id="menubar" value="333333"/>
+    <color id="menubar_h" value="333333"/> 
+    <color id="menubar_p" value="333333"/> 
+	
+    <color id="statusbar" value="0"/>
+    <color id="tab" value="48585f"/>
+    <color id="tab_h" value="48585f"/>
+    <color id="tab_p" value="48585f"/>
+<color id="text_tab_checked"     value="102, 75, 151"/> <!-- Tab text -->
+<color id="text_tab_checked_h"   value="102, 75, 151"/> <!-- Tab text - on hover -->
+<color id="text_tab_checked_d"   value="102, 75, 151"/> <!-- Tab text - down -->
+<color id="text_tab_unchecked"   value="129, 129, 129"/> <!-- Tab text -->
+<color id="text_tab_unchecked_h" value="102, 75, 151"/> <!-- Tab text - on hover -->
+<color id="text_tab_unchecked_d" value="102, 75, 151"/> <!-- Tab text - down -->
+    <color id="toolbar_h" value="48585f"/>
+    <color id="toolbar_ds" value="7a8180"/> 
+    <color id="toolbar_dh" value="ffffff"/>
+    <color id="toolbar" value="48585f"/>  <!-- Toolbar icon label text -->
+    <color id="toolbar_border" value="249,249,242"/> <!-- IM wnd/text format background. Click on text icon to see it -->
+    <color id="header" value="0"/>
+    <color id="header_h" value="001d71"/> 
+    <color id="header_ph" value="ffffff"/>
+    <color id="header_dh" value="ffffff"/> 
+    <color id="header_ds" value="7a8180"/> 
+    <color id="control_hb" value="eff0e6"/>
+    <color id="control_ht" value="000000"/> 
+    <color id="control_fb" value="ad86d5"/>  <!-- ********** background color - Pref/title ********** -->
+    <color id="control_ft" value="ffffff"/> 
+    <color id="control_nb" value="ffffff"/> 
+    <color id="control_nt" value=""/>
+    <color id="control_db" value="ffffff"/>
+    <color id="control_dt" value="666666"/> 
+    <color id="billing_bkgnd" value="FFFFCC"/> 
+    <color id="dnd_bkgnd" value="FFFFCC"/> 
+	
+    <color id="slot-caption-border" value="666666"/> <!-- Plug-in module -->
+    <color id="slot-caption-divider" value="cccccc"/> <!-- Plug-in module title bar divider -->
+    <color id="slot-border-gap" value="af9cd8"/> <!-- ********** Plug-in module gap ********** -->
+	<color id="slot-caption-font-color" value="333333"/> <!-- Plug-in module title -->
+    <color id="slot-caption-shadow-font-color" value="FFFFFF"/> <!-- Plug-in module slide out wid title -->
+	
+    <color id="backcolor" value="249,249,242"/> <!-- ********** background color - not sure where ********** -->
+    <color id="mainwndbackcolor" value="249,249,242"/> <!-- ********** Me panel and IM wnd background ********** -->
+    <color id="searchareabackcolor" value="249,249,242"/> <!-- ********** background color - not sure where ********** -->
+    <color id="defaulttextcolor" value="000000"/> <!-- IM wnd user ID text -->
+    <color id="hovertextcolor" value="63,134,207"/> <!-- used for link color - not sure where -->
+    <color id="disabledtextcolor" value="120,120,120"/>
+    <color id="cctextcolor" value="60,75,82"/>
+    <color id="cchovertextcolor" value="63,134,207"/> <!-- Link color - not sure where -->
+    <color id="ccdisabledtextcolor" value="120,120,120"/> 
+    <color id="phonetextcolor" value="120,120,120"/> <!-- PSTN balance/forward text -->
+    <color id="phonelabeltextcolor" value="120,120,120"/> <!-- Forward feature drop down text -->
+    <color id="phonehovertextcolor" value="120,120,120"/> <!-- PSTN balance/forward text - on-hover -->
+    <color id="phonedisabledtextcolor" value="204,204,204"/> <!-- PSTN balance/forward text - disabled -->
+    <color id="displaynametextcolor" value="0,0,0"/> <!-- Contact card user ID -->
+    <color id="defaultshadowcolor" value="FFFFFF"/> 
+    <color id="activecaption" value="FFFFFF"/> 
+    <color id="itactivecaption" value="7a8180"/> 
+    <color id="activemaincaption" value="FFFFFF"/> <!-- Wnds caption bar text -->
+    <color id="itactivemaincaption" value="CCCCCC"/> <!-- Wnds caption bar text - deactivated -->
+	  <color id="text_dim" value="999999"/>
+    <color id="friend_list_group_bkgnd_gradient" value="255,255,255"/>
+	
+    <color id="widget_group_header" value="8362d3"/> <!-- ********** group name color ********** -->
+    <color id="list_view_selection_bkgnd" value="228,222,254"/>
+
+    <color id="menubartext" value="666666"/> <!-- IM wnd top navigation text -->
+    <color id="menubartext_h" value="333333"/> <!-- IM wnd top navigation text - on hover -->
+    <color id="menubartext_d" value="999999"/> <!-- IM wnd top navigation text - deactivated -->
+    <color id="menubartext_p" value="333333"/>
+    <color id="mainmenubartext" value="dcdcdc"/> <!-- Main wnd top navigation text -->
+    <color id="mainmenubartext_h" value="FFFFFF"/> <!-- Main wnd top navigation text - on hover -->
+    <color id="mainmenubartext_d" value="cccccc"/> <!-- Main wnd top navigation text - deactivated -->
+    <color id="mainmenubartext_p" value="FFFFFF"/>
+    <color id="textadcolor" value="0,0,0"/>
+  </colors>
+</theme>

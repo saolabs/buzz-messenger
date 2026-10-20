@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<theme app="Y!Msgr" version="2" >
+  <style id="style.hyperlink" type="toggle" dock="top" font="defaultfontnormal" font_hover="defaultfontunderline" textcolor="text_hyperlink" textcolor_disable="button_ds" textalign_x="left" textalign_y="center" height="16" optional="false"/>
+
+  <section id="LoginWnd" caption="true" maximizable="true" minimizable="true" resizable="true" systemmenu="true" height="400" width="300">
+    <dockpanel id="root"  backcolor="mainwndbackcolor" margin="10,40,10,20">
+      <!-- Animation logo-->
+      
+      <!-- Login credentials info -->
+      <dockpanel id="Credentials" dock="top" align_x="center">
+        <dockpanel dock="top" margin="3,0,0,0">
+          <label id="Cred_YID_Label" dock="fill" text="Yahoo! &amp;ID:" font="defaultfontnormal" height="15" draw_no_prefix="false" textcolor="dialog_text"/>
+        </dockpanel>
+        <edit id="Cred_YID_Edit" dock="top" width="150" min_width="100" height="16" font="defaultfontnormal"/>
+        <dockpanel dock="top" margin="3,5,0,0">
+          <label id="Cred_Pass_Label" dock="fill" text="&amp;Password:" font="defaultfontnormal" height="15" draw_no_prefix="false" textcolor="dialog_text"/>
+        </dockpanel>
+        <edit id="Cred_Pass_Edit" dock="top" width="150" height="16" font="defaultfontnormal" password_field="true" />
+        <dockpanel dock="top" height="10" />
+        <commoncontrol type="Checkbox" id="Cred_Rem_Cred" dock="top" align_x="left" text="&amp;Remember my ID password" font="defaultfontnormal" height="17" width="170" />
+        <commoncontrol type="Checkbox" id="Cred_Auto_Signin" dock="top" align_x="left" text="Sign in &amp;automatically" font="defaultfontnormal" height="17" width="170" />
+        <commoncontrol type="Checkbox" id="Cred_Signin_Invis" dock="top" align_x="left" text="Sign in as inv&amp;isible to everyone" font="defaultfontnormal" height="17" width="170" />
+        <dockpanel dock="top" height="20" />
+        <commoncontrol type="Button" DefaultPushButton="true" id="Cred_SignIn" dock="top" align_x="center" text="&amp;Sign In" enabled="true" height="23" width="80" font="defaultfontnormal"/>
+        <dockpanel dock="top" height="20" />
+        <label id="Language_Label" dock="top" text="&amp;Language:" height="15" draw_no_prefix="false" textcolor="dialog_text"/>
+        <combobox id="Language" dock="top" font="defaultfontnormal" width="150"/>
+      </dockpanel>
+
+      <textbutton id="Help_ForgotPass" text="Forgot your password?" style="style.hyperlink" dock="bottom" align_x="center" handcursor="true" />
+      <textbutton id="Help_Signup" text="Get a new Yahoo! ID" style="style.hyperlink" dock="bottom" align_x="center" handcursor="true"/>
+
+    </dockpanel>
+  </section>
+  
+  <section id="ConnectionWizard" caption="true" text="[Yahoo! Messenger Troubleshooter" maximizable="false" minimizable="false" resizable="true" systemmenu="true" width="430">
+    <dockpanel id="root" backcolor="mainwndbackcolor" >
+      <customattr name="ControlsTabOrder" value ="CW_TestHttpURL,CW_SubmitReport,CW_TestHttpsURL,CW_SubmitReport,CW_ConnPref,CW_Start,CW_Detail,CW_Close" />
+      <dockpanel dock="top" margin="10,5,10,10">
+        <dockpanel dock="left" width="30" height="100%">
+          <image dock="left" id="CW_Icon"  imagefile="..\images\sad-smiley.png" />
+        </dockpanel>
+        <dockpanel dock="top" id="CW_Prompt" margin="4,3,0,0" spacersize="5" show="visible">
+          <event name="OnHide">
+            <action targetid="CW_Start" show="hidden"/>
+          </event>
+          <label id="CW_Prompt_Main_Title" dock="top" text="[There was a problem signing you in to Yahoo! Messenger" height="15" width="100%" textalign_x="left" font="defaultfontnormal" textcolor="dialog_text"/>
+          <label id="CW_Prompt_Title" dock="top" text="[There might be a problem with your Internet connection. Make sure your computer is connected to the Internet. Click Troubleshoot to begin a series of tests to try to diagnose the connection problem." width="100%" multiline="true"  textalign_x="left" font="defaultfontnormal"  height="40" textcolor="dialog_text"/>
+        </dockpanel>
+        <dockpanel dock="top" id="CW_Progress" margin="4,3,0,0" spacersize="5" show="hidden">
+          <event name="OnShow">
+            <action targetid="CW_Detail" show="visible"/>
+          </event>
+          <label id="CW_Progress_Main_Title" dock="top" text="[There was a problem signing you in to Yahoo! Messenger" height="15" width="100%" textalign_x="left" font="defaultfontnormal" textcolor="dialog_text"/>
+          <label id="CW_Progress_Title" dock="top" text="[Performing basic connectivity tests..." width="100%" textalign_x="left" font="defaultfontnormal"  height="15" textcolor="dialog_text"/>
+          <dockpanel dock="top" margin="0,4,15,0" spacersize="5">
+            <slider id="CW_Progress.Progress" dock="top" enabled="false" align_x="center" type="normal" width="202" height="20" imagefile_on="..\images\progress-bar-on.png" imagefile_off="..\images\progress-bar-off.png" position="0"/>
+            <label id="CW_Progress.Description" dock="top" text="....." width="100%" textalign_x="center" font="defaultfontnormal"  height="15" textcolor="dialog_text"/>
+          </dockpanel>
+        </dockpanel>
+        <dockpanel dock="top" id="CW_Result" margin="4,3,0,0" show="hidden">
+          <event name="OnShow">
+            <action targetid="CW_Detail" show="visible"/>
+            <action targetid="CW_Icon" imagefile="..\images\y_bang_smiley.png"/>
+          </event>
+          <dockpanel dock="top" id="CW_Result_Failed_Http" show="hidden">
+            <label id="CW_Result_Failed_Main_Title" dock="top" text="[Yahoo! Messenger has successfully diagnosed what might be the network connection issue." height="40" multiline="true"  width="100%" textalign_x="left" font="defaultfontnormal" textcolor="dialog_text"/>
+            <dockpanel dock="top" height="10" />
+            <label id="CW_Result_Fail_Http_Title" dock="top" text="[Possible problem with HTTP connection" font="defaultfontbold" />
+            <dockpanel dock="top" height="5" />
+            <label id="CW_Result_Fail_Http_Desc_1" dock="top" text="[Verify that you can see web pages you typically browse to in Internet Explorer. If pages don't appear, the Internet Options in Internet Explorer may be incorrect." height="40" multiline="true"  width="100%" textalign_x="left" font="defaultfontnormal" textcolor="dialog_text"/>
+            <dockpanel dock="top">
+              <label id="CW_Test_Link" dock="left" text="[Test link: " height="14" multiline="false" textalign_x="left" font="defaultfontnormal" textcolor="dialog_text"/>
+              <textbutton id="CW_TestHttpURL" dock="left" text="[http://www.yahoo.com" url="http://www.yahoo.com/" handcursor="true" font="defaultfontnormal" font_hover="defaultfontunderline" textcolor="text_hyperlink" textcolor_disable="button_ds" textalign_x="left" textalign_y="center" height="14" >
+                <customattr name="url" value="http://www.yahoo.com/" />
+                <!--<event name="OnClick" >
+                  <action type = "url" url="http://www.yahoo.com/" />
+                </event>-->
+              </textbutton>
+            </dockpanel>
+            <dockpanel dock="top" height="5" />
+            <label id="CW_Result_Fail_Http_Desc_2" dock="top" text="[In Internet Explorer, open the Tools menu and choose Internet Options, then click the Connections tab. Depending on whether your using Dial-up or LAN, verify that your existing connections settings (for example proxy server settings) are correct." height="56" multiline="true"  width="100%" textalign_x="left" font="defaultfontnormal" textcolor="dialog_text"/>
+            <dockpanel dock="top" height="5" />
+            <label id="CW_Result_IE_Version_Waring" dock="top" text="(You must use Internet Explorer to change these settings. These instructions may change depending on the version of Internet Explorer you're using.)" height="40" width="100%" multiline="true" textalign_x="left" font="defaultfontnormal" textcolor="dialog_text"/>
+            <dockpanel dock="top" height="5" />
+            <label id="CW_Result_Fail_Http_Desc_3" dock="top" text="[For more information, check the Windows online help and search for terms like dial up, LAN, or proxy server." height="28" width="100%" multiline="true" textalign_x="left" font="defaultfontnormal" textcolor="dialog_text"/>
+            <dockpanel dock="top" height="5" />
+            <!--<textbutton id="CW_SubmitReport" dock="top" text="[Report the Problem to Yahoo!" font="defaultfontnormal" font_hover="defaultfontunderline" textcolor="text_hyperlink" textcolor_disable="button_ds" textalign_x="left" textalign_y="center" height="14" />-->
+          </dockpanel>
+          <dockpanel dock="top" id="CW_Result_Failed_Login_Server_Http" show="hidden">
+            <label id="CW_Result_Failed_Main_Title" dock="top" text="[Yahoo! Messenger has successfully diagnosed what might be the network connection issue." height="40" multiline="true"  width="100%" textalign_x="left" font="defaultfontnormal" textcolor="dialog_text"/>
+            <dockpanel dock="top" height="10" />
+            <label id="CW_Result_Failed_Login_Server_Http_Title" dock="top" text="[Possible problem with secure HTTP connection (HTTPS)" font="defaultfontbold" />
+            <dockpanel dock="top" height="5" />
+            <label id="CW_Result_Failed_Login_Server_Http_Desc_1" dock="top" text="[Verify that you can see a secure web page in Internet Explorer. If the page doesn't appear, your Internet Options in Internet Explorer may be incorrect." height="40" multiline="true"  width="100%" textalign_x="left" font="defaultfontnormal" textcolor="dialog_text"/>
+            <dockpanel dock="top">
+              <label id="CW_Test_Link" dock="left" text="[Test link: " height="14" multiline="false" textalign_x="left" font="defaultfontnormal" textcolor="dialog_text"/>
+              <textbutton id="CW_TestHttpsURL" dock="left" text="[https://login.yahoo.com" url="https://login.yahoo.com/" handcursor="true" font="defaultfontnormal" font_hover="defaultfontunderline" textcolor="text_hyperlink" textcolor_disable="button_ds" textalign_x="left" textalign_y="center" height="14" >
+                <customattr name="url" value="https://login.yahoo.com/" />
+                <!--<event name="OnClick" >
+                <action type = "url" url="https://login.yahoo.com/" />
+              </event>-->
+              </textbutton>
+            </dockpanel>
+            <dockpanel dock="top" height="5" />
+            <label id="CW_Result_Failed_Login_Server_Http_Desc_2" dock="top" text="[1. In Internet Explorer, open the Tools menu and choose Internet Options, then click the Connections tab." height="28" multiline="true"  width="100%" textalign_x="left" font="defaultfontnormal" textcolor="dialog_text"/>
+            <label id="CW_Result_Failed_Login_Server_Http_Desc_3" dock="top" text="[2. Click LAN settings." height="14" width="100%" multiline="false" textalign_x="left" font="defaultfontnormal" textcolor="dialog_text"/>
+            <label id="CW_Result_Failed_Login_Server_Http_Desc_4" dock="top" text="[3. In the LAN settings dialog, under Proxy server make sure that Use a proxy server for your LAN is set, then click Advanced." height="28" width="100%" multiline="true" textalign_x="left" font="defaultfontnormal" textcolor="dialog_text"/>
+            <label id="CW_Result_Failed_Login_Server_Http_Desc_5" dock="top" text="[4. In the Proxy Settings dialog, verify the Secure server address and port." height="14" multiline="false" width="100%" textalign_x="left" font="defaultfontnormal" textcolor="dialog_text"/>
+            <dockpanel dock="top" height="5" />
+            <label id="CW_Result_IE_Version_Waring" dock="top" text="(You must use Internet Explorer to change these settings. These instructions may change depending on the version of Internet Explorer you're using.)" height="40" width="100%" multiline="true" textalign_x="left" font="defaultfontnormal" textcolor="dialog_text"/>
+            <dockpanel dock="top" height="5" />
+            <label id="CW_Result_Failed_Login_Server_Http_Desc_6" dock="top" text="[For more information, check the Windows online help and search for terms like LAN, or proxy server." height="28" multiline="true"  width="100%" textalign_x="left" font="defaultfontnormal" textcolor="dialog_text"/>
+            <dockpanel dock="top" height="5" />
+            <textbutton id="CW_SubmitReport" dock="top" text="[Report the Problem to Yahoo!" font="defaultfontnormal" font_hover="defaultfontunderline" textcolor="text_hyperlink" textcolor_disable="button_ds" textalign_x="left" textalign_y="center" height="14" />
+          </dockpanel>
+          <dockpanel dock="top" id="CW_Result_Failed_DNS" show="hidden">
+            <label id="CW_Result_Failed_Main_Title" dock="top" text="[Yahoo! Messenger has successfully diagnosed what might be the network connection issue." height="40" multiline="true"  width="100%" textalign_x="left" font="defaultfontnormal" textcolor="dialog_text"/>
+            <dockpanel dock="top" height="10" />
+            <label id="CW_Result_Fail_DNS_Title" dock="top" text="[We are not able to make a connection to the Internet" font="defaultfontbold" />
+            <dockpanel dock="top" height="5" />
+            <label id="CW_Result_Fail_DNS_Desc_1" dock="top" text="[One of the following may be true:" height="14" width="100%" multiline="false" textalign_x="left" font="defaultfontnormal" textcolor="dialog_text"/>
+            <label id="CW_Result_Fail_DNS_Desc_2" dock="top" text="[• You're not connected to the Internet. Check cables, modems, routers, etc." height="28" multiline="true"  width="100%" textalign_x="left" font="defaultfontnormal" textcolor="dialog_text"/>
+            <label id="CW_Result_Fail_DNS_Desc_3" dock="top" text="[• Your Windows Internet options including the Windows Firewall settings are incorrect." height="28" multiline="true"  width="100%" textalign_x="left" font="defaultfontnormal" textcolor="dialog_text"/>
+            <label id="CW_Result_Fail_DNS_Desc_4" dock="top" text="[• There is a problem with your Windows network settings, for example, the DNS settings in your Internet Protocol (IP) settings are incorrect or the DNS server is specified incorrectly or is not responding." height="40" width="100%" multiline="true" textalign_x="left" font="defaultfontnormal" textcolor="dialog_text"/>
+            <dockpanel dock="top" height="5" />
+            <label id="CW_Result_Fail_DNS_Desc_5" dock="top" text="[For more information, check the Windows online help and search for terms like DNS and Firewall." height="28" width="100%" multiline="true" textalign_x="left" font="defaultfontnormal" textcolor="dialog_text"/>
+            <dockpanel dock="top" height="5" />
+            <!--<textbutton id="CW_SubmitReport" dock="top" text="[Report the Problem to Yahoo!" font="defaultfontnormal" font_hover="defaultfontunderline" textcolor="text_hyperlink" textcolor_disable="button_ds" textalign_x="left" textalign_y="center" height="14" />-->
+          </dockpanel>
+          <dockpanel dock="top" id="CW_Result_Success" show="show">
+            <label id="CW_Result_Success_Main_Title" dock="top" text="[It appears that there is a possibly temporary probelm with your connection settings.  You can change the setting in the Connection Preferences dialog." height="40" multiline="true"  width="100%" textalign_x="left" font="defaultfontnormal" textcolor="dialog_text"/>
+            <dockpanel dock="top" height="10" />
+            <label id="CW_Result_Success_Title" dock="top" text="[Fix the connection problem:" font="defaultfontbold" />
+            <dockpanel dock="top" height="5" />
+            <dockpanel dock="top" height="14">
+              <label id="" text="1. " dock="left" font="defaultfontnormal" height="100%"/>
+              <textbutton id="CW_ConnPref" dock="fill" text="[Open Messenger Connection Preferences." font="defaultfontnormal" font_hover="defaultfontunderline" textcolor="text_hyperlink" textcolor_disable="button_ds" textalign_x="left" textalign_y="center" height="100%" />
+            </dockpanel>
+            <label id="CW_Result_Success_Http_Desc" text="[2. Select &quot;Connect via a proxy server&quot; and then &quot;HTTP Proxy&quot;" dock="top" font="defaultfontnormal" height="14"/>
+            <label id="CW_Result_Success_Socks_Desc" text="[2. Select &quot;Connect via a proxy server&quot; and then &quot;SOCKS Proxy&quot;" dock="top" font="defaultfontnormal" height="14"/>
+            <label id="CW_Result_Success_Raw_Desc" text="[2. Select &quot;Connect directly to the Internet&quot;" dock="top" font="defaultfontnormal" height="14"/>
+            <label id="CW_Result_Success_Desc_1" text="[3. Click OK in the Preferences dialog." multiline="false" height="14" dock="top" width="100%" font="defaultfontnormal" />
+            <dockpanel dock="top" height="5" />
+            <label id="CW_Result_Success_Desc_2" text="[Note that this problem may only be temporary. If you experience delays with these new settings, try switching back to your previous connection settings." dock="top" multiline="true" height="40" width="100%" font="defaultfontnormal" />
+          </dockpanel>
+        </dockpanel>
+        
+        <dockpanel id="CW_BtnPanel" dock="top" margin="0,8,0,0" spacersize="8">
+          <textbutton id="CW_Close" dock="right" text="[Close"           type="toggle" height="24" margin="10,0,10,0" resizemargin="4,1,4,1" imagefile="..\images\btn-single-small.png" font="defaultfontnormal" textcolor="button" textalign_x="center" textalign_y="center"/>
+          <textbutton id="CW_Start" dock="right" text="[Troubleshoot >>" type="toggle" height="24" margin="10,0,10,0" resizemargin="4,1,4,1" imagefile="..\images\btn-single-small.png" checked="true" font="defaultfontnormal" textcolor="button" textalign_x="center" textalign_y="center" DefaultPushButton="true" >
+            <!--<event name="OnClick">
+              <action targetid="CW_Prompt" show="hidden"/>
+              <action targetid="CW_Progress" show="show"/>
+            </event>-->
+          </textbutton>
+          <textbutton id="CW_Detail" show="hidden" type="toggle" dock="left" text="[Show &amp;Details" height="24" margin="10,0,10,0" resizemargin="4,1,4,1" imagefile="..\images\btn-single-small.png" font="defaultfontnormal" textcolor="button" textalign_x="center" textalign_y="center" icondock="left" iconalign_x="center" iconalign_y="center" iconfile="..\images\up_down_expand_toggle.png">
+            <!--<event name="OnButtonToggleOn" >
+              <action targetid="CW_Test.Result" show="visible" />
+            </event>
+            <event name="OnButtonToggleOff" >
+              <action targetid="CW_Test.Result" show="hidden" />
+            </event>-->
+          </textbutton>
+        </dockpanel>
+      </dockpanel>
+      <dockpanel id="CW_Test.Result" dock="top" width="100%" height="200" margin="0,1,0,0" show="hidden" backcolor="0,0,0">
+        <dockpanel dock="fill" margin="45,5,10,5" backcolor="mainwndbackcolor">
+          <label id="CW_Rest.Result.Desc" dock="top" text="[This information can help you solve any network problems.  You can also copy and paste this information to share it with a network administrator." height="35" multiline="true" width="100%" textalign_x="left" font="defaultfontnormal" textcolor="dialog_text"/>
+          <dockpanel dock="fill"  backcolor="0,0,0" margin="1,1,1,1">
+            <edit id="CW_Rest.Result.Edit" dock="fill" drawborder="false" multiline="true" vscrollbar="true" font="defaultfontnormal" text="" />
+          </dockpanel>
+        </dockpanel>
+      </dockpanel>
+    </dockpanel>
+  </section>
+  
+</theme>

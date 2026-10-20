@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<theme app="Y!Msgr" version="2" >
+  
+  <section id="FriendList">
+      <!-- The "Me" panel area at the top for the local user status -->
+      <override id="MePanel" dock="top" resizemargin="2,59,160,1" />
+  </section>
+  
+</theme>

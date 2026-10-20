@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<theme app="Y!Msgr" version="2" >
+  <style id="style.skinpicker.preview" dock="top" imagefile="sp_buttons.png" resizemargin="4,4,4,4" iconalign_x="center" iconalign_y="center" icondock="fill" iconfile="..\preview.png" onestate="true" type="toggle" />
+  <style id="style.button.addbuddy" margin="3,3,3,3" resizemargin="2,8,2,8" type="toggle" imagefile="..\images\btn-single-small.png" />
+  <style id="style.button.bluetext" margin="5,2,5,2" font="defaultfontnormal" resizemargin="2,9,2,8" type="toggle" imagefile="..\images\btn-single-small_tr.png" textalign_x="center" textalign_y="center" textcolor="phonetextcolor" textcolor_disable="phonedisabledtextcolor" textcolor_hover="phonehovertextcolor"/>
+  <style id="style.button.dropdown"  textalign_x="left" dock="left" font="defaultfontnormal" onestate="true" iconalign_x="left" iconalign_y="center" icondock="left" imagefile="..\images\btn-single-dropdown-small.png" margin="3,0,15,0" resizemargin="2,0,12,0" type="normal" />
+  <style id="style.conjoinedbutton.left"  textalign_x="left" dock="left" font="defaultfontnormal" BkgndInvisibleOnNormal="true" onestate="true" iconalign_x="left" iconalign_y="center" icondock="left" imagefile="..\images\btn-no-border-left.png" margin="3,0,0,0" resizemargin="2,10,3,8" type="toggle" />
+  <style id="style.conjoinedbutton.right" textalign_x="left" dock="left" font="defaultfontnormal" BkgndInvisibleOnNormal="false" onestate="true" iconalign_x="center" iconalign_y="top" icondock="center" imagefile="..\images\btn-no-border-right.png" margin="3,5,3,0" resizemargin="2,10,3,6" type="toggle" />
+
+  <section id="FriendList" caption="true" maximizable="true" minimizable="true" resizable="true" systemmenu="true" height="400" width="300">
+    <dockpanel id="root"  backcolor="mainwndbackcolor">
+      <!-- The "Me" panel area at the top for the local user status -->
+      <dockpanel dock="top" id="MePanel" height="59" margin="0,2,3,0" imagefile="me_bg.png" resizemargin="2,59,160,1" show="visible" >
+        <dockpanel id="DisplayImageArea" dock="left" height="100%" width="56">
+          <canvas dock="fill">
+            <textbutton id="DisplayImageArea.Background" xpos="0" ypos="0" width="100%" height="100%" />
+            <image id="DisplayImage" dock="left" xpos="4" ypos="4"  width="48" height="48" onestate="true" imagefile="..\images\DefaultFriendIcon.png" handcursor="true">
+              <event name="OnMouseEnter" >
+                <action targetid="display_image_hover_effect" duration="200" easing="true" alpha="255" />
+              </event>
+              <event name="OnMouseLeave" >
+                <action targetid="display_image_hover_effect" duration="200" easing="true" alpha="0" />
+              </event>
+            </image>
+            <dockpanel id="display_image_hover_effect" alpha="0" xpos="0" ypos="0" width="56" height="56" imagefile="DisplayImgOverlay.png" />
+          </canvas>
+        </dockpanel>
+
+        <canvas dock="fill">
+          <textbutton id="StatusArea.Background" xpos="0" ypos="0" width="100%" height="100%" />
+          <dockpanel xpos="0" ypos="0" width="100%" height="100%" id="Status">
+            <dockpanel dock="top" width="100%" height="18" clipedge="right">
+              <!--<textbutton id="Email" margin="3,0,3,0" dock="right" height="100%" BkgndInvisibleOnNormal="true" clipmode="clip" style="style.button.bluetext" onestate="false" iconalign_x="center" iconalign_y="center" icondock="center" iconfile="..\images\email.png"/>-->
+              <textbutton id="InsiderEdge" dock="right" height="100%" type="toggle" BkgndInvisibleOnNormal="true" imagefile="..\images\btn-insider-r.png" resizemargin="0,3,2,3" >
+                <event name="OnMouseEnter" >
+                  <action targetid="InsiderIcon" state="2" />
+                  <action targetid="Insider" state="2" />
+                </event>
+                <event name="OnMouseLeave" >
+                  <action targetid="InsiderIcon" state="0" />
+                  <action targetid="Insider" state="0" />
+                </event>
+                <event name="OnLButtonDown" >
+                  <action targetid="InsiderIcon" state="1" />
+                  <action targetid="Insider" state="1" />
+                </event>
+                <event name="OnLButtonUp" >
+                  <action targetid="InsiderIcon" state="2" />
+                  <action targetid="Insider" state="2" />
+                </event>
+              </textbutton>
+              <textbutton id="Insider" dock="right" text="[Insider" margin="3,0,0,0" height="100%" type="toggle" optional="true" BkgndInvisibleOnNormal="true" imagefile="..\images\btn-insider-m.png" resizemargin="0,3,0,3" >
+                <event name="OnMouseEnter" >
+                  <action targetid="InsiderIcon" state="2" />
+                  <action targetid="InsiderEdge" state="2" />
+                </event>
+                <event name="OnMouseLeave" >
+                  <action targetid="InsiderIcon" state="0" />
+                  <action targetid="InsiderEdge" state="0" />
+                </event>
+                <event name="OnLButtonDown" >
+                  <action targetid="InsiderIcon" state="1" />
+                  <action targetid="InsiderEdge" state="1" />
+                </event>
+                <event name="OnLButtonUp" >
+                  <action targetid="InsiderIcon" state="2" />
+                  <action targetid="InsiderEdge" state="2" />
+                </event>
+              </textbutton>
+              <textbutton id="InsiderIcon" dock="right" margin="3,0,0,0" height="100%" type="toggle" BkgndInvisibleOnNormal="true" imagefile="..\images\btn-insider-l.png" resizemargin="3,3,0,3" iconalign_x="center" iconalign_y="center" icondock="center" iconfile="..\images\yinsider.png">
+                <event name="OnMouseEnter" >
+                  <action targetid="Insider" state="2" />
+                  <action targetid="InsiderEdge" state="2" />
+                </event>
+                <event name="OnMouseLeave" >
+                  <action targetid="Insider" state="0" />
+                  <action targetid="InsiderEdge" state="0" />
+                </event>
+                <event name="OnLButtonDown" >
+                  <action targetid="Insider" state="1" />
+                  <action targetid="InsiderEdge" state="1" />
+                </event>
+                <event name="OnLButtonUp" >
+                  <action targetid="Insider" state="2" />
+                  <action targetid="InsiderEdge" state="2" />
+                </event>
+              </textbutton>
+              <textbutton id="DisplayName" height="100%" optional="true" text="Kurt Hamilton" iconfile="..\images\online.png" font="defaultfontlargebold" style="style.button.dropdown" />
+            </dockpanel>
+            <dockpanel id="StatusTextArea" dock="top" width="100%" margin="0,0,0,0">
+              <dockpanel id="StatusTextButton" width="100%" height="20">
+                <dockpanel dock="right" height="100%" width="18" margin="0,1,0,1">
+                  <textbutton id="StatusDropDown" dock="right" height="100%" width="18" BkgndInvisibleOnNormal="false" iconfile="..\images\single_arrow_down.png" imagefile="..\images\btn-no-border-right.png" style="style.conjoinedbutton.right">
+                    <event name="OnLButtonDown" >
+                      <action state="1" targetid="StatusText" type="normal" />
+                    </event>
+                    <event name="OnLButtonUp" >
+                      <action state="2" targetid="StatusText" type="normal" />
+                    </event>
+                  </textbutton>
+                </dockpanel>
+                <textbutton id="StatusText" dock="fill" optional="false" width="100%" height="100%" BkgndInvisibleOnNormal="false" text="&lt;tell all your friends what&apos;up?&gt;" custom_draw="true" margin="4,0,4,0" style="style.conjoinedbutton.left" resizemargin="2,2,2,2" type="normal" iconfile="..\images\plugin.png" iconalign_x="left" iconalign_y="center" icondock="left" imagefile="btn-single-status.png" textcolor="menubartext">
+                  <event name="OnHide" >
+                    <action targetid="PhoneBar" show="hidden"/>
+                    <action targetid="StatusEditArea" show="visible"/>
+                  </event>
+                  <event name="OnShow" >
+                    <action targetid="StatusEditArea" show="hidden"/>
+                    <action targetid="PhoneBar" show="visible"/>
+                  </event>
+                  <event name="OnClick" >
+                    <action targetid="StatusTextButton" show="hidden"/>
+                    <action targetid="StatusEditArea" show="visible"/>
+                  </event>
+                </textbutton>
+              </dockpanel>
+              <dockpanel id="StatusEditArea" dock="top" show="hidden" clipedge="right" width="100%" height="100%">
+                <textbutton id="StatusDropDownEdit" dock="right"  height="100%" width="18" iconfile="..\images\single_arrow_down.png" imagefile="..\images\btn-right-small.png" style="style.conjoinedbutton.right" />
+                <dockpanel dock="fill" backcolor="145,145,145" margin="1,1,0,1">
+                  <dockpanel dock="fill" backcolor="255,255,255" >
+                    <dockpanel id="StatusDropDownEdit.BorderOutter" dock="top" width="100%" margin="1,1,1,1" backcolor="198,211,255" >
+                      <dockpanel id="StatusDropDownEdit.Border" dock="top" width="100%" height="100%" margin="1,1,1,1" backcolor="181,211,255" >
+                        <dockpanel dock="fill" backcolor="255,255,255" margin="0,1,0,0">
+                          <edit id="StatusMsgEdit" dock="top" drawborder="false" height="14" multiline="true" font="defaultfontnormal">
+                            <customattr name="tall height" value="27"/>
+                            <customattr name="short height" value="14"/>
+                            <event name="OnEnter" >
+                              <action targetid="StatusTextButton" show="visible"/>
+                            </event>
+                            <event name="OnSetFocus">
+                              <action targetid="StatusDropDownEdit.BorderOutter" backcolor="198,211,255" />
+                              <action targetid="StatusDropDownEdit.Border" backcolor="181,211,255" />
+                              <action targetid="StatusMsgURL.BorderOutter" backcolor="255,255,255" />
+                              <action targetid="StatusMsgURL.Border" backcolor="dddddd" />
+                            </event>
+                          </edit>
+                        </dockpanel>
+                      </dockpanel>
+                    </dockpanel>
+                    <dockpanel dock="top" width="100%" height="18" margin="0,0,0,0">
+                      <dockpanel dock="fill" id="StatusMsgURL.BorderOutter" margin="1,1,1,1" backcolor="255,255,255">
+                        <dockpanel dock="fill" id="StatusMsgURL.Border" margin="1,1,1,1" backcolor="dddddd">
+                          <dockpanel dock="fill" backcolor="255,255,255" margin="0,1,0,1">
+                            <textbutton id="StatusMsgURLToggle" show="visible" res_id="1322" text="include web link" dock="top" width="100%" height="100%" textalign_x="left" BkgndInvisibleOnNormal="true" margin="3,0,3,0" textalign_y="center" textcolor="bfbfbf" textcolor_hover="666666" >
+                              <event name="OnShow" >
+                                <action targetid="StatusMsgURL" show="hidden"/>
+                              </event>
+                              <event name="OnHide" >
+                                <action targetid="StatusMsgURL" show="visible"/>
+                              </event>
+                              <event name="OnClick">
+                                <action targetid="StatusMsgURLToggle" show="hidden"/>
+                              </event>
+                            </textbutton>
+
+                            <edit id="StatusMsgURL" dock="top" width="100%" height="100%" drawborder="false"  font="defaultfontnormal">
+                              <event name="OnEnter" >
+                                <action targetid="StatusTextButton" show="visible"/>
+                              </event>
+                              <event name="OnSetFocus">
+                                <action targetid="StatusMsgURL.BorderOutter" backcolor="198,211,255" />
+                                <action targetid="StatusMsgURL.Border" backcolor="181,211,255" />
+                                <action targetid="StatusDropDownEdit.BorderOutter" backcolor="255,255,255" />
+                                <action targetid="StatusDropDownEdit.Border" backcolor="dddddd" />
+                              </event>
+                            </edit>
+                          </dockpanel>
+                        </dockpanel>
+                      </dockpanel>
+                    </dockpanel>
+                  </dockpanel>
+                </dockpanel>
+              </dockpanel>
+            </dockpanel>
+            <dockpanel id="PhoneBar" width="100%" height="18" margin="0,1,0,0" clipedge="none" dock="top" spacersize="3" >
+              <textbutton id="Yahoo360" margin="5,2,5,2" show="hidden" dock="left"  text="Y! 360plus" textalign_x="left" height="100%" BkgndInvisibleOnNormal="true" clipmode="clip" optional="true" style="style.button.bluetext">
+                <event name="OnClick" >
+                  <action type = "url" url="http://vn.360plus.yahoo.com/"/>
+                </event>
+              </textbutton>
+              <!--<textbutton id="Email" margin="3,0,3,0" dock="right" height="100%" BkgndInvisibleOnNormal="true" clipmode="clip" style="style.button.bluetext" onestate="false" iconalign_x="center" iconalign_y="center" icondock="center" iconfile="..\images\email.png"/>-->
+              <textbutton id="Email" margin="3,0,3,0" dock="right" height="100%" BkgndInvisibleOnNormal="true" clipmode="clip" style="style.button.bluetext" onestate="false" iconalign_x="center" iconalign_y="center" icondock="center" iconfile="..\images\email.png"/>
+              <!--<textbutton id="Insider" text="[Insider" margin="3,0,3,0" dock="right" height="100%" BkgndInvisibleOnNormal="true" clipmode="clip" style="style.button.bluetext" iconalign_x="center" iconalign_y="center" icondock="center" iconfile="..\images\yinsider.png"/>-->
+              <textbutton id="GoMobile" margin="5,0,5,0" dock="left" height="100%" BkgndInvisibleOnNormal="true" clipmode="clip" style="style.button.bluetext" iconalign_x="right" iconalign_y="center" icondock="right" iconfile="im_forward_active.png"/>
+              <textbutton id="Voice" margin="2,2,13,2" dock="left" res_id="623" text="[Yahoo! Voice" height="100%" BkgndInvisibleOnNormal="true" clipmode="clip" optional="true" textalign_x="left" iconalign_x="left" iconalign_y="center" icondock="left" iconfile="call_foward_inactive_icon.png" style="style.button.bluetext" resizemargin="2,11,11,3" imagefile="..\images\btn-single-dropdown.png" />
+            </dockpanel>
+          </dockpanel>
+        </canvas>
+      </dockpanel>
+      <!-- system notification area-->
+      <dockpanel id="SysNotification" dock="top" spacersize="5" margin="5,5,5,5" imagefile="info_bg.png" resizemargin="5,5,5,5" show="hidden">
+        <image id="SysNotification.imgIcon" dock="left" align_y="top" show="hidden"/>
+        <imagebutton id="SysNotification.btnClose" dock="right" imagefile="..\images\SysNotif_close.png" show="hidden"/>
+        <customcontrol dock="left" id="SysNotification.Text" width="100%" height="20"/>
+      </dockpanel>
+      <!-- New Toolbar -->
+      <!--<canvas id="BadgeCanvas" dock="top" >-->
+        <dockpanel id="NewToolbar" dock="top" width="100%" >
+          <dockpanel id="NewToolbarLeft" dock="left" width="50%" >
+            <imagebutton id="MenuContacts" dock="right" height="28" align_y="center" align_x="center" resizemargin="1,8,16,0" imagefile="TabMenuLeft.png" show="visible" />
+            <textbutton id="BtnContacts" width="100%" height="28" text="Contacts" align_y="center" align_x="center" checked="true"
+            margin="5,2,5,5" font="defaultfontlargebold" resizemargin="7,11,17,9" type="toggle" imagefile="TabLeft.png"
+            textalign_x="center" textalign_y="bottom" textcolor="text_tab_checked" textcolor_down="text_tab_checked_d" textcolor_hover="text_tab_checked_h">
+            <event name="OnButtonToggleOn" >
+              <action targetid="" textcolor="text_tab_checked" textcolor_down="text_tab_checked_d" textcolor_hover="text_tab_checked_h" />
+            </event>
+            <event name="OnButtonToggleOff" >
+              <action targetid="" textcolor="text_tab_unchecked" textcolor_down="text_tab_unchecked_d" textcolor_hover="text_tab_unchecked_h" />
+            </event>
+            </textbutton>
+          </dockpanel>
+          <dockpanel id="NewToolbarRight" dock="right" width="51%" >
+            <textbutton id="MenuUpdates" dock="right" height="28" width="19" align_y="center" align_x="center" resizemargin="0,0,0,0" imagefile="TabMenuRight.png" show="hidden" />
+            <textbutton id="BtnUpdates" width="100%" height="28" text="Y! Updates" align_y="center" align_x="center"
+            margin="5,2,5,5" font="defaultfontlargebold" resizemargin="7,11,17,9" type="toggle" imagefile="TabRight.png"
+            iconalign_x="center" iconalign_y="bottom" iconfile="new_updates.png" onestate="true"  icondock="left"
+            textalign_x="center" textalign_y="bottom" textcolor="text_tab_unchecked" textcolor_down="text_tab_unchecked_d" textcolor_hover="text_tab_unchecked_h" >
+              <event name="OnButtonToggleOn" >
+                <action targetid="" textcolor="text_tab_checked" textcolor_down="text_tab_checked_d" textcolor_hover="text_tab_checked_h" />
+              </event>
+              <event name="OnButtonToggleOff" >
+                <action targetid="" textcolor="text_tab_unchecked" textcolor_down="text_tab_unchecked_d" textcolor_hover="text_tab_unchecked_h" />
+              </event>
+            </textbutton>
+          </dockpanel>
+        </dockpanel>
+        <!--<dockpanel id="BadgePanel" xpos="0" ypos="0" width="100%" margin="0,0,15,0" >
+          <textbutton id="Badge" text="3" ypos="50" dock="right" imagefile="Badge.png" resizemargin="9,9,9,9" margin="4,3,3,3" textcolor="255,255,255" enable="false" />
+        </dockpanel>-->
+      <!--</canvas>-->
+      <!-- The search contact edit box area-->
+      <dockpanel id="ContactSearchArea" dock="top" width="100%" height="26" margin="7,2,10,1" imagefile="SearchBar.png" resizemargin="40,7,10,7">
+        <!-- Button to clear the search edit box-->
+        <textbutton id="AddBuddy" align_y="center" dock="left"
+                iconalign_x="center" iconalign_y="center" iconfile="addbuddy.png"
+                style="style.button.addbuddy" BkgndInvisibleOnNormal="true" />
+        <dockpanel id="EditArea" width="100%" margin="10,5,4,4" >
+          <imagebutton id="SearchOptions" dock="left" imagefile="SearchOptions.png" onestate="true" enable="false" align_y="top" />
+          <imagebutton id="ClearSearch" dock="right" imagefile="..\images\Clear.png" enable="false" align_y="top" show="hidden" />
+          <!--edit dock="fill" drawborder="false"/-->
+          <customcontrol id="ContactSearchBox" dock="fill" height="13">
+          </customcontrol>
+        </dockpanel>
+      </dockpanel>
+      <!-- Toolbar buttons at the bottom for Add a contact and Conference-->
+
+      <dockpanel id="BottomPluginEdge" dock="bottom" height="7" width="100%" imagefile="BottomPluginEdge.png" resizemargin="7,0,7,0" />
+      <dockpanel id="PluginPanel" dock="bottom" imagefile="PluginPanel.png" width="100%" resizemargin="5,5,5,5" margin="5,3,5,0" spacersize="5" >
+        <textbutton id="PluginsArea.Plugin" font="defaultfontnormal" align_y="center" dock="left" text="[Plug-ins" type="toggle" margin="10,4,10,4"
+                  imagefile="..\images\btn-single-small.png" resizemargin="2,11,2,9" BkgndInvisibleOnNormal="true"
+                  iconalign_x="center" iconalign_y="center" iconfile="..\images\arrow_plugins.png" />
+        <textbutton id="PluginsArea.AddPlugins" font="defaultfontnormal" dock="right" align_y="center" text="[Add plugins" type="toggle" margin="10,4,10,4"
+                    textalign_x="center" textalign_y="center" imagefile="..\images\btn-single-small.png" resizemargin="2,11,2,9" BkgndInvisibleOnNormal="true" />
+      </dockpanel>
+      <dockpanel backcolor="145,145,145" dock="fill" margin="1,1,1,1" spacer="2">
+        <customcontrol id="EmptyFriendListPromo" show="hidden" dock="bottom" width="100%" minheight="300"/>
+        <customcontrol id="Updates" text="Updates" show="hidden" dock="top" width="100%" height="100%"/>
+        <customcontrol id="FriendList" dock="fill" minwidth="175" minheight="100" SelectedBkgnd="images\bg_selected.png" HoveredBkgnd="images\bg_hover.png" RowHeightSingle="19" RowHeightDouble="36" AvatarOffsetLeft="18" AvatarOffsetTop="2" OpiOffsetLeft="5" OpiOffsetTop="5" NameOffsetLeft="6" NameOffsetTop="3" StatusOffsetTop="18"  AvatarOffsetLeft1="18" OpiOffsetLeft1="5" NameOffsetLeft1="5"  />
+      </dockpanel>
+    </dockpanel>
+  </section>
+
+  <style id="style.GM.SingleButton" font="defaultfontnormal" textcolor="cctextcolor" textcolor_hover="cchovertextcolor" textalign_x="center" textalign_y="center" />
+
+  <!-- SkinPicker Pop-up Window -->
+  <section id="SkinPickerWnd" layered="false" caption="false" topmost="false" backgroundmove="false" resizable="false" minimizable="false" maximizable="false" systemmenu="false" ontaskbar="false" > <!--width="400"-->
+    <dockpanel id="root" backcolor="252,252,246" outline="true" outlinecolor="0,0,0" resizemargin="4,4,4,4" margin="3,2,3,2">
+      <!--imagefile=".\sp_background.png"  backcolor="255,0,0" outline="true" outlinecolor="0,0,0" -->
+      <!-- Close button -->
+      <!--<dockpanel dock="top" margin="3,0,0,0">
+        <label dock="left" id="Skins" text="Skins" textcolor="defaulttextcolor" font="defaultfontnormal" textalign_y="center" />
+        <imagebutton id="CloseButton" dock="right" type="4" imagefile="..\images\close.png" />
+      </dockpanel>-->
+      <dockpanel dock="top" width="100%">
+        <textbutton id="LeftArrow" height="13" imagefile="..\images\btn-single-small.png" iconfile="scroll_u.png" align_x="center" align_y="center" margin="1,3,1,3" resizemargin="3,3,3,3" type="toggle" width="100%" />
+      </dockpanel>
+      <dockpanel dock="top" spacersize="5" margin="0,0,0,0" >
+        <textbutton id="thumb0" style="style.skinpicker.preview" />
+        <textbutton id="thumb1" style="style.skinpicker.preview" />
+        <textbutton id="thumb2" style="style.skinpicker.preview" />
+        <textbutton id="thumb3" style="style.skinpicker.preview" />
+        <textbutton id="thumb4" style="style.skinpicker.preview" />
+        <textbutton id="thumb5" style="style.skinpicker.preview" />
+        <textbutton id="thumb6" style="style.skinpicker.preview" />
+      </dockpanel>
+      <dockpanel dock="top" width="100%">
+        <textbutton id="RightArrow" height="13" imagefile="..\images\btn-single-small.png" iconfile="scroll_d.png" align_x="center" align_y="center" margin="1,3,1,3" resizemargin="3,3,3,3" type="toggle" width="100%" />
+      </dockpanel>
+    </dockpanel>
+  </section>
+  
+  <!-- FeatureCue Pop-up Window -->
+  <section id="FeatureCue" layered="true" caption="false" topmost="false" backgroundmove="false" resizable="false" minimizable="false" maximizable="false" systemmenu="false" ontaskbar="false" >
+    <dockpanel id="root" imagefile="FeatureCue.png" resizemargin="140,40,40,40" margin="30,40,40,30" spacersize="10">
+      <!--<label dock="top" id="TestLabel" text="Your friends are up to something! Your friends are up to something!" textcolor="defaulttextcolor" font="defaultfontnormal" align_y="center" textalign_x="left" textalign_y="center" />-->
+      <dockpanel id="left" dock="left">
+        <image id="FeatureCueImage" dock="left" imagefile="FeatureCueImage.png" enabled="false" />
+      </dockpanel>
+      <dockpanel id="right" dock="left" width="150" spacersize="10">
+        <dockpanel id="top" dock="top" width="100%" spacersize="10">
+          <imagebutton id="CloseButton" dock="right" type="4" imagefile="..\images\close.png" />
+          <label dock="left" id="Line1" width="100%" text="Line 1" multiline="true" textcolor="defaulttextcolor" font="defaultfontbold" align_y="center" textalign_x="left" textalign_y="center" />
+        </dockpanel>
+        <dockpanel id="bottom" dock="top" width="100%" spacersize="10">
+          <label dock="top" id="Line2" width="100%" text="Line 2" multiline="true" textcolor="defaulttextcolor" font="defaultfontnormal" align_y="center" textalign_x="left" textalign_y="center" />
+          <label dock="top" id="Line3" width="100%" text="Line 3" multiline="true" textcolor="defaulttextcolor" font="defaultfontnormal" align_y="center" textalign_x="left" textalign_y="center" />
+          <label dock="top" id="Line4" width="100%" text="Line 4" multiline="true" textcolor="defaulttextcolor" font="defaultfontnormal" align_y="center" textalign_x="left" textalign_y="center" />
+        </dockpanel>
+      </dockpanel>
+    </dockpanel>
+  </section>
+</theme>

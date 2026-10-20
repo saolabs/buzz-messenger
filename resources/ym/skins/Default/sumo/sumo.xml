@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<theme app="Y!Msgr" version="2" >
+
+  <style id="sumo.button" imagefile="..\images\btn-single-small.png" type="toggle" dock="top" font="defaultfontnormal" textcolor="button" textcolor_disable="button_ds" textcolor_hover="button_h" textalign_x="center" textalign_y="center" height="24" margin="5,3,5,3" resizemargin="4,1,4,1" />
+
+  <section id="sumo" caption="true" maximizable="false" minimizable="false" resizable="false" systemmenu="true" height="300" width="400">
+    <dockpanel id="popup" minwidth="254" >
+      <dockpanel id="background" dock="fill" imagefile="background.png" resizemargin="26,50,26,10" margin="6,6,6,6">
+          <!-- Middle area with the splash image and action buttions -->
+          <dockpanel dock="top" spacersize="10">
+            <dockpanel id="DisplayImageArea" dock="left" width="120" height="240">
+              <image id="SplashImage" dock="fill" imagefile="sumo_splash.png" height="240" width="120" />
+              <dockpanel id="AvatarSection" show="hidden" dock="fill">
+                <dockpanel width="20" dock="left"/>
+                <customcontrol id="Avatar" height="128" width="86" />
+              </dockpanel>
+            </dockpanel>
+            <dockpanel dock="top" id="Titlepacer" width="100%" height="36" />
+            <dockpanel id="Congratstext" dock="fill">
+              <label dock="top" id="Congrats" res_id="226" text="[Congratulations!" font="defaultfontlargebold" textalign_x="left" textalign_y="center" />
+              <dockpanel dock="top" id="Congratspacer" width="100%" height="16" />
+              <label dock="top" width="290" multiline="true" id="Displaytext" res_id="223" text="[Because you're a valued user, we're giving you the prestigious Yahoo! Messenger All-Stars Award. A crown will appear next to your name:" textalign_x="left" textalign_y="top" font="defaultfontnormal"/>
+              <dockpanel dock="top" id="DisplayBarspacer" width="100%" height="6" />
+              <dockpanel dock="top" spacersize="3" margin="10,6,10,6" backcolor="255,255,255">
+                <image id="OnlineImg" dock="left" imagefile="..\images\online.png" />
+                <label id="DisplayName" dock="left" text="[Lara Sampson" textcolor="0,0,0"/>
+                <image id="SumoImg" dock="left" imagefile="..\sumo\1.png" />                  
+              </dockpanel>
+            </dockpanel>
+          </dockpanel>
+          <dockpanel dock="top" id="Actionspanelspacer" width="100%" height="10" />
+          <dockpanel id="ActionsPanel" dock="bottom" margin="0,0,0,0" spacersize="4" width="100%">
+            <textbutton id="Learnmore" dock="left" res_id="496" text="[Learn More..." BkgndInvisibleOnNormal="true" font="defaultfontnormal" textcolor="button" textcolor_hover="text_user_hyperlink">
+              <customattr name="Launch URL" value="sumo learn more"/>
+            </textbutton>
+            <textbutton id="NoThanks" dock="right" res_id="248" text="[No Thanks" style="sumo.button" />
+            <textbutton id="ShowIcon" dock="right" res_id="249" text="[Show This Icon" style="sumo.button">
+              <customattr name="Launch URL" value="sumo manage"/>
+            </textbutton>
+          </dockpanel>
+        </dockpanel>
+      </dockpanel>
+  </section>
+</theme>

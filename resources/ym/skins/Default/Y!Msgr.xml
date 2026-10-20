@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<theme app="Y!Msgr" version="2" >
+  <section caption="1" composited="0" height="800" id="MainWindow" resizable="1" width="300" >
+    <dockpanel backcolor="backcolor" id="root">
+      <customcontrol id="MyStatusPane" dock="top" width="260" height="54" />
+      <dockpanel id="Main" dock="fill">
+        <dockpanel id="PluginWnd" dock="bottom" width="100%" height="300" splitter="true" imagefile_splitter="splitterbarH.jpg">
+          <customcontrol id="SlotMgrWnd" dock="fill" width="100%" />?
+        </dockpanel>
+        <dockpanel id="BuddyListArea" dock="fill" width="100%">
+          <customcontrol id="BuddySearch" dock="top" width="100%" height="36" />
+          <customcontrol id="PstnAcctInfo" dock="bottom" width="100%" height="22" />
+          <customcontrol id="BuddyListView" dock="fill" width="100%" />
+        </dockpanel>
+      </dockpanel>
+    </dockpanel>
+  </section>
+  <section caption="1" composited="0" height="800" id="main" resizable="1" width="1000" >
+    <dockpanel backcolor="backcolor" id="root" >
+      <dockpanel dock="top" >
+        <imagebutton dock="left" imagefile="smile-button.PNG" />
+        <combobox dock="left" height="25" width="50%" />
+      </dockpanel>
+      <dockpanel dock="top" spacersize="0" >
+        <canvas dock="left" height="3" show="invisible" width="5" />
+        <imagebutton dock="left" imagefile="m-pab_add1.png" />
+        <canvas height="3" show="invisible" width="3" />
+        <imagebutton dock="left" imagefile="m-pab_mlist1.png" type="toggle" />
+        <imagebutton align_x="left" dock="left" imagefile="m-pab-abook.png" type="toggle" />
+        <imagebutton align_y="center" dock="right" imagefile="m-msg-360.png" />
+        <imagebutton align_y="center" dock="right" imagefile="m-msg-vmail.png" />
+        <imagebutton align_y="center" dock="right" imagefile="m-msg-email.png" />
+      </dockpanel>
+      <dockpanel backcolor="0,128,128" dock="bottom" enabled="false" margin="2,2,2,2" outline="true" outlinecolor="defaulttextcolor" >
+        <imagebutton enabled="true" imagefile="smile-button.png" />
+        <edit align_y="center" dock="right" height="25" optional="false" width="90%" />
+      </dockpanel>
+      <dockpanel backcolor="255,255,128" dock="bottom" margin="3,3,3,3" >
+        <image align_x="center" align_y="center" dock="bottom" imagefile="ad.png" />
+      </dockpanel>
+      <dockpanel dock="bottom" margin="5,5,5,5" >
+        <dockpanel backcolor="0,0,0" dock="fill" minheight="70" />
+        <textbutton font="defaultfontlargebold" show="visible" text="Plug-ins" textcolor="defaulttextcolor" />
+      </dockpanel>
+    </dockpanel>
+  </section>
+  <section caption="1" composited="0" height="800" id="chat" resizable="1" width="1000" >
+    <dockpanel backcolor="backcolor" id="root" >
+      <dockpanel dock="top" >
+        <canvas >
+          <!--Webcam Button-->
+          <textbutton height="100%" id="WebcamButton" imagefile="m-blank-im-conv-tbar.png" resizemargin="5,2,5,5" width="100%" >
+            <event name="OnLButtonDown" >
+              <action Height="7" height="6" targetid="WebcamButtonTopSpace" />
+              <action targetid="WebcamButtonLeftSpace" width="2" />
+            </event>
+            <event name="OnLButtonUp" >
+              <action height="5" targetid="WebcamButtonTopSpace" />
+              <action targetid="WebcamButtonLeftSpace" width="1" />
+            </event>
+          </textbutton>
+          <dockpanel >
+            <canvas dock="left" height="1" id="WebcamButtonLeftSpace" targetid="WebcamButtonLeftSpace" width="1" />
+            <dockpanel dock="left" resizemargin="3,3,5,5" >
+              <canvas Height="7" dock="top" height="5" id="WebcamButtonTopSpace" targetid="WebcamButtonTopSpace" width="1" />
+              <image align_x="center" dock="top" imagefile="WebCam.png" />
+              <dockpanel dock="top" >
+                <canvas dock="left" id="space" width="5" />
+                <label align_x="center" dock="left" text="Webcam" />
+                <canvas dock="right" height="1" id="space" width="7" />
+              </dockpanel>
+              <canvas dock="bottom" height="5" width="1" />
+            </dockpanel>
+            <canvas dock="right" height="1" id="WebcamButtonRightSpace" width="1" />
+          </dockpanel>
+        </canvas>
+        <canvas >
+          <!--Games Button-->
+          <textbutton height="100%" id="GamesButton" imagefile="m-blank-im-conv-tbar.png" resizemargin="5,2,5,5" width="100%" >
+            <event name="OnLButtonDown" >
+              <action Height="7" height="6" targetid="GamesButtonTopSpace" />
+              <action targetid="GamesButtonLeftSpace" width="2" />
+            </event>
+            <event name="OnLButtonUp" >
+              <action height="5" targetid="GamesButtonTopSpace" />
+              <action targetid="GamesButtonLeftSpace" width="1" />
+            </event>
+          </textbutton>
+          <dockpanel >
+            <canvas dock="left" height="1" id="GamesButtonLeftSpace" targetid="GamesButtonLeftSpace" width="1" />
+            <dockpanel dock="left" resizemargin="3,3,5,5" >
+              <canvas Height="7" dock="top" height="5" id="GamesButtonTopSpace" targetid="GamesButtonTopSpace" width="1" />
+              <image align_x="center" dock="top" imagefile="games.png" />
+              <dockpanel dock="top" >
+                <canvas dock="left" id="space" width="5" />
+                <label align_x="center" dock="left" text="Games" />
+                <canvas dock="right" height="1" id="space" width="7" />
+              </dockpanel>
+              <canvas dock="bottom" height="5" width="1" />
+            </dockpanel>
+            <canvas dock="right" height="1" id="GamesButtonRightSpace" width="1" />
+          </dockpanel>
+        </canvas>
+        <canvas >
+          <!--Plugins Button-->
+          <textbutton height="100%" id="PluginsButton" imagefile="m-blank-im-conv-tbar.png" resizemargin="5,2,5,5" targetid="PluginsButton" width="100%" >
+            <event name="OnLButtonDown" >
+              <action Height="7" height="6" targetid="PluginsButtonTopSpace" />
+              <action targetid="PluginsButtonLeftSpace" width="2" />
+            </event>
+            <event name="OnLButtonUp" >
+              <action height="5" targetid="PluginsButtonTopSpace" />
+              <action targetid="PluginsButtonLeftSpace" width="1" />
+            </event>
+          </textbutton>
+          <dockpanel >
+            <canvas dock="left" height="1" id="PluginsButtonLeftSpace" targetid="PluginsButtonLeftSpace" width="1" />
+            <dockpanel dock="left" resizemargin="3,3,5,5" >
+              <canvas Height="7" dock="top" height="5" id="PluginsButtonTopSpace" targetid="PluginsButtonTopSpace" width="1" />
+              <image align_x="center" dock="top" imagefile="Plugins.png" />
+              <dockpanel dock="top" >
+                <canvas dock="left" id="space" width="5" />
+                <label align_x="center" dock="left" text="Plug-ins" />
+                <canvas dock="right" height="1" id="space" width="7" />
+              </dockpanel>
+              <canvas dock="bottom" height="5" width="1" />
+            </dockpanel>
+            <canvas dock="right" height="1" id="PluginsButtonRightSpace" width="1" />
+          </dockpanel>
+        </canvas>
+        <canvas >
+          <!--SendFile Button-->
+          <textbutton height="100%" id="SendFileButton" imagefile="m-blank-im-conv-tbar.png" resizemargin="5,2,5,5" width="100%" >
+            <event name="OnLButtonDown" >
+              <action Height="7" height="6" targetid="SendFileButtonTopSpace" />
+              <action targetid="SendFileButtonLeftSpace" width="2" />
+            </event>
+            <event name="OnLButtonUp" >
+              <action height="5" targetid="SendFileButtonTopSpace" />
+              <action targetid="SendFileButtonLeftSpace" width="1" />
+            </event>
+          </textbutton>
+          <dockpanel >
+            <canvas dock="left" height="1" id="SendFileButtonLeftSpace" targetid="SendFileButtonLeftSpace" width="1" />
+            <dockpanel dock="left" resizemargin="3,3,5,5" >
+              <canvas Height="7" dock="top" height="5" id="SendFileButtonTopSpace" targetid="SendFileButtonTopSpace" width="1" />
+              <image align_x="center" dock="top" imagefile="SendFile.png" />
+              <dockpanel dock="top" >
+                <canvas dock="left" id="space" width="5" />
+                <label align_x="center" dock="left" text="SendFile" />
+                <canvas dock="right" height="1" id="space" width="7" />
+              </dockpanel>
+              <canvas dock="bottom" height="5" width="1" />
+            </dockpanel>
+            <canvas dock="right" height="1" id="SendFileButtonRightSpace" width="1" />
+          </dockpanel>
+        </canvas>
+        <canvas >
+          <!--PhotoShare Button-->
+          <textbutton height="100%" id="PhotoShareButton" imagefile="m-blank-im-conv-tbar.png" resizemargin="5,2,5,5" width="100%" >
+            <event name="OnLButtonDown" >
+              <action Height="7" height="6" targetid="PhotoShareButtonTopSpace" />
+              <action targetid="PhotoShareButtonLeftSpace" width="2" />
+            </event>
+            <event name="OnLButtonUp" >
+              <action height="5" targetid="PhotoShareButtonTopSpace" />
+              <action targetid="PhotoShareButtonLeftSpace" width="1" />
+            </event>
+          </textbutton>
+          <dockpanel >
+            <canvas dock="left" height="1" id="PhotoShareButtonLeftSpace" targetid="PhotoShareButtonLeftSpace" width="1" />
+            <dockpanel dock="left" resizemargin="3,3,5,5" >
+              <canvas Height="7" dock="top" height="5" id="PhotoShareButtonTopSpace" targetid="PhotoShareButtonTopSpace" width="1" />
+              <image align_x="center" dock="top" imagefile="PhotoShare.png" />
+              <dockpanel dock="top" >
+                <canvas dock="left" id="space" width="5" />
+                <label align_x="center" dock="left" text="Photos" />
+                <canvas dock="right" height="1" id="space" width="7" />
+              </dockpanel>
+              <canvas dock="bottom" height="5" width="1" />
+            </dockpanel>
+            <canvas dock="right" height="1" id="PhotoShareButtonRightSpace" width="1" />
+          </dockpanel>
+        </canvas>
+        <canvas >
+          <!--Conference Button-->
+          <textbutton height="100%" id="ConferenceButton" imagefile="m-blank-im-conv-tbar.png" resizemargin="5,2,5,5" width="100%" >
+            <event name="OnLButtonDown" >
+              <action Height="7" height="6" targetid="ConferenceButtonTopSpace" />
+              <action targetid="ConferenceButtonLeftSpace" width="2" />
+            </event>
+            <event name="OnLButtonUp" >
+              <action height="5" targetid="ConferenceButtonTopSpace" />
+              <action targetid="ConferenceButtonLeftSpace" width="1" />
+            </event>
+          </textbutton>
+          <dockpanel >
+            <canvas dock="left" height="1" id="ConferenceButtonLeftSpace" targetid="ConferenceButtonLeftSpace" width="1" />
+            <dockpanel dock="left" resizemargin="3,3,5,5" >
+              <canvas Height="7" dock="top" height="5" id="ConferenceButtonTopSpace" targetid="ConferenceButtonTopSpace" width="1" />
+              <image align_x="center" dock="top" imagefile="Conference.png" />
+              <dockpanel dock="top" >
+                <canvas dock="left" id="space" width="5" />
+                <label align_x="center" dock="left" text="Conference" />
+                <canvas dock="right" height="1" id="space" width="7" />
+              </dockpanel>
+              <canvas dock="bottom" height="5" width="1" />
+            </dockpanel>
+            <canvas dock="right" height="1" id="ConferenceButtonRightSpace" width="1" />
+          </dockpanel>
+        </canvas>
+      </dockpanel>
+    </dockpanel>
+  </section>
+</theme>

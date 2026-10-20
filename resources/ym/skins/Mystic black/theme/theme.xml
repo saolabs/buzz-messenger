@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<theme>
+<styles>
+<!-- the imagefile should have both the active and inactive states in it (identical sizes) -->
+      	<style id="mainframewindow" imagefile="mainframewindow.png" logo="Yahoo!_Messenger.png"
+                ellipsis="ellipsis.png" 
+				resizemargin="4,44,4,5"
+				resizemargin_top="10,0,170,0"
+				resizemargin_bottom="3,0,9,0"
+				resizemargin_left="0,0,0,9"
+				resizemargin_right="0,0,0,9"
+				active_font="defaultfontbold" active_textcolor="activemaincaption"
+				inactive_font="defaultfontbold" inactive_textcolor="itactivemaincaption"
+				icon_xpos="10" icon_ypos="7"
+				title_xpos="-100" title_ypos="-100"/>
+				
+		<style id="framewindow" imagefile="framewindow.png"
+				resizemargin="3,28,5,4"
+				resizemargin_top="10,0,170,0"
+				resizemargin_bottom="0,0,9,0"
+				resizemargin_left="0,1,0,9"
+				resizemargin_right="0,1,0,9"
+				active_font="defaultfontbold" active_textcolor="activemaincaption"
+				inactive_font="defaultfontbold" inactive_textcolor="itactivemaincaption"
+				icon_xpos="10" icon_ypos="6"
+				title_xpos="30" title_ypos="0"/>
+  	</styles>
+</theme>

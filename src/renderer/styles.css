@@ -1,0 +1,1118 @@
+/* Số đo, màu, font lấy từ skin Y!M 10 (FriendList.xml, IMWindow.xml, colors.xml, fonts.xml).
+   Tahoma 8pt = 11px; máy không có Tahoma (Ubuntu) dùng Verdana/DejaVu Sans. */
+:root {
+  /* --ts: hệ số cỡ chữ (Cỡ chữ trong menu Xem), độc lập với zoom của cả cửa sổ. */
+  --ts: 0.92;
+  --font: Tahoma, Verdana, "DejaVu Sans", "Segoe UI", sans-serif;
+  --back: rgb(249, 249, 242);
+  --text: #333;
+  --dim: #999;
+  --border: rgb(145, 145, 145);
+  --history-border: rgb(162, 162, 162);
+  --selection: #8362d3;
+  --tab-on: rgb(102, 75, 151);
+  --tab-off: rgb(129, 129, 129);
+  --link: #3399cc;
+  --menu: #fcfcf6;
+  /* Mặc định theo Purple; useSkinColors() ghi đè theo colors.xml của skin đang dùng. */
+  --tb-text: #333;
+  --status-text: #000;
+  --menubar-text: #666;
+  --menubar-text-h: #333;
+  --mainmenubar-text: #dcdcdc;
+  --mainmenubar-text-h: #fff;
+  --menu-text: #333;
+  --menu-text-h: #fff;
+  --name-text: #000;
+  --list-bg: #fff;
+  --list-hover: rgb(228, 222, 254);
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--back);
+  font: calc(11px * var(--ts)) var(--font);
+  color: var(--text);
+  user-select: none;
+  cursor: default;
+}
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+input,
+textarea {
+  font: calc(11px * var(--ts)) var(--font);
+  color: #000;
+}
+
+/* ---- sprite ---- */
+.slice {
+  border-style: solid;
+  border-width: 0;
+  border-image-source: var(--bi-n);
+  border-image-repeat: stretch;
+}
+.slice.btn:hover,
+.hot:hover > .slice {
+  border-image-source: var(--bi-h);
+}
+.slice.btn:active,
+.hot:active > .slice {
+  border-image-source: var(--bi-d);
+}
+.icon {
+  display: inline-block;
+  flex: none;
+  background: var(--bg-n) no-repeat center;
+}
+.hot:hover .icon {
+  background-image: var(--bg-h);
+}
+.hot:active .icon {
+  background-image: var(--bg-d);
+}
+
+/* ---- khung cửa sổ ---- */
+.frame {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.frame-top {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  -webkit-app-region: drag;
+}
+.titlebar {
+  height: 24px;
+  display: flex;
+  align-items: center;
+  padding: 0 4px 0 10px;
+}
+.frame:not(.main-frame) .titlebar {
+  height: 28px;
+}
+.title-logo {
+  margin-top: 1px;
+}
+.title-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  display: flex;
+}
+.title-text {
+  flex: 1;
+  font-weight: bold;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.inactive .title-text {
+  color: #ccc;
+}
+.winbtns {
+  margin-left: auto;
+  display: flex;
+  -webkit-app-region: no-drag;
+}
+.skin-btn {
+  position: relative;
+  margin-right: 4px;
+  width: 21px;
+  height: 21px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Viên tròn: viền ngoài sáng → vòng xám sẫm → lòng vàng nâu (màu lấy từ ảnh chụp Y!M 10). */
+.skin-btn span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 40%, #c9ae95 0%, #b0957c 55%, #8e8073 100%);
+  border: 1px solid rgba(90, 80, 100, 0.55);
+  box-shadow: 0 0 0 1px rgba(210, 200, 235, 0.3);
+  opacity: 0.85;
+}
+.skin-btn:hover span {
+  opacity: 1;
+  filter: brightness(1.1);
+}
+/* đường chấm dọc ngăn nút skin với nút thu nhỏ, như ảnh gốc */
+.skin-btn::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  top: 4px;
+  bottom: 4px;
+  border-right: 1px dotted rgba(230, 225, 245, 0.4);
+}
+.skin-btn:active span {
+  filter: brightness(0.92);
+}
+.frame-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0 4px 5px;
+}
+.frame-content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- menu ---- */
+.menubar {
+  height: 20px;
+  display: flex;
+  padding-left: 4px;
+  -webkit-app-region: no-drag;
+}
+.menubar-item {
+  position: relative;
+}
+.menubar-btn {
+  height: 20px;
+  padding: 0 7px;
+  line-height: 20px;
+  color: var(--menubar-text);
+}
+.menubar-btn:hover {
+  color: var(--menubar-text-h);
+}
+.menubar.main .menubar-btn {
+  color: var(--mainmenubar-text);
+}
+.menubar.main .menubar-btn:hover {
+  color: var(--mainmenubar-text-h);
+}
+.menu-popup {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  z-index: 100;
+  min-width: 170px;
+  padding: 2px;
+  background: var(--menu);
+  border: 1px solid #887ea4;
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.25);
+  color: var(--menu-text);
+}
+.menu-row {
+  height: 20px;
+  line-height: 20px;
+  padding-right: 16px;
+  white-space: nowrap;
+}
+.menu-row:hover {
+  background: var(--selection);
+  color: var(--menu-text-h);
+}
+.menu-row.disabled {
+  color: var(--dim);
+}
+.menu-row.disabled:hover {
+  background: none;
+}
+.menu-check {
+  display: inline-block;
+  width: 20px;
+  text-align: center;
+}
+.menu-sep {
+  height: 1px;
+  margin: 3px 2px;
+  background: #d6d3c8;
+}
+
+/* ---- buddy list ---- */
+.me-panel {
+  flex: none;
+  height: 59px;
+  margin: 2px 3px 0 0;
+  display: flex;
+}
+.me-avatar {
+  position: relative;
+  cursor: pointer;
+  width: 56px;
+  height: 56px;
+  padding: 4px;
+}
+.me-avatar img {
+  width: 48px;
+  height: 48px;
+  display: block;
+}
+/* khung DisplayImgOverlay.png của skin là 56×56, ôm ảnh 48×48 ở lề 4px */
+.me-avatar .overlay {
+  position: absolute;
+  inset: 0;
+  width: 56px;
+  height: 56px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.me-avatar:hover .overlay {
+  opacity: 1;
+}
+.me-info {
+  flex: 1;
+  min-width: 0;
+  padding-top: 4px;
+}
+.me-name {
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 15px 0 3px;
+  max-width: 100%;
+  font: bold calc(12px * var(--ts)) var(--font);
+  color: var(--name-text);
+  position: relative;
+}
+.me-name .name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.me-name .arrow {
+  position: absolute;
+  right: 4px;
+  top: 7px;
+}
+.me-status {
+  height: 20px;
+  display: flex;
+  margin-top: 1px;
+  margin-right: 4px;
+}
+.me-status-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.me-status-text .placeholder {
+  color: var(--dim);
+}
+.me-status input {
+  flex: 1;
+  min-width: 0;
+  height: 20px;
+  border: 1px solid rgb(181, 211, 255);
+  outline: 1px solid rgb(198, 211, 255);
+  padding: 0 3px;
+}
+.me-status-drop {
+  width: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fl-tabs {
+  flex: none;
+  height: 28px;
+  display: flex;
+  margin-top: 4px;
+}
+.fl-tab {
+  flex: 1;
+  min-width: 0;
+  height: 28px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 5px 5px;
+  font: bold calc(12px * var(--ts)) var(--font);
+  color: var(--tab-off);
+}
+.fl-tab:hover,
+.fl-tab.checked {
+  color: var(--tab-on);
+}
+.fl-tab-menu {
+  width: 17px;
+  flex: none;
+  height: 28px;
+}
+.fl-tab .tab-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.search-area {
+  flex: none;
+  height: 26px;
+  margin: 2px 10px 1px 7px;
+  display: flex;
+  align-items: center;
+}
+.search-area .add {
+  width: 30px;
+  height: 22px;
+  margin-left: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.search-area .edit {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 4px 0 10px;
+}
+.search-area input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  height: 16px;
+}
+.search-area input::placeholder {
+  color: #aaa;
+}
+
+.fl-box {
+  flex: 1;
+  min-height: 0;
+  margin: 1px 1px 2px;
+  border: 1px solid var(--border);
+  background: var(--list-bg);
+  overflow-y: auto;
+}
+.fl-group {
+  height: max(19px, 1.8em);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-left: 5px;
+  font-weight: bold;
+  color: #333;
+  background: linear-gradient(#fff, #f4f2fa);
+}
+.fl-row {
+  position: relative;
+  height: max(36px, calc(8px + 2.6em));
+}
+.fl-row.single {
+  height: 19px;
+}
+.fl-row .bg {
+  position: absolute;
+  inset: 0;
+  display: none;
+}
+.fl-row:hover .bg.hover,
+.fl-row.selected .bg.selected {
+  display: block;
+}
+.fl-row:hover.selected .bg.hover {
+  display: none;
+}
+.fl-row .opi {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+}
+.fl-row .avatar {
+  position: absolute;
+  left: 18px;
+  top: calc(50% - 16px);
+  width: 32px;
+  height: 32px;
+  border: 1px solid #ccc;
+}
+.fl-row .name,
+.fl-row .msg {
+  position: absolute;
+  left: 56px;
+  right: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fl-row .name {
+  top: 3px;
+  line-height: 1.25;
+  color: #000;
+}
+.fl-row.unread .name,
+.fl-row.unread .msg {
+  font-weight: bold;
+}
+.fl-row.offline .name {
+  color: var(--dim);
+}
+.fl-row .msg {
+  top: calc(4px + 1.3em);
+  line-height: 1.25;
+  color: var(--dim);
+}
+.fl-row .msg .emo {
+  vertical-align: -5px;
+  max-height: 16px;
+}
+.fl-empty {
+  padding: 16px 10px;
+  color: var(--dim);
+  text-align: center;
+}
+
+
+.update {
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+  border-bottom: 1px solid #eee;
+}
+.update:hover {
+  background: var(--list-hover);
+}
+.update img {
+  width: 24px;
+  height: 24px;
+  flex: none;
+}
+.update .when {
+  color: var(--dim);
+  font-size: calc(10px * var(--ts));
+}
+.update b {
+  color: #000;
+}
+
+/* ---- đăng nhập ---- */
+.login {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 10px 14px;
+  color: var(--text);
+}
+/* Logo + form căn giữa theo chiều dọc (margin auto), link trợ giúp dính đáy. */
+.login-main {
+  margin: auto 0;
+  width: 170px; /* LoginWnd.xml: ô nhập 150, cột checkbox 170 */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.login-logo {
+  align-self: center;
+  width: 110px;
+  height: 99px;
+  margin-bottom: 18px;
+}
+.login-form {
+  display: flex;
+  flex-direction: column;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+.login-form > label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 6px;
+}
+.login-form > label input {
+  width: 100%;
+  height: 20px;
+  padding: 1px 3px;
+  border: 1px solid #7f9db9;
+  user-select: text;
+}
+.login-form > label input:focus {
+  outline: 1px solid rgb(181, 211, 255);
+}
+.login-checks {
+  margin-top: 6px;
+}
+.login-checks label {
+  min-height: 17px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.login-checks input {
+  margin: 0;
+}
+.login-error {
+  min-height: 20px;
+  padding: 3px 0;
+  line-height: 1.3;
+  color: #c00;
+}
+.login-error.info {
+  color: var(--text);
+  opacity: 0.75;
+}
+.login-link {
+  align-self: center;
+  margin-top: 8px;
+  color: var(--link);
+  cursor: pointer;
+}
+.login-link:hover {
+  text-decoration: underline;
+}
+.update.unread b {
+  color: #000;
+}
+.update.unread {
+  font-weight: bold;
+}
+.login-btn {
+  align-self: center;
+  width: 80px;
+  height: 23px;
+}
+.login-lang {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 20px;
+}
+.combo {
+  position: relative;
+  height: calc(21px * max(1, var(--ts)));
+}
+.combo select {
+  appearance: none;
+  width: 100%;
+  height: 100%;
+  padding: 0 20px 0 3px;
+  border: 1px solid rgb(158, 158, 158);
+  border-radius: 0;
+  background: #fff;
+  color: #000;
+  font: calc(11px * var(--ts)) var(--font);
+  outline: 0;
+}
+.combo select:focus {
+  border-color: #7f9db9;
+}
+/* nút mũi tên phủ lên mép phải; chuột xuyên qua để bấm vẫn mở <select> */
+.combo-btn {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  bottom: 1px;
+  width: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.login-links {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  color: var(--link);
+}
+.login-links span:hover {
+  text-decoration: underline;
+}
+.pushbutton {
+  min-width: 80px;
+  height: 22px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--tb-text);
+}
+
+/* ---- skin picker ---- */
+.skin-picker {
+  position: absolute;
+  z-index: 50;
+  right: 60px;
+  top: 24px;
+  -webkit-app-region: no-drag;
+  padding: 5px;
+  background: rgb(252, 252, 246);
+  border: 1px solid #000;
+  display: grid;
+  grid-template-columns: repeat(2, 84px);
+  gap: 5px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+.skin-picker button {
+  width: 84px;
+  height: 34px;
+  padding: 2px;
+  border: 1px solid #ccc;
+  background: #fff;
+}
+.skin-picker button.on {
+  border: 2px solid var(--selection);
+}
+.skin-picker img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ---- cửa sổ chat ---- */
+.im-tabs {
+  flex: none;
+  height: 26px;
+  display: flex;
+  gap: 1px;
+  padding: 2px 3px 0;
+  border-bottom: 1px solid var(--history-border);
+}
+.im-tab {
+  max-width: 150px;
+  min-width: 70px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 4px 0 7px;
+}
+.im-tab .label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.im-tab.active .label {
+  font-weight: bold;
+}
+.im-tab.flash .label {
+  color: #d2691e;
+  font-weight: bold;
+}
+.im-tab .x {
+  width: 13px;
+  height: 13px;
+  line-height: 12px;
+  text-align: center;
+  color: #888;
+}
+.im-tab .x:hover {
+  color: #c00;
+}
+
+.im-toolbar {
+  flex: none;
+  height: 57px;
+  margin: 2px 0 3px 3px;
+  display: flex;
+}
+.tb-btn {
+  min-width: 50px;
+  max-width: 120px;
+  height: 100%;
+  margin-right: 2px;
+  padding: 5px 8px 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  font-size: calc(9.5px * var(--ts));
+  color: var(--tb-text);
+}
+.tb-spacer {
+  flex: 1;
+}
+
+.im-friendbar {
+  flex: none;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 0 0 7px;
+  white-space: nowrap;
+  color: var(--text);
+}
+.im-friendbar .friend-msg {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.75;
+}
+.im-friendbar .emo {
+  vertical-align: -5px;
+  max-height: 16px;
+}
+.small-btn {
+  height: 18px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 0 4px;
+}
+
+.im-toggle {
+  flex: none;
+  display: flex;
+  align-items: flex-end;
+  margin-left: 2px;
+}
+.im-toggle .bevel {
+  flex: 1;
+  height: 4px;
+  border-bottom: 1px solid var(--history-border);
+}
+
+.im-main {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+.im-left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  margin-left: 2px;
+}
+.im-history {
+  flex: 1;
+  min-height: 0;
+  margin: 0 1px 1px;
+  border: 1px solid var(--history-border);
+  background: #fff;
+  overflow-y: auto;
+  padding: 4px 6px;
+  user-select: text;
+  cursor: text;
+  font: calc(12px * var(--ts)) var(--font);
+  line-height: 1.5;
+  color: #000;
+}
+.im-history .line {
+  word-wrap: break-word;
+}
+.im-history .who {
+  font-weight: bold;
+}
+.im-history .who.me {
+  color: #3d3d9e;
+}
+.im-history .who.them {
+  color: #c0392b;
+}
+.im-history .buzz {
+  color: #e00;
+  font-weight: bold;
+  font-size: calc(13px * var(--ts));
+}
+.im-history .emo {
+  vertical-align: middle;
+}
+.im-history .stamp {
+  color: var(--dim);
+  font-size: calc(10px * var(--ts));
+  text-align: center;
+  margin: 6px 0;
+}
+.im-history .att {
+  margin: 3px 0 3px 12px;
+}
+.im-history .att-image {
+  display: block;
+  max-width: min(240px, 90%);
+  max-height: 240px;
+  border: 1px solid #ddd;
+  cursor: zoom-in;
+}
+/* sticker Messenger gốc 96px, thu nhỏ cho cân với chữ Y!M */
+.im-history .att-sticker {
+  display: block;
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+/* xem ảnh lớn trong cửa sổ chat */
+.viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(0, 0, 0, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  cursor: zoom-out;
+  -webkit-app-region: no-drag;
+}
+.viewer img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+.im-history .att-audio {
+  height: 30px;
+  max-width: 100%;
+}
+.im-history .att-play {
+  padding: 2px 8px;
+  border: 1px solid #b9b3c9;
+  border-radius: 10px;
+  background: #f4f2fa;
+  color: #333;
+  cursor: pointer;
+}
+.im-history .att-note {
+  color: var(--dim);
+  font-size: 0.9em;
+}
+.im-history .line.system {
+  color: var(--dim);
+  font-style: italic;
+}
+.im-history .line.pending {
+  opacity: 0.55;
+}
+.im-history .line.failed {
+  opacity: 1;
+}
+.im-history .send-error,
+.im-statusbar .status-error {
+  color: #c00;
+  font-size: 0.85em;
+}
+.im-statusbar .status-error {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.im-history .typing {
+  color: var(--dim);
+  font-style: italic;
+}
+
+.im-input-panel {
+  flex: none;
+  height: 98px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 2px;
+}
+.im-imtoolbar {
+  flex: none;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.im-imtoolbar .tool {
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.im-bevel {
+  flex: none;
+  height: 3px;
+  border-bottom: 1px solid #ddd;
+}
+.im-input {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  border: 1px solid var(--history-border);
+  background: #fff;
+  margin: 1px;
+  padding: 2px 5px;
+  gap: 5px;
+}
+.im-input textarea {
+  flex: 1;
+  border: 0;
+  outline: 0;
+  resize: none;
+  font: calc(12px * var(--ts)) var(--font);
+  user-select: text;
+}
+.im-input .send {
+  align-self: center;
+  width: 50px;
+  min-width: 50px;
+  height: 30px;
+}
+
+.im-display {
+  flex: none;
+  width: 108px;
+  margin: 3px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px;
+}
+.im-display img {
+  display: block;
+  border: 1px solid #ccc;
+  background: #fff;
+}
+.im-statusbar {
+  flex: none;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-left: 4px;
+  color: var(--status-text);
+  opacity: 0.7;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.im-statusbar .grow {
+  flex: 1;
+}
+
+.emo-picker {
+  position: absolute;
+  bottom: 26px;
+  left: 0;
+  z-index: 40;
+  width: 300px;
+  max-height: 260px;
+  overflow-y: auto;
+  padding: 4px;
+  background: var(--menu);
+  border: 1px solid #887ea4;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-wrap: wrap;
+}
+.emo-picker button {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+}
+.emo-picker button:hover {
+  border-color: var(--selection);
+  background: #fff;
+}
+.emo-picker img {
+  max-width: 26px;
+  max-height: 26px;
+}
+.emo-picker .tip {
+  width: 100%;
+  height: 16px;
+  color: #666;
+  padding-left: 2px;
+}
+
+@keyframes buzz {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(-6px, 2px);
+  }
+  40% {
+    transform: translate(6px, -2px);
+  }
+  60% {
+    transform: translate(-4px, 1px);
+  }
+  80% {
+    transform: translate(4px, -1px);
+  }
+}
+.shake {
+  animation: buzz 0.12s linear 4;
+}
+
+/* ---- hộp thoại (PIN) ---- */
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-app-region: no-drag;
+}
+.dialog {
+  width: min(240px, calc(100% - 20px));
+  padding: 10px;
+  background: var(--back);
+  border: 1px solid #887ea4;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.35);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dialog-title {
+  font-weight: bold;
+}
+.dialog-hint {
+  opacity: 0.8;
+  line-height: 1.35;
+}
+.dialog input.dialog-text,
+.dialog input[type="password"] {
+  height: 22px;
+  border: 1px solid #7f9db9;
+  padding: 0 4px;
+  letter-spacing: 3px;
+  user-select: text;
+}
+.dialog label {
+  display: flex;
+  gap: 4px;
+  align-items: flex-start;
+  line-height: 1.3;
+}
+.dialog-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+.dialog-buttons .pushbutton {
+  min-width: 60px;
+}

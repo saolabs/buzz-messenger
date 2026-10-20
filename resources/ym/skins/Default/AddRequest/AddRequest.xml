@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<theme app="Y!Msgr" version="2" >
+  <style id="style.addrequest.single" margin="5,2,5,2" font="defaultfontnormal" resizemargin="2,11,2,9" type="toggle" imagefile="..\images\btn-single-small.png" textalign_x="center" textalign_y="center" textcolor="button" textcolor_disable="button_dh" textcolor_hover="button_h"/>
+
+  <!-- Multiple-add requests dialogs -->
+  <section id="MultiAddRequest" text="Add to Messenger List Request" caption="true" systemmenu="true" height="300" width="400">
+    <!--width="400"-->
+    <dockpanel id="root" backcolor="window_frame" margin="5,5,5,5" width="400" height="400">
+      <label dock="top" id="Title" multiline="true" width="350" text="%d people have requested to add you to their Messenger List.  What would you like to do?" textcolor="defaulttextcolor" font="defaultfontnormal"/>
+      <label dock="top" id="TooltipFormat" show="hidden" text="%s would like to add you to his or her Messnger List as %s." />
+      <label dock="top" id="AcceptLabel" show="hidden" text="Accept" />
+      <dockpanel dock="bottom" width="100%" margin="0,5,0,0" spacersize="10">
+        <textbutton id="DenyAll" dock="left" text="Deny All" height="20" width="30%" textalign_x="center" style="style.addrequest.single"/>
+        <textbutton id="DenySelected" dock="left" text="Deny Selected" height="20" width="30%" textalign_x="center" style="style.addrequest.single"/>
+      </dockpanel>
+      <dockpanel dock="fill" margin="0,5,0,0" spacersize="5">
+        <commoncontrol id="SelectAll" type="Checkbox" dock="bottom" height="16" text="Select all"/>
+        <customcontrol id="FriendList" dock="fill" minwidth="175" />
+        <!--commoncontrol id="AddRequestLists" type="SysListView32" dock="fill"/-->
+      </dockpanel>      
+    </dockpanel>
+  </section>
+</theme>

@@ -1,0 +1,92 @@
+{
+  "name": "buzz-messenger",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Buzz! Messenger — Facebook Messenger với giao diện chat cổ điển, BUZZ! và emoticon",
+  "author": "SaoLabs",
+  "license": "UNLICENSED",
+  "homepage": "https://github.com/saolabs/buzz-messenger",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/saolabs/buzz-messenger.git"
+  },
+  "main": "out/main/main.js",
+  "scripts": {
+    "dev": "electron-vite dev --watch",
+    "build": "electron-vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "extract": "python3 -I scripts/extract_installer.py 10.0.0.1102_ymsgr1000_1102_us.exe _extracted && python3 -I scripts/swf_to_svg.py _extracted/Messenger/login.swf _extracted/Messenger/Media/login && python3 -I scripts/bmp_to_png.py _extracted/Messenger/skins && python3 -I scripts/brand_logo.py _extracted/Messenger/Media/login/connected.svg _extracted/icon.svg && electron scripts/render-icon.mjs _extracted/icon.svg _extracted/icon.png && npm run assets:prepare",
+    "assets:prepare": "node scripts/prepare-assets.mjs",
+    "dist:mac": "npm run build && electron-builder --mac",
+    "dist:win": "npm run build && electron-builder --win",
+    "dist:linux": "npm run build && electron-builder --linux"
+  },
+  "dependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^30.0.0",
+    "@types/node": "^22.17.1",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "@vitejs/plugin-react": "^5.0.0",
+    "electron": "^43.3.0",
+    "electron-builder": "^26.0.12",
+    "electron-vite": "^4.0.0",
+    "jsdom": "^29.1.1",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.2"
+  },
+  "build": {
+    "appId": "com.saolabs.buzz-messenger",
+    "productName": "Buzz! Messenger",
+    "files": [
+      "out/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "resources/ym",
+        "to": "ym"
+      }
+    ],
+    "mac": {
+      "artifactName": "buzz-messenger-${version}-mac-${arch}.${ext}",
+      "category": "public.app-category.social-networking",
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "icon": "resources/ym/icon.png"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "resources/ym/icon.png"
+    },
+    "linux": {
+      "artifactName": "buzz-messenger-${version}-linux-${arch}.${ext}",
+      "maintainer": "SaoLabs",
+      "category": "Network",
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "icon": "resources/ym/icon.png",
+      "executableName": "buzz-messenger"
+    },
+    "nsis": {
+      "artifactName": "buzz-messenger-${version}-win-${arch}-setup.${ext}",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "portable": {
+      "artifactName": "buzz-messenger-${version}-win-${arch}-portable.${ext}"
+    }
+  }
+}

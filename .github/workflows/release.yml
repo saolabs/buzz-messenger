@@ -1,0 +1,177 @@
+name: Build desktop release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing version tag to build, for example v0.1.0'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: desktop-release-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Check version tag and runtime resources
+        id: version
+        env:
+          RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+        shell: bash
+        run: |
+          node --input-type=module <<'JS'
+          import { appendFileSync, existsSync, readFileSync } from 'node:fs';
+          import { execFileSync } from 'node:child_process';
+          const { version } = JSON.parse(readFileSync('package.json', 'utf8'));
+          const tag = process.env.RELEASE_TAG;
+          if (tag !== `v${version}`) throw new Error(`Tag must match package.json: v${version}`);
+          execFileSync('git', ['show-ref', '--verify', `refs/tags/${tag}`]);
+          for (const file of [
+            'icon.png', 'skins/Purple/colors.xml', 'skins/Default/colors.xml',
+            'Media/Smileys/emoticons.xml', 'Media/login/asleep.svg',
+            'Media/login/connected.svg', 'Media/buzz.wav', 'Media/message.wav',
+          ]) {
+            if (!existsSync(`resources/ym/${file}`)) throw new Error(`Missing runtime asset: ${file}`);
+          }
+          appendFileSync(process.env.GITHUB_OUTPUT, `tag=${tag}\n`);
+          JS
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+
+  build:
+    needs: validate
+    name: Package ${{ matrix.platform }}-${{ matrix.arch }}
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: mac
+            arch: arm64
+            runner: macos-15
+            script: dist:mac
+          - platform: mac
+            arch: x64
+            runner: macos-15-intel
+            script: dist:mac
+          - platform: win
+            arch: x64
+            runner: windows-2022
+            script: dist:win
+          - platform: linux
+            arch: x64
+            runner: ubuntu-24.04
+            script: dist:linux
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.validate.outputs.tag }}
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install Linux packaging tools
+        if: matrix.platform == 'linux'
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y libarchive-tools
+      - run: npm ci
+      - name: Build installers
+        run: npm run ${{ matrix.script }} -- --${{ matrix.arch }} --publish never
+        env:
+          CSC_LINK: ${{ matrix.platform == 'mac' && secrets.MAC_CSC_LINK || matrix.platform == 'win' && secrets.WIN_CSC_LINK || '' }}
+          CSC_KEY_PASSWORD: ${{ matrix.platform == 'mac' && secrets.MAC_CSC_KEY_PASSWORD || matrix.platform == 'win' && secrets.WIN_CSC_KEY_PASSWORD || '' }}
+          APPLE_ID: ${{ matrix.platform == 'mac' && secrets.APPLE_ID || '' }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ matrix.platform == 'mac' && secrets.APPLE_APP_SPECIFIC_PASSWORD || '' }}
+          APPLE_TEAM_ID: ${{ matrix.platform == 'mac' && secrets.APPLE_TEAM_ID || '' }}
+      - uses: actions/upload-artifact@v7
+        with:
+          name: installers-${{ matrix.platform }}-${{ matrix.arch }}
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14
+          path: |
+            dist/*.dmg
+            dist/*.zip
+            dist/*.exe
+            dist/*.AppImage
+            dist/*.deb
+
+  release:
+    needs: [validate, build]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.validate.outputs.tag }}
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          package-manager-cache: false
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: installers-*
+          path: release-assets
+          merge-multiple: true
+      - name: Verify all installers and write checksums
+        run: |
+          node --input-type=module <<'JS'
+          import { createHash } from 'node:crypto';
+          import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
+          const { version } = JSON.parse(readFileSync('package.json', 'utf8'));
+          const prefix = `buzz-messenger-${version}`;
+          const expected = [
+            `${prefix}-mac-arm64.dmg`, `${prefix}-mac-arm64.zip`,
+            `${prefix}-mac-x64.dmg`, `${prefix}-mac-x64.zip`,
+            `${prefix}-win-x64-setup.exe`, `${prefix}-win-x64-portable.exe`,
+            `${prefix}-linux-x64.AppImage`, `${prefix}-linux-x64.deb`,
+          ].sort();
+          const files = readdirSync('release-assets').sort();
+          if (JSON.stringify(files) !== JSON.stringify(expected)) throw new Error(`Unexpected installers: ${files}`);
+          const checksums = files.map(file => {
+            const data = readFileSync(`release-assets/${file}`);
+            if (!data.length) throw new Error(`Empty installer: ${file}`);
+            return `${createHash('sha256').update(data).digest('hex')}  ${file}`;
+          });
+          writeFileSync('release-assets/SHA256SUMS.txt', checksums.join('\n') + '\n');
+          JS
+      - name: Create or update draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ needs.validate.outputs.tag }}
+        shell: bash
+        run: |
+          if gh release view "$RELEASE_TAG" --json isDraft > release-state.json 2>/dev/null; then
+            node -e 'if (!require("./release-state.json").isDraft) throw new Error("Release is already published; create a new version instead of replacing its downloads.")'
+          else
+            gh release create "$RELEASE_TAG" --verify-tag --draft \
+              --title "Buzz! Messenger $RELEASE_TAG" --notes-file docs/RELEASE-NOTES.md
+          fi
+          gh release upload "$RELEASE_TAG" release-assets/* --clobber
+          echo "Draft ready: https://github.com/$GH_REPO/releases" >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<theme app="Y!Msgr" version="2" >
+  <style id="style.IMWnd.toolbarbutton" dock="left" type="toggle" BkgndInvisibleOnNormal="true" imagefile="..\images\btn-single-toolbar.png" minwidth="50" maxwidth="120" resizemargin="2,11,2,9" margin="8,3,8,5"  height="100%" font="defaultfontsmallnormal" textcolor="button" textcolor_hover="button_h" textcolor_disabled="button_dh" textalign_x="center" textalign_y="bottom" iconalign_x="center" iconalign_y="center" icondock="top" />
+  <style id="style.IMWnd.toggletoolbarbuttonsmall" dock="left" type="autotoggle" imagefile="btn_bkgnd_invis_on_normal.png" resizemargin="4,6,4,13" margin="3,2,3,2" width="24"  height="100%" font="defaultfontsmallnormal" textcolor="defaulttextcolor" textcolor_hover="hovertextcolor" textcolor_disabled="disabledtextcolor" textalign_x="center" textalign_y="top" iconalign_x="center" iconalign_y="center" icondock="top" onestate="true" />
+  <style id="style.IMWnd.emoticon_button" dock="left" type="toggle" height="22" imagefile="btn_bkgnd_invis_on_normal.png" resizemargin="4,6,4,13" margin="2,2,2,2" iconalign_x="center" iconalign_y="center" icondock="center" onestate="true" />
+  <style id="style.IMWnd.toolbarbuttonsmall" dock="left" type="toggle" imagefile="btn_bkgnd_invis_on_normal.png" resizemargin="3,3,3,3" margin="3,2,3,2" height="100%" font="defaultfontnormal" textcolor="defaulttextcolor" textcolor_hover="defaulttextcolor" textcolor_disabled="disabledtextcolor" textalign_x="center" textalign_y="top" iconalign_x="center" iconalign_y="center" icondock="top" onestate="true" />
+  <style id="style.activitymenu.small" dock="top" width="100%" imagefile="..\images\am_buttons.png" resizemargin="0,0,0,0" margin="6,2,2,2" iconalign_x="left" iconalign_y="center" icondock="left" iconfile="icon_small.png" onestate="true" font="defaultfontbold" textalign_x="left" type="toggle" />
+  <style id="style.activitymenu.large" dock="top" width="100%" height="80" imagefile="..\images\am_buttons.png" resizemargin="0,0,0,0" margin="6,2,4,0" iconalign_x="left" iconalign_y="top" icondock="left" iconfile="icon_small.png" onestate="true" textalign_x="left" type="toggle" />
+
+  <section caption="true" id="IMWindow" composited="false" height="500" width="480" resizable="true" icon="im.ico">
+    <dockpanel id="root" dock="fill" backcolor="mainwndbackcolor" minheight="250">
+      <!-- Status bar -->
+      <dockpanel id="IMWndStatusBar" width="100%" dock="bottom" margin="4,2,0,0" spacersize="0">
+        <dockpanel id="IMWndStatusBarIcon" dock="right" margin="0,0,0,0" spacersize="0">
+          <image id="IMWnd.StatusBarSizeIcon" imagefile="..\images\resize_ctrl.png" align_y="bottom" show="visible" dock="right" />
+        </dockpanel>
+        <dockpanel id="IMWnd.IMWndStatusBarTop" width="100%" dock="top" clipedge="right" margin="0,0,0,2" spacersize="0">
+          <label id="IMWnd.StatusBarTag" dock="left" font="defaultfontnormal" alpha="107" textalign_x="left" textalign_y="center" textcolor="textadcolor" />
+          <dockpanel id="spacer" width="5" />
+          <label id="IMWnd.StatusBar" dock="left" optional="true" clipmode="clip" enableclick="true"  handcursor="true" alpha="175" font="defaultfontbold" font_hover="defaultfontboldunderline" textalign_x="left" textalign_y="center" textcolor="textadcolor" />
+          <label id="IMWnd.StatusBarGap" dock="left" optional="true" clipmode="hide" text="  " enableclick="true" font="defaultfontbold" textalign_x="left" textalign_y="center" />
+          <label id="IMWnd.StatusBarUrl" dock="left" optional="true" clipmode="hide" enableclick="true"  handcursor="true" alpha="175" font="defaultfontnormal" font_hover="defaultfontunderline" textalign_x="left" textalign_y="center" textcolor="textadcolor" />
+        </dockpanel>
+        <dockpanel id="IMWnd.IMWndStatusBarBottom" width="100%" dock="fill" margin="0,0,0,2" spacersize="3" show="hidden">
+          <label id="IMWnd.StatusBarUrl2" dock="left" enableclick="true"  handcursor="true" alpha="175" font="defaultfontnormal" font_hover="defaultfontunderline" textalign_x="left" textalign_y="center" textcolor="textadcolor" />
+        </dockpanel>
+      </dockpanel>
+      <!-- Actual IM window layout -->
+      <dockpanel id="IMWnd" dock="fill">
+        <!-- Right side panel for plugin, game, etc -->
+        <dockpanel id="IMWnd.SidePanel" dock="right" show="hidden" height="100%" width="300" margin="0,3,2,0" splitter="true" imagefile_splitter="..\images\InvisibleSquare5x5.png" imagefile_splittergrip="..\images\grabbie_v.png">
+          <customcontrol id="IMWnd.SidePanel.Control" show="visible" drawborder="true" minwidth="300" minheight="300" width="100%" height="100%" dock="fill" />
+        </dockpanel>
+        <!-- Left side panel including toolbar, history and input window -->
+        <dockpanel id="IMWnd.Main" dock="fill" width="100%" height="100%" minwidth="300" >
+          <!-- Toolbar area -->
+          <dockpanel id="IMWnd.MainToolbarArea" dock="top" height="57" width="100%" margin="3,2,0,3">
+            <textbutton id="IMWnd.TB.Video" dock="left" text="Video Call" res_id="783" iconfile="..\images\video.png" style="style.IMWnd.toolbarbutton" />
+            <canvas id="IMWnd.TB.Voice.BtnArea" dock="left" minwidth="66">
+              <event name="OnHide" >
+                <action targetid="IMWnd.ToolbarArea" dock="left" />
+              </event>
+              <event name="OnShow" >
+                <action targetid="IMWnd.ToolbarArea" dock="right" />
+              </event>
+              <textbutton id="IMWnd.TB.Voice" text="Voice Call" minwidth="66" res_id="102" iconfile="..\images\voice.png" style="style.IMWnd.toolbarbutton">
+                <event name="OnButtonToggleOn" >
+                  <action targetid="IMWnd.TB.Voice.Dropdown" checked="true" />
+                </event>
+                <event name="OnButtonToggleOff" >
+                  <action targetid="IMWnd.TB.Voice.Dropdown" checked="false" />
+                </event>
+              </textbutton>
+              <dockpanel xpos="0" ypos="0" width="100%" height="100%">
+                <textbutton id="IMWnd.TB.Voice.Dropdown" dock="right" width="17" height="100%" resizemargin="7,0,8,0" imagefile="..\images\btn-split-toolbar.png" iconfile="..\images\single_arrow_down.png" onestate="true" type="toggle" icondock="center" iconalign_x="center" iconalign_y="center" margin="2,0,2,13">
+                  <event name="OnMouseEnter" >
+                    <action targetid="IMWnd.TB.Voice" state="2" />
+                  </event>
+                  <event name="OnMouseLeave" >
+                    <action targetid="IMWnd.TB.Voice" state="0" />
+                  </event>
+                </textbutton>                
+              </dockpanel>              
+            </canvas>
+            <dockpanel id="IMWnd.ToolbarArea" dock="right" height="100%">
+              <textbutton id="IMWnd.TB.Photoshare" dock="right" text="Photos" margin="8,7,8,5" iconfile="PhotoShare.png" style="style.IMWnd.toolbarbutton" />
+              <textbutton id="IMWnd.TB.Plugin" dock="right" text="Activities " iconfile="Activities.png" style="style.IMWnd.toolbarbutton" />
+              <textbutton id="IMWnd.TB.IMThemes" dock="right" text="IMVironment" iconfile="IMTheme.png" style="style.IMWnd.toolbarbutton" />
+            </dockpanel>
+          </dockpanel>
+          <dockpanel id="IMWnd.FriendStatusBarArea" dock="top" width="100%" margin="2,0,0,0">
+            <dockpanel width="1" dock="right" />
+            <dockpanel dock="fill" spacersize="3" height="18">
+              <textbutton id="IMWnd.IgnoreBuddy"  dock="right" res_id="1401" text = "Ignore User" align_y="bottom" iconfile="..\images\ignorebuddy.png" height="100%" style="style.IMWnd.toolbarbuttonsmall" textalign_y="center" textalign_x="left" iconalign_x="left" iconalign_y="center" icondock="left" margin="4,2,3,2" onestate="false" />
+              <textbutton id="IMWnd.AddBuddy" dock="right" res_id="1400" text = "Add User" align_y="bottom" iconfile="..\images\addbuddy_clr.png" height="100%" style="style.IMWnd.toolbarbuttonsmall" textalign_y="center" textalign_x="left" iconalign_x="left" iconalign_y="center" icondock="left" margin="4,2,3,2" onestate="false"/>
+              <dockpanel dock="fill" clipedge="right" spacersize="3" margin="5,2,0,0">
+                <image id="IMWnd.StatusIcon" dock="left" imagefile="..\images\busy.png" align_y="center" />
+                <label id="IMWnd.FriendName" dock="left" height="100%" text="Hung Nguyen" font="defaultfontnormal" textcolor="defaulttextcolor" textalign_y="center" align_y="center" optional="true"/>
+                <image id="NetworkLogo" dock="left" width="16" height="16" show="hidden"/>
+                <image id="IMWnd.WidgetIcon" dock="left" imagefile="..\images\widget.png" show="visible" align_y="center" />
+                <label id="IMWnd.FriendStatusMsgDivider" dock="left" height="100%" text="-" font="defaultfontnormal" textcolor="defaulttextcolor" textalign_y="center" align_y="center" optional="true"/>
+                <customcontrol id="IMWnd.FriendStatusMsg" dock="left" height="100%" width="100%" optional="true" />
+              </dockpanel>
+            </dockpanel>
+          </dockpanel>
+
+          <dockpanel id="VideoPanel" dock="top" show="hidden" width="100%" height="100%" margin="0,0,0,2">
+            <customcontrol id="VideoPanelControl" dock="top" width="100%" height="100%"/>
+          </dockpanel>
+
+          <!-- Divide again for the input area and the history window area -->
+          <dockpanel id="IMWnd.im_history_panel" dock="bottom" width="100%" height="100%" splitter="true" imagefile_splittergrip="..\images\grabbie.png" imagefile_splitter="..\images\InvisibleSquare5x5.png">
+            <dockpanel dock="top" margin="2,0,0,0">
+              <textbutton id="IMWnd.IM.Toggle" show="visible" dock="left" align="left"  type="autotoggle" resizemargin="0,0,0,0" iconalign_x="left" iconalign_y="center" icondock="left" iconfile="im_view_toggle.png">
+                <event name="OnButtonToggleOn" >
+                  <action targetid="IMWnd.IM.Toggle.Bevel" show="hidden" />
+                </event>
+                <event name="OnButtonToggleOff" >
+                  <action targetid="IMWnd.IM.Toggle.Bevel" show="visible" />
+                </event>
+              </textbutton>
+              <dockpanel dock="fill" id="IMWnd.IM.Toggle.Bevel">
+                <dockpanel dock="bottom" backcolor="162,162,162" height="1" width="100%" />
+                <dockpanel dock="bottom" imagefile="im_bg_bevel.png" height="3" width="100%" />
+              </dockpanel>
+            </dockpanel>
+            <dockpanel id="IMWnd.im_history_panel.main" dock="fill">
+              <dockpanel id="IMWnd.DisplayImgArea" dock="right" height="100%" minwidth="102" margin="3,3,3,3" imagefile="im_tb_disp_img_toggle_bg.png" resizemargin="3,22,28,10">
+                <!-- Friend's display image -->
+                <customcontrol id="IMWnd.BuddyDisplay" dock="top" align_x="center" minwidth="96" minheight="96">
+                  <event name="OnHide" >
+                    <action targetid="IMWnd.BuddyDisplayDefault" show="visible" />
+                  </event>
+                  <event name="OnShow" >
+                    <action targetid="IMWnd.BuddyDisplayDefault" show="hidden" />
+                  </event>
+                </customcontrol>
+                <image id="IMWnd.BuddyDisplayDefault" imagefile="..\images\DefaultFriendIcon.png" dock="top" align_x="center" width="96" height="96"/>
+
+                <!-- My dislay image area -->
+                <customcontrol id="IMWnd.MyDisplay" dock="bottom" align_x="center" width="48" height="48"/>
+              </dockpanel>
+              <dockpanel id="IMWnd.InputPanel" dock="bottom" margin="2,0,0,0" width="100%" splitter="true"  imagefile_splitter="..\images\InvisibleSquare5x5.png">
+                <!-- Toolbar area for audible, emoticon -->
+                <dockpanel id="IMWnd.IMToolbar" dock="top" height="24" width="100%" spacersize="2">
+                  <textbutton id="IMWnd.Emoticons" dock="left" iconfile="im_tb_emoticon.png" width="33" style="style.IMWnd.toolbarbuttonsmall" onestate="false" />
+                  <textbutton id="IMWnd.Audibles" dock="left" iconfile="im_tb_audibles.png" width="28" style="style.IMWnd.toggletoolbarbuttonsmall" onestate="false" />
+                  <textbutton id="IMWnd.Format" dock="left" iconfile="im_tb_format.png" style="style.IMWnd.toggletoolbarbuttonsmall" onestate="false" />
+                  <textbutton id="IMWnd.Buzz" dock="left" iconfile="im_tb_buzz.png" width="24" style="style.IMWnd.toolbarbuttonsmall" onestate="false" />
+                  <textbutton id="IMWnd.FileXfer" dock="left" width="24" iconfile="..\images\SendFile.png" style="style.IMWnd.toolbarbuttonsmall" onestate="false" />                 
+                  <textbutton id="IMWnd.DisplayImageToggle" dock="right" align_y="center" imagefile="im_tb_disp_img_toggle.png" width="29" height="22" style="style.IMWnd.toggletoolbarbuttonsmall" />
+                  <dockpanel id="IMWnd.SmileyBar" dock="left" height="100%" width="100%" spacersize="2">                    
+                    <edit id="IMWnd.SmileyBar.Search" dock="left" align_y="center" drawborder="true" height="17" width="35" font="defaultfontnormal"/>
+                    <dockpanel id="IMWnd.SmileyBar.Result" dock="fill" clipedge="right">
+                      <customattr name="IMWnd.SmileyBar.Result.Count" value="8" />
+                      <textbutton id="IMWnd.SmileyBar.Result.1" dock="left" iconfile="..\images\typing.png" style="style.IMWnd.emoticon_button" optional="true" />
+                      <textbutton id="IMWnd.SmileyBar.Result.2" dock="left" iconfile="..\images\widget.png" style="style.IMWnd.emoticon_button" optional="true" />
+                      <textbutton id="IMWnd.SmileyBar.Result.3" dock="left" iconfile="..\images\webcam_12x12.png" style="style.IMWnd.emoticon_button" optional="true" />
+                      <textbutton id="IMWnd.SmileyBar.Result.4" dock="left" iconfile="..\images\online.png" style="style.IMWnd.emoticon_button" optional="true" />
+                      <textbutton id="IMWnd.SmileyBar.Result.5" dock="left" iconfile="..\images\online.png" style="style.IMWnd.emoticon_button" optional="true" />
+                      <textbutton id="IMWnd.SmileyBar.Result.6" dock="left" iconfile="..\images\online.png" style="style.IMWnd.emoticon_button" optional="true" />
+                      <textbutton id="IMWnd.SmileyBar.Result.7" dock="left" iconfile="..\images\online.png" style="style.IMWnd.emoticon_button" optional="true" />
+                      <textbutton id="IMWnd.SmileyBar.Result.8" dock="left" iconfile="..\images\online.png" style="style.IMWnd.emoticon_button" optional="true" />
+                    </dockpanel>
+                  </dockpanel>
+                </dockpanel>
+                <dockpanel id="IMWnd.FromPanel" dock="top" minheight="18" width="100%" margin="0,2,0,0">
+                  <label id="IMWnd.FromPanel.FromLabel" dock="left" text="[Design] Send As:" textalign_y="center" textalign_x="left" height="100%"/>
+                  <dockpanel width="3" dock="left" />
+                  <combobox id="IMWnd.From" dock="left" width="150"/>
+                </dockpanel>
+                <dockpanel dock="top" imagefile="im_bg_bevel.png" height="3" width="100%" />
+                <dockpanel id="IMWnd.InputArea" dock="fill" backcolor="162,162,162" margin="1,1,1,1" minheight="46">
+                  <dockpanel id="IMWnd.InputArea" dock="fill" backcolor="255,255,255" margin="5,2,5,2">
+                    <commoncontrol type="Button" DefaultPushButton="true"  dock="right" id="IMWnd.Send" text="[Send" enabled="true" height="30" width="50" minwidth="40" minheight="25" align_y="center" />
+                    <!--<dockpanel height="100%" width="5" dock="right" />-->
+                    <customcontrol id="IMWnd.Input" dock="fill"  minwidth="100" />
+                  </dockpanel>
+                </dockpanel>
+              </dockpanel>
+              <dockpanel id="IMWnd.HistoryPanel" dock="fill" margin="2,0,0,0">
+              <!-- Toolbar area for font format-->
+              <customcontrol id="IMWnd.FormatToolbar" minheight="30" width="100%" dock="bottom" show="hidden" />
+              <customcontrol id="IMWnd.AudibleBar" width="100%" minheight="75" dock="bottom" show="hidden" />
+              <!-- Friend status/history display area-->
+              <dockpanel id="IMWnd.HistoryWnd.History" dock="fill" minwidth="200" minheight="100" backcolor="162,162,162" margin="1,0,1,1">
+                <customcontrol id="IMWnd.History" dock="fill"/>
+              </dockpanel>
+            </dockpanel>
+            </dockpanel>
+          </dockpanel>
+        </dockpanel>
+      </dockpanel>
+    </dockpanel>
+  </section>
+
+  <section id="ConvSidePanel" composited="false" caption="false" >
+    <dockpanel dock="fill">
+      <dockpanel id="root" dock="fill" imagefile="im_side_bg.png" resizemargin="5,9,5,5" margin="5,2,5,2">
+        <dockpanel id="LabelArea" dock="top" width="100%" margin="4,5,0,0">
+          <imagebutton id="Close" dock="right" type="4" imagefile="..\images\close.png" />
+          <label id="PanelAppName" dock="left" text="Panel Name" textalign_y="center" textalign_x="left" width="100%" font="defaultfontlargenormal"/>
+        </dockpanel>
+        <dockpanel height="5" dock="top" />
+        <dockpanel id="PluginWarningArea" dock="bottom" show="hidden" width="100%" spacer="5" margin="5,0,5,0" clipedge="right">
+          <dockpanel height="5" dock="top" />
+          <image dock="left" imagefile="..\images\yahoo_logo.png" />
+          <dockpanel width="10" dock="left" />
+          <dockpanel height="3" dock="top" />
+          <label id="PluginWarningLabel" dock="fill" optional="true" text="[Note: Plug-ins without this Yahoo! logo are the sole responsibility of the plug-in developer." font="defaultfontnormal" textalign_y="bottom"/>
+        </dockpanel>
+        <customcontrol id="PanelArea" dock="fill" backcolor="100,100,100" />
+      </dockpanel>
+    </dockpanel>
+  </section>
+
+  <!-- ActivityMenu Pop-up Window -->
+  <section id="ActivityMenu" layered="false" caption="false" topmost="false" backgroundmove="false" resizable="false" minimizable="false" maximizable="false" systemmenu="false" ontaskbar="false" >
+    <!--width="400"-->
+    <dockpanel id="root" outline="true" outlinecolor="0,0,0" width="320" resizemargin="0,0,0,0" margin="0,0,0,0">
+      <dockpanel id="menu" dock="top" backcolor="menuitem_b" spacersize="0" margin="0,5,0,0" >
+        <dockpanel id="Recent" dock="top" margin="8,0,0,6" >
+          <label id="ActivityMenu.Recent" dock="top" width="100%" text="[R E C E N T" font="defaultfontbold" textcolor="menuitem" textalign_y="center" textalign_x="left" />
+        </dockpanel>
+        <canvas id="ActivityMenu.recent_canvas0" dock="top" >
+          <textbutton id="ActivityMenu.recent0"  text="[recent0" textcolor="menuitem" textcolor_hover="menuitem" style="style.activitymenu.small">
+            <event name="OnMouseEnter" >
+              <!--uncheck all other top level controls-->
+              <action targetid="ActivityMenu.recent1" checked="false" />
+              <action targetid="ActivityMenu.recent2" checked="false" />
+              <action targetid="ActivityMenu.recent3" checked="false" />
+              <action targetid="ActivityMenu.recent4" checked="false" />
+              <action targetid="ActivityMenu.featured0" checked="false" />
+              <action targetid="ActivityMenu.featured1" checked="false" />
+              <action targetid="ActivityMenu.MoreButton" checked="false" />
+              <!--check this control controls-->
+              <action targetid="ActivityMenu.recent0" checked="true" />
+              <action targetid="ActivityMenu.recent_info0" show="visible" />
+            </event>
+            <event name="OnButtonToggleOn" >
+              <action targetid="ActivityMenu.recent_info0" show="visible" />
+              <action targetid="" textcolor="menuitem_h" textcolor_hover="menuitem_h" />
+            </event>
+            <event name="OnButtonToggleOff" >
+              <action targetid="ActivityMenu.recent_info0" show="hidden" />
+              <action targetid="" textcolor="menuitem" textcolor_hover="menuitem" />
+            </event>
+          </textbutton>
+          <dockpanel id="recent_info4" dock="top" height="100%" width="100%" margin="0,0,25,0" >
+            <image id="ActivityMenu.recent_info0" imagefile="icon_info.png" tiptext="[More info" align_y="center" show="hidden" dock="right">
+            </image>
+          </dockpanel>
+        </canvas>
+
+        <canvas id="ActivityMenu.recent_canvas1" dock="top" >
+          <textbutton id="ActivityMenu.recent1"  text="[recent1" textcolor="menuitem" style="style.activitymenu.small">
+            <event name="OnMouseEnter" >
+              <!--uncheck all other top level controls-->
+              <action targetid="ActivityMenu.recent0" checked="false" />
+              <action targetid="ActivityMenu.recent2" checked="false" />
+              <action targetid="ActivityMenu.recent3" checked="false" />
+              <action targetid="ActivityMenu.recent4" checked="false" />
+              <action targetid="ActivityMenu.featured0" checked="false" />
+              <action targetid="ActivityMenu.featured1" checked="false" />
+              <action targetid="ActivityMenu.MoreButton" checked="false" />
+              <!--check this control controls-->
+              <action targetid="ActivityMenu.recent1" checked="true" />
+              <action targetid="ActivityMenu.recent_info1" show="visible" />
+            </event>
+            <event name="OnButtonToggleOn" >
+              <action targetid="ActivityMenu.recent_info1" show="visible" />
+              <action targetid="" textcolor="menuitem_h" textcolor_hover="menuitem_h" />
+            </event>
+            <event name="OnButtonToggleOff" >
+              <action targetid="ActivityMenu.recent_info1" show="hidden" />
+              <action targetid="" textcolor="menuitem" textcolor_hover="menuitem" />
+            </event>
+          </textbutton>
+          <dockpanel id="recent_info1" dock="top" height="100%" width="100%" margin="0,0,25,0" >
+            <image id="ActivityMenu.recent_info1" imagefile="icon_info.png" tiptext="[More info" align_y="center" show="hidden" dock="right">
+            </image>
+          </dockpanel>
+        </canvas>
+
+        <canvas id="ActivityMenu.recent_canvas2" dock="top" >
+          <textbutton id="ActivityMenu.recent2"  text="[recent2" textcolor="menuitem" style="style.activitymenu.small">
+            <event name="OnMouseEnter" >
+              <!--uncheck all other top level controls-->
+              <action targetid="ActivityMenu.recent0" checked="false" />
+              <action targetid="ActivityMenu.recent1" checked="false" />
+              <action targetid="ActivityMenu.recent3" checked="false" />
+              <action targetid="ActivityMenu.recent4" checked="false" />
+              <action targetid="ActivityMenu.featured0" checked="false" />
+              <action targetid="ActivityMenu.featured1" checked="false" />
+              <action targetid="ActivityMenu.MoreButton" checked="false" />
+              <!--check this control controls-->
+              <action targetid="ActivityMenu.recent2" checked="true" />
+              <action targetid="ActivityMenu.recent_info2" show="visible" />
+            </event>
+            <event name="OnButtonToggleOn" >
+              <action targetid="ActivityMenu.recent_info2" show="visible" />
+              <action targetid="" textcolor="menuitem_h" textcolor_hover="menuitem_h" />
+            </event>
+            <event name="OnButtonToggleOff" >
+              <action targetid="ActivityMenu.recent_info2" show="hidden" />
+              <action targetid="" textcolor="menuitem" textcolor_hover="menuitem" />
+            </event>
+          </textbutton>
+          <dockpanel id="recent_info2" dock="top" height="100%" width="100%" margin="0,0,25,0" >
+            <image id="ActivityMenu.recent_info2" imagefile="icon_info.png" tiptext="[More info" align_y="center" show="hidden" dock="right">
+            </image>
+          </dockpanel>
+        </canvas>
+        
+        <canvas id="ActivityMenu.recent_canvas3" dock="top" >
+          <textbutton id="ActivityMenu.recent3"  text="[recent3" textcolor="menuitem" style="style.activitymenu.small">
+            <event name="OnMouseEnter" >
+              <!--uncheck all other top level controls-->
+              <action targetid="ActivityMenu.recent0" checked="false" />
+              <action targetid="ActivityMenu.recent1" checked="false" />
+              <action targetid="ActivityMenu.recent2" checked="false" />
+              <action targetid="ActivityMenu.recent4" checked="false" />
+              <action targetid="ActivityMenu.featured0" checked="false" />
+              <action targetid="ActivityMenu.featured1" checked="false" />
+              <action targetid="ActivityMenu.MoreButton" checked="false" />
+              <!--check this control controls-->
+              <action targetid="ActivityMenu.recent3" checked="true" />
+              <action targetid="ActivityMenu.recent_info3" show="visible" />
+            </event>
+            <event name="OnButtonToggleOn" >
+              <action targetid="ActivityMenu.recent_info3" show="visible" />
+              <action targetid="" textcolor="menuitem_h" textcolor_hover="menuitem_h" />
+            </event>
+            <event name="OnButtonToggleOff" >
+              <action targetid="ActivityMenu.recent_info3" show="hidden" />
+              <action targetid="" textcolor="menuitem" textcolor_hover="menuitem" />
+            </event>
+          </textbutton>
+          <dockpanel id="recent_info3" dock="top" height="100%" width="100%" margin="0,0,25,0" >
+            <image id="ActivityMenu.recent_info3" imagefile="icon_info.png" tiptext="[More info" align_y="center" show="hidden" dock="right">
+            </image>
+          </dockpanel>
+        </canvas>
+
+        <!--<textbutton id="ActivityMenu.recent4" text="[recent4" style="style.activitymenu.small" />-->
+        <canvas id="ActivityMenu.recent_canvas4" dock="top" >
+          <textbutton id="ActivityMenu.recent4"  text="[recent4" textcolor="menuitem" style="style.activitymenu.small">
+            <event name="OnMouseEnter" >
+              <!--uncheck all other top level controls-->
+              <action targetid="ActivityMenu.recent0" checked="false" />
+              <action targetid="ActivityMenu.recent1" checked="false" />
+              <action targetid="ActivityMenu.recent2" checked="false" />
+              <action targetid="ActivityMenu.recent3" checked="false" />
+              <action targetid="ActivityMenu.featured0" checked="false" />
+              <action targetid="ActivityMenu.featured1" checked="false" />
+              <action targetid="ActivityMenu.MoreButton" checked="false" />
+              <!--check this control controls-->
+              <action targetid="ActivityMenu.recent4" checked="true" />
+              <action targetid="ActivityMenu.recent_info4" show="visible" />
+            </event>
+            <event name="OnButtonToggleOn" >
+              <action targetid="ActivityMenu.recent_info4" show="visible" />
+              <action targetid="" textcolor="menuitem_h" textcolor_hover="menuitem_h" />
+            </event>
+            <event name="OnButtonToggleOff" >
+              <action targetid="ActivityMenu.recent_info4" show="hidden" />
+              <action targetid="" textcolor="menuitem" textcolor_hover="menuitem" />
+            </event>
+          </textbutton>
+          <dockpanel id="recent_info4" dock="top" height="100%" width="100%" margin="0,0,25,0" >
+            <image id="ActivityMenu.recent_info4" imagefile="icon_info.png" tiptext="[More info" align_y="center" show="hidden" dock="right">
+            </image>
+          </dockpanel>
+        </canvas>
+
+        <image id="ActivityMenu.RecentSeparator" imagefile="Separator.png" width="100%" dock="top" />
+        <dockpanel id="Featured" dock="top" margin="8,0,0,6" >
+            <label id="ActivityMenu.Featured" dock="top" width="100%" text="[F E A T U R E D" font="defaultfontbold" textcolor="menuitem" textalign_y="center" textalign_x="left" />
+        </dockpanel>
+
+        <canvas id="ActivityMenu.featured_canvas0" dock="top" >
+          <textbutton id="ActivityMenu.featured0" style="style.activitymenu.large">
+            <event name="OnMouseEnter" >
+              <!--uncheck all other top level controls-->
+              <action targetid="ActivityMenu.recent0" checked="false" />
+              <action targetid="ActivityMenu.recent1" checked="false" />
+              <action targetid="ActivityMenu.recent2" checked="false" />
+              <action targetid="ActivityMenu.recent3" checked="false" />
+              <action targetid="ActivityMenu.recent4" checked="false" />
+              <action targetid="ActivityMenu.featured1" checked="false" />
+              <action targetid="ActivityMenu.MoreButton" checked="false" />
+              <!--check this control controls-->
+              <action targetid="ActivityMenu.featured0" checked="true" />
+              <action targetid="ActivityMenu.featured_info0" show="visible" />
+            </event>
+            <event name="OnButtonToggleOn" >
+              <action targetid="ActivityMenu.featured_info0" show="visible" />
+              <action targetid="ActivityMenu.featured_name0" textcolor="menuitem_h" />
+              <action targetid="ActivityMenu.featured_text0" textcolor="menuitem_h" />
+            </event>
+            <event name="OnButtonToggleOff" >
+              <action targetid="ActivityMenu.featured_info0" show="hidden" />
+              <action targetid="ActivityMenu.featured_name0" textcolor="menuitem" />
+              <action targetid="ActivityMenu.featured_text0" textcolor="menuitem" />
+            </event>
+          </textbutton>
+          <dockpanel id="featured_panel0" dock="top" height="100%" xpos="37" margin="0,0,7,5" >
+            <dockpanel id="featured_toppanel0" dock="top" margin="0,0,0,0" spacersize="5" >
+              <label id="ActivityMenu.featured_name0" dock="left" text="[featured0" font="defaultfontbold" textcolor="menuitem" />
+            </dockpanel>
+            <image id="ActivityMenu.featured_player0" imagefile="SinglePlayer.png" tiptext="[Single player" align_y="bottom" show="visible" dock="bottom">
+              <event name="OnMouseEnter" >
+                <action targetid="ActivityMenu.featured0" checked="true" />
+              </event>
+            </image>
+            <label id="ActivityMenu.featured_text0" dock="top" height="40" width="280" text="[This is the best activity ever. Plus it's new, so you know it's good. Ask your friends: they're completely amazed by it. Except that one guy." multiline="true" font="defaultfontnormal" textcolor="menuitem" />
+          </dockpanel>
+          <!--<dockpanel id="featured_info0" dock="top" height="100%" width="100%" margin="0,0,25,0" >
+            <image id="ActivityMenu.featured_info0" imagefile="icon_info.png" tiptext="[More info" align_y="center" show="hidden" dock="right">
+              <event name="OnMouseEnter" >
+                <action targetid="ActivityMenu.featured0" checked="true" />
+              </event>
+              <event name="OnMouseLeave" >
+                <action targetid="ActivityMenu.featured0" checked="false" />
+              </event>
+            </image>
+          </dockpanel>-->
+        </canvas>
+        <canvas id="ActivityMenu.featured_canvas1" dock="top" >
+          <textbutton id="ActivityMenu.featured1" style="style.activitymenu.large">
+            <event name="OnMouseEnter" >
+              <!--uncheck all other top level controls-->
+              <action targetid="ActivityMenu.recent0" checked="false" />
+              <action targetid="ActivityMenu.recent1" checked="false" />
+              <action targetid="ActivityMenu.recent2" checked="false" />
+              <action targetid="ActivityMenu.recent3" checked="false" />
+              <action targetid="ActivityMenu.recent4" checked="false" />
+              <action targetid="ActivityMenu.featured0" checked="false" />
+              <action targetid="ActivityMenu.MoreButton" checked="false" />
+              <!--check this control controls-->
+              <action targetid="ActivityMenu.featured1" checked="true" />
+              <action targetid="ActivityMenu.featured_info1" show="visible" />
+            </event>
+            <event name="OnButtonToggleOn" >
+              <action targetid="ActivityMenu.featured_info1" show="visible" />
+              <action targetid="ActivityMenu.featured_name1" textcolor="menuitem_h" />
+              <action targetid="ActivityMenu.featured_text1" textcolor="menuitem_h" />
+            </event>
+            <event name="OnButtonToggleOff" >
+              <action targetid="ActivityMenu.featured_info1" show="hidden" />
+              <action targetid="ActivityMenu.featured_name1" textcolor="menuitem" />
+              <action targetid="ActivityMenu.featured_text1" textcolor="menuitem" />
+            </event>
+          </textbutton>
+          <dockpanel id="featured_panel1" dock="top" height="100%" xpos="37" margin="0,0,7,5" >
+            <dockpanel id="featured_toppanel1" dock="top" margin="0,0,0,0" spacersize="5" >
+              <label id="ActivityMenu.featured_name1" dock="left" text="[featured1" font="defaultfontbold" textcolor="menuitem" />
+            </dockpanel>
+            <image id="ActivityMenu.featured_player1" imagefile="MultiPlayer.png" tiptext="[Two players" align_y="bottom" show="visible" dock="bottom">
+              <event name="OnMouseEnter" >
+                <action targetid="ActivityMenu.featured1" checked="true" />
+              </event>
+            </image>
+            <label id="ActivityMenu.featured_text1" dock="top" height="40" width="280" text="[This is the best activity ever. Plus it's new, so you know it's good. Ask your friends: they're completely amazed by it. Except that one guy." multiline="true" font="defaultfontnormal" textcolor="menuitem" />
+          </dockpanel>
+          <!--<dockpanel id="featured_info1" dock="top" height="100%" width="100%" margin="0,0,25,0" >
+            <image id="ActivityMenu.featured_info1" imagefile="icon_info.png" tiptext="[More info" align_y="center" show="hidden" dock="right">
+              <event name="OnMouseEnter" >
+                <action targetid="ActivityMenu.featured1" checked="true" />
+              </event>
+              <event name="OnMouseLeave" >
+                <action targetid="ActivityMenu.featured1" checked="false" />
+              </event>
+            </image>
+          </dockpanel>-->
+        </canvas>
+
+        <image id="Separator" imagefile="Separator.png" width="100%" dock="top" />
+      </dockpanel>
+
+      <canvas id="ActivityMenu.more_canvas">
+        <textbutton id="ActivityMenu.MoreButton" dock="top" width="100%" height="100%" imagefile="..\images\am_buttons.png" resizemargin="0,0,0,0" type="toggle" >
+          <event name="OnMouseEnter" >
+            <!--uncheck all other top level controls-->
+            <action targetid="ActivityMenu.recent0" checked="false" />
+            <action targetid="ActivityMenu.recent1" checked="false" />
+            <action targetid="ActivityMenu.recent2" checked="false" />
+            <action targetid="ActivityMenu.recent3" checked="false" />
+            <action targetid="ActivityMenu.recent4" checked="false" />
+            <action targetid="ActivityMenu.featured0" checked="false" />
+            <action targetid="ActivityMenu.featured1" checked="false" />
+            <action targetid="ActivityMenu.MoreButton" checked="true" />
+          </event>
+          <event name="OnButtonToggleOn" >
+            <action targetid="ActivityMenu.More" textcolor="menuitem_h" />
+            <action targetid="ActivityMenu.Activities" textcolor="menuitem_h" />
+          </event>
+          <event name="OnButtonToggleOff" >
+            <action targetid="ActivityMenu.More" textcolor="menuitem" />
+            <action targetid="ActivityMenu.Activities" textcolor="menuitem" />
+          </event>
+        </textbutton>
+        <dockpanel id="more_activities" dock="top" margin="7,4,7,3" >
+          <!--<label id="ActivityMenu.Activities" dock="top" width="320" text="[Backgammon, Chess, Flight Tracker, Panda Golf, Y! Updates, ActivityMatic 500, Literati, Cookie Party..." multiline="true" font="defaultfontnormal" textcolor="menuitem" />-->
+          <label id="ActivityMenu.More" dock="top" width="320" text="[More Activities..." font="defaultfontbold" textcolor="menuitem" />
+        </dockpanel>
+      </canvas>
+    </dockpanel>
+  </section>
+</theme>

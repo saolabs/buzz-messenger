@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<VoicePreferencesAdvData>
+<EnableRingPCSpeaker>0</EnableRingPCSpeaker>
+<CallLogArchive>0</CallLogArchive>
+<DefaultRingTone id="Default Ring Tone ID"><RingToneID>default_ring</RingToneID><GroupNameID>Group Name ID</GroupNameID></DefaultRingTone>
+<GroupNameList>
+<GroupName displayname="Default Group Name Display Name" id="Group Name ID"><RingToneID>Yahoo_ring_03</RingToneID></GroupName>
+</GroupNameList>
+<RingToneList>
+<RingTone displayname="Silent" id="Silent">silent.wav</RingTone>
+<RingTone displayname="Ring Ring" id="default_ring">default_ring.wav</RingTone>
+<RingTone displayname="Yahoo! Ring" id="Yahoo_ring_03">Yahoo_ring_03.wav</RingTone>
+<RingTone displayname="Yahoo! Yodel" id="yodel">yodel.wav</RingTone>
+</RingToneList>
+<IncomingAlerts>
+<EnableRinging>1</EnableRinging>
+<RingingAlerts><UserRingToneList/></RingingAlerts>
+<PauseOtherAudioSources>0</PauseOtherAudioSources>
+<HowLongToPlayAlerts><PlayAlert>0</PlayAlert><PlayAlert>1</PlayAlert><Selected>1</Selected></HowLongToPlayAlerts>
+</IncomingAlerts>
+<AudioDeviceSelection>
+<IncomingDevice/>
+<OutgoingDevice/>
+<LayoutDevice>
+<DeviceType>0</DeviceType>
+<DeviceType>1</DeviceType>
+<SelectDevice>1</SelectDevice>
+</LayoutDevice>
+<RingerDevice/>
+</AudioDeviceSelection>
+<RingTonePath/>
+</VoicePreferencesAdvData>

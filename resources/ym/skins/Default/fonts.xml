@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<fonts>
+  <!--<font id="" font="" textcolor=""/>-->
+  <!-- from Indigo -->
+  <font id="caption" font="Tahoma,8,FW_BOLD" quality="c"/>
+  <font id="caption_inactive" font="Tahoma,8,FW_BOLD" quality="c" />
+  <font id="caption_s" font="Tahoma,7,FW_LIGHT" />
+  <font id="caption_inactive_s" font="Tahoma,7,FW_LIGHT" />
+  <font id="caption_t" font="Tahoma,7,FW_BOLD" textcolor="ff0000"/>
+  <font id="caption_inactive_t" font="Tahoma,7,FW_BOLD" textcolor="7a8180"/>
+  <font id="groupbox_header" font="Tahoma,8,FW_LIGHT" height="8" weight="300" textcolor="0"/>
+  <font id="menuitem" font="Tahoma,8,FW_NORMAL" />
+  <font id="menuitem_h" font="Tahoma,8,FW_NORMAL" />
+  <font id="menuitem_d" font="Tahoma,8,FW_NORMAL" edgeeffect="disabled" edgecolor="ffffff"/>
+  <font id="statusbar" font="Tahoma,8,FW_NORMAL" />
+  <font id="defaultfontnormal" font="Tahoma,8,FW_NORMAL" />
+  <font id="defaultfontbold" font="Tahoma,8,FW_BOLD" />
+  <font id="defaultfontitalic" font="Tahoma,8,FW_NORMAL,ITALIC" />
+  <font id="defaultfontunderline" font="Tahoma,8,FW_NORMAL,UNDERLINE" />
+  <font id="defaultfontboldunderline" font="Tahoma,8,FW_BOLD,UNDERLINE" />
+  <font id="defaultfontsmallnormal" font="Tahoma,7,FW_NORMAL" />
+  <font id="defaultfontlargenormal" font="Tahoma,9,FW_NORMAL" />
+  <font id="defaultfontlargebold" font="Tahoma,9,FW_BOLD" />
+  <font id="defaultfontxlargebold" font="Tahoma,13,FW_BOLD" />
+
+  <font id="menubar" font="defaultfontnormal" textcolor="menubartext"/>
+  <font id="menubar_h" font="defaultfontnormal" textcolor="menubartext_h"/>
+  <font id="menubar_d" font="defaultfontnormal" textcolor="menubartext_d"/>
+  <font id="menubar_p" font="defaultfontnormal" textcolor="menubartext_p"/>
+  <font id="mainmenubar" font="defaultfontnormal" textcolor="mainmenubartext"/>
+  <font id="mainmenubar_h" font="defaultfontnormal" textcolor="mainmenubartext_h"/>
+  <font id="mainmenubar_d" font="defaultfontnormal" textcolor="mainmenubartext_d"/>
+  <font id="mainmenubar_p" font="defaultfontnormal" textcolor="mainmenubartext_p"/>
+
+  <font id="font_sys_notif" font="Tahoma,8,FW_NORMAL" />
+</fonts>

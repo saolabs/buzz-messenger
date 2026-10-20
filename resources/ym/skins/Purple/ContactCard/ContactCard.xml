@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<theme app="Y!Msgr" version="2" >
+
+  <style id="style.CC.topactionbutton" type="toggle" dock="top" font="defaultfontlargenormal" textcolor="button" textcolor_hover="button_h" textalign_x="center" textalign_y="center" height="100%" width="33%" resizemargin="3,1,3,1" />
+  <style id="style.CC.actionbutton" type="toggle" dock="top" font="defaultfontnormal" textcolor="button" textcolor_disable="button_ds" textcolor_hover="button_h" textalign_x="center" textalign_y="center" height="20" width="100%" resizemargin="4,1,4,1" />
+  <style id="style.CC.actionbuttontext" type="toggle" dock="top" font="defaultfontnormal" font_hover="defaultfontunderline" textcolor="text_hyperlink" textcolor_disable="button_ds" textalign_x="left" textalign_y="center" height="16" width="100%"/>
+  <style id="style.CC.SingleButton" font="defaultfontnormal" textcolor="button" textcolor_disable="button_ds" textcolor_hover="button_h" textalign_x="center" textalign_y="center" />
+  <style id="style.MyCC.ContentLink" dock="left" font="defaultfontnormal" textcolor="button" textcolor_disable="button_ds" textcolor_hover="button_h" textalign_x="center" textalign_y="center" height="21"/>
+  <style id="style.overlay.actionbutton" type="toggle" imagefile="..\images\btn-middle-small.png" dock="left" font="defaultfontsmallnormal" textcolor="button" textcolor_disable="button_ds" textcolor_hover="button_h" textalign_x="center" textalign_y="center" height="100%" resizemargin="2,7,2,7" margin="3,0,3,0" />
+  <style id="style.overlay.label" textcolor="0,0,0" dock="top" scroll="false" scrollspace_width="50" scroll_period="50" width="100%" textalign_x="left" textalign_y="center" />
+  <style id="style.CC.Status" textcolor="255,255,255" dock="top" scroll="false" scrollspace_width="50" scroll_period="50" textalign_x="left" textalign_y="center" />
+
+  <section id="ContactCard" layered="false" caption="false" maximizable="false" minimizable="false" systemmenu="false">
+    <dockpanel id="popup" minwidth="254" backcolor="236,237,224">
+      <customattr name="CornerArc" value="0" />
+      <customattr name="DelayShowTime" value="500" />
+      <customattr name="DimissTime" value="4000" />      
+      <dockpanel id="background" dock="fill" imagefile="background.png" resizemargin="26,50,26,10">
+        <dockpanel id="Main" dock="fill" width="100%" height="100%" margin="4,0,4,2">
+          <!-- Title area-->
+          <dockpanel dock="top" id="TitleArea" width="100%" height="26" margin="3,0,0,0">
+            <!-- Close button -->
+            <dockpanel dock="right" height="100%" margin="0,2,0,2">
+              <imagebutton id="Close" dock="right" type="4" imagefile="..\images\close.png">
+                <event name="OnClick" >
+                  <action command="close" section="ContactCard" type="popup" />
+                </event>
+              </imagebutton>
+            </dockpanel>
+            <dockpanel id="NetworkLogoArea" dock="left" show="hidden" align_y="center" margin="0,0,5,0">
+              <image id="NetworkLogo" dock="left" width="16" height="16"/>
+            </dockpanel>
+            <dockpanel dock="fill" clipedge="right" maxwidth="200">
+              <compositelabel dock="left" id="Name" label1="DisplayName" label2="BuddyID"  separator=""  textcolor="displaynametextcolor" font="defaultfontlargenormal" height="100%"   textalign_x="left" textalign_y="center" optional="true"/>
+              <label show="hidden" dock="left" id="DisplayName" text="[Kurt Hamilton" textcolor="displaynametextcolor" font="defaultfontlargenormal" height="100%"   textalign_x="left" textalign_y="center" />
+              <label show="hidden" dock="left" id="BuddyID" text="[Kurt Hamilton" textcolor="displaynametextcolor" font="defaultfontlargenormal" height="100%"   textalign_x="left" textalign_y="center" />
+              <dockpanel dock="left" id="SumoImgspacer" width="2" height="100%" />
+              <textbutton id="SumoImg" dock="left" align_y="center" show="visible" iconalign_x="center" iconalign_y="center" icondock="center" onestate="true"  iconfile="..\sumo\1.png" imagefile="..\images\btn-single-small_tr.png" type="toggle" height="14" resizemargin="2,9,2,8" margin="3,0,3,0" BkgndInvisibleOnNormal="true">
+                <customattr name="Launch URL" value="sumo about" />               
+              </textbutton>            
+          </dockpanel>
+          </dockpanel>
+          <dockpanel id="Main" dock="fill" margin="4,4,4,4">
+            <!-- Middle area with the friend icon and action buttions -->
+            <dockpanel dock="top">
+              <dockpanel id="DisplayImageArea" dock="right" width="96" height="96">
+                <image id="DisplayImage" dock="fill" imagefile="..\images\DefaultFriendIcon.png" height="96" width="96" />
+                <dockpanel id="AvatarSection" show="hidden" dock="fill">
+                  <dockpanel width="5" dock="left"/>
+                  <customcontrol id="Avatar" height="128" width="86" />
+                </dockpanel>
+              </dockpanel>
+              <dockpanel id="DisplayImageAreaSpacer" dock="right" width="10" />
+              <!-- The buttons for top 3 actions -->
+              <dockpanel id="Actions.MainActionsPanel" dock="top" width="100%" margin="0,0,0,5" spacersize="5">
+                <textbutton imagefile="..\images\btn-single-small.png" id="Actions.Call" dock="left" height="22" width="48%" iconfile="card-CallButton.png" iconalign_x="center" iconalign_y="center" icondock="center" style="style.CC.actionbutton" />
+                <textbutton imagefile="..\images\btn-single-small.png" id="Actions.SMS" dock="left" height="22" width="48%" iconfile="card-SmsButton.png" iconalign_x="center" iconalign_y="center" icondock="center" style="style.CC.actionbutton" />
+              </dockpanel>
+              <dockpanel id="Actions.ActionsPanel" dock="fill" margin="0,0,0,0">
+                <customattr name="MaxNumOfBtnToShow" value="4" />
+                <textbutton id="Actions.CallMobile" text="[Call Mobile" style="style.CC.actionbuttontext"/>
+                <textbutton id="Actions.CallHome" text="[Call Home" style="style.CC.actionbuttontext"/>
+                <textbutton id="Actions.CallWork" text="[Call Work" style="style.CC.actionbuttontext"/>
+                <textbutton id="Actions.Email" text="[Send Email" style="style.CC.actionbuttontext"/>
+                <textbutton id="Actions.Webcam" text="[Webcam" style="style.CC.actionbuttontext"/>
+                <textbutton id="Actions.Conference" text="[Conference" style="style.CC.actionbuttontext"/>
+                <textbutton id="Actions.Photosharing" text="[Photosharing" style="style.CC.actionbuttontext"/>
+                <textbutton id="Actions.SendFile" text="[Send File" style="style.CC.actionbuttontext"/>
+
+
+                <textbutton id="Actions.ViewProfile" res_id="11111" text="[View Profile" dock="bottom" style="style.CC.actionbuttontext">
+                  <customattr name="Required" value="true" />
+                  <customattr name="SingleButton" value="true" />
+                  <!-- To indicate that this button is a stand alone button so don't change the background image-->
+                </textbutton>
+                <textbutton id="Actions.EditContact" text="[Edit Contact..." type="toggle" dock="bottom" style="style.CC.actionbuttontext">
+                  <customattr name="Required" value="true" />
+                  <customattr name="SingleButton" value="true" /> <!-- To indicate that this button is a stand alone button so don't change the background image-->
+                </textbutton>
+              </dockpanel>
+            </dockpanel>
+
+            <!-- Vertical spacer -->
+            <dockpanel dock="top" height="5" />
+			      <dockpanel dock="top" imagefile="\menu_separator.png" height="2" />
+
+            <!-- Visibility setting button -->
+            <textbutton dock="top" align_x="center" id="Actions.Visibility" text="[You appear online to this contact" BkgndInvisibleOnNormal="true" type="toggle" height="19" imagefile="..\images\btn-single-small.png" resizemargin="10,1,10,1" style="style.CC.SingleButton" iconalign_x="right" iconalign_y="center" icondock="right" onestate="true" iconfile="..\images\single_arrow_down.png" />
+
+            <!-- Vertical spacer -->
+            <dockpanel dock="top" height="2" />
+
+            <!-- Vitality banner -->
+            <dockpanel id="VitalityBannerContainer" dock="top" width="100%">
+              <dockpanel backcolor="158,158,158" dock="top" width="100%" margin="1,1,1,0">
+                <dockpanel backcolor="255,255,255" dock="top" width="100%" margin="1,1,1,0">
+                  <dockpanel backcolor="236,236,236" dock="top" width="100%" margin="3,0,3,0">
+                    <label id="IdleStatusTimer" dock="top" width="100%" height="20" font="defaultfontnormal" textcolor="cctextcolor" textalign_x="left" textalign_y="center" />
+                    <customcontrol id="CustomUserStatus" height="20" width="100%"  dock="top"/>
+                  </dockpanel>
+                  <customcontrol id="VitalityBanner" dock="top" height="67" width="100%" />                    
+                </dockpanel>
+              </dockpanel>
+              <dockpanel id="VitalityBanner.BottomBorder" targetid="VitalityBanner.BottomBorder" backcolor="158,158,158" show="hidden" dock="top" height="1" width="100%" />
+              <textbutton id="VitalityBanner.Expand" dock="top" width="100%" height="13" imagefile="..\images\btn-middle-small.png" type="autotoggle" iconalign_x="center" iconalign_y="center" icondock="center" iconfile="..\images\up_down_expand_toggle.png" style="style.CC.actionbutton" BkgndNormalOnToggle="true">
+                <event name="OnHide" >
+                  <action targetid="VitalityBanner.BottomBorder" show="visible" />
+                </event>
+                <event name="OnShow" >
+                  <action targetid="VitalityBanner.BottomBorder" show="hidden" />
+                </event>  
+              </textbutton>
+            </dockpanel>
+          </dockpanel>
+        </dockpanel>
+      </dockpanel>
+    </dockpanel>
+  </section>
+  <section id="MyContactCard" layered="false" caption="false" maximizable="false" minimizable="false" systemmenu="false">
+    <dockpanel id="popup" minwidth="254">
+      <customattr name="CornerArc" value="0" />
+      <customattr name="DimissTime" value="60000" />
+      <dockpanel id="background" dock="fill" imagefile="background.png" resizemargin="26,50,26,10">
+        <dockpanel id="Main" dock="fill" width="100%" height="100%" margin="4,0,4,2">
+          <!-- Title area-->
+          <dockpanel dock="top" id="TitleArea" width="100%" height="26" margin="3,0,0,0">
+            <!-- Close button -->
+            <dockpanel dock="right" height="100%" margin="0,2,0,2">
+              <imagebutton id="Close" dock="right" type="4" imagefile="..\images\close.png">
+                <event name="OnClick" >
+                  <action command="close" section="ContactCard" type="popup" />
+                </event>
+              </imagebutton>
+            </dockpanel>
+            <label dock="left" id="DisplayName" text="[Kurt Hamilton (me)" textcolor="displaynametextcolor" font="defaultfontlargenormal" height="100%"   textalign_x="left" textalign_y="center" />
+            <dockpanel dock="left" id="SumoImgspacer" width="2" height="100%" />
+            <textbutton id="SumoImg" dock="left" align_y="center" show="visible" iconalign_x="center" iconalign_y="center" icondock="center" onestate="true"  iconfile="..\sumo\1.png" imagefile="..\images\btn-single-small_tr.png" type="toggle" height="14" resizemargin="2,9,2,8" margin="3,0,3,0" BkgndInvisibleOnNormal="true">
+              <customattr name="Launch URL" value="sumo about" />
+            </textbutton>            
+          </dockpanel>
+          <dockpanel id="Main" dock="fill" margin="4,4,4,4">
+            <!-- Middle area with the friend icon and action buttions -->
+            <dockpanel dock="top">
+              <dockpanel id="DisplayImageArea" dock="right" width="96" height="96">
+                <image id="DisplayImage" dock="fill" imagefile="..\images\DefaultFriendIcon.png" height="96" width="96" />
+                <dockpanel id="AvatarSection" show="hidden" dock="fill">
+                  <dockpanel width="5" dock="left"/>
+                  <customcontrol id="Avatar" height="128" width="86" />
+                </dockpanel>
+              </dockpanel>
+              <dockpanel id="DisplayImageAreaSpacer" dock="right" width="10" />
+              <dockpanel dock="fill" margin="0,0,0,0">
+                <textbutton id="Actions.DisplayImage" text="[Display Image..." style="style.CC.actionbuttontext"/>
+                <textbutton id="Actions.EditContact" text="[Contact Details"   style="style.CC.actionbuttontext"/>
+                <textbutton id="Actions.AccountInfo" text="[Account Info"      style="style.CC.actionbuttontext"/>
+                <textbutton id="Actions.SumoInfo" text="[Power User Benefits"  res_id="1291" style="style.CC.actionbuttontext" />
+                <textbutton id="Actions.ViewProfile" res_id="102" text="[Edit My Profile" style="style.CC.actionbuttontext"/>
+                <textbutton id="VitalityBanner.PreferenceLink" text="[My Sharing Preference..." dock="bottom"  res_id="271" style="style.CC.actionbuttontext" />
+              </dockpanel>
+            </dockpanel>
+
+            <!-- Vertical spacer -->
+            <dockpanel dock="top" height="4" />
+
+            <!-- Vitality banner -->
+            <dockpanel id="VitalityBannerContainer" dock="top" width="100%">
+              <dockpanel backcolor="158,158,158" dock="top" width="100%" margin="1,1,1,0">
+                <dockpanel backcolor="255,255,255" dock="top" width="100%" margin="1,1,1,0">
+                  <dockpanel backcolor="236,236,236" dock="top" width="100%" margin="3,0,3,0">
+                    <label id="IdleStatusTimer" dock="top" width="100%" height="20" font="defaultfontnormal" textcolor="cctextcolor" textalign_x="left" textalign_y="center" />
+                    <customcontrol id="CustomUserStatus" height="20" width="100%"  dock="top"/>
+                  </dockpanel>
+                  <customcontrol id="VitalityBanner" dock="top" height="67" width="100%" />
+                </dockpanel>
+              </dockpanel>
+              <dockpanel id="VitalityBanner.BottomBorder" backcolor="158,158,158" show="hidden" dock="top" height="1" width="100%" />
+              <textbutton id="VitalityBanner.Expand" dock="top" width="100%" height="13" imagefile="..\images\btn-middle-small.png" type="autotoggle" iconalign_x="center" iconalign_y="center" icondock="center" iconfile="..\images\up_down_expand_toggle.png" style="style.CC.actionbutton">
+                <event name="OnHide" >
+                  <action targetid="VitalityBanner.BottomBorder" show="visible" />
+                </event>
+                <event name="OnShow" >
+                  <action targetid="VitalityBanner.BottomBorder" show="hidden" />
+                </event>
+              </textbutton>
+            </dockpanel>
+          </dockpanel>
+        </dockpanel>
+      </dockpanel>
+    </dockpanel>
+  </section>
+  <section id="ContactCardOverlay" layered="true" alpha="255" composited="true" caption="false" maximizable="false" minimizable="false" resizable="false" systemmenu="false">
+    <dockpanel id="popup" width="300" height="38" margin="12,0,0,0" >
+      <customattr name="MoreActivateTags" value="DisplayImage,StatusIcon,Status.MoreLeft,Status.MoreRight,DisplayImage.Frame" />
+      <customattr name="Height" value="38" />
+      <customattr name="MarginLeft" value="3" />
+      <customattr name="MarginTop" value="-1" />
+      <customattr name="MarginBottom" value="0" />
+      <customattr name="MarginRight" value="0"/>
+      <customattr name="Resizable" value="true" />
+      <customattr name="DimissTime" value="500" />
+      <customattr name="DelayShowTime" value="200" />
+      <customattr name="FadeInOnShowSteps" value="5" />
+      <customattr name="FadeInOnShowDelay" value="100" />
+      <customattr name="FadeInTransitionFrame" value="0,50,100,150,200,255" />
+      <customattr name="FadeInTransitionButtons" value="0,50,100,150,200,255" />
+      <customattr name="ControlsTabOrder" value ="DisplayImage.Frame,Actions.Call,Actions.SMS" />
+      <!--<dockpanel id="left-of-image" dock="left" width="26" height="100%" />-->
+      <dockpanel id="image-frame" dock="left" width="38" height="38" >
+        <imagebutton id="DisplayImage.Frame" imagefile="Frame.png" type="toggle" />
+      </dockpanel>
+      <dockpanel id="ActionButtons" dock="fill" height="100%" margin="0,0,5,0" >
+        <imagebutton id="Actions.SMS" dock="right" align_x="right" align_y="top" imagefile="SmsButton.png" opacity="100" type="toggle" />
+        <dockpanel dock="right" width="2" />
+        <imagebutton id="Actions.Call" dock="right" align_x="right" align_y="top" imagefile="CallButton.png" opacity="100" type="toggle" />
+      </dockpanel>
+    </dockpanel>
+  </section>
+
+</theme>

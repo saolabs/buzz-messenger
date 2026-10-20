@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<theme app="Y!Msgr" version="2" >
+
+ <section id="OfflineMsgViewer" caption="true" text="Offline Messages" maximizable="true" minimizable="true" resizable="true" systemmenu="true" icon="..\\IMWindow\\im.ico">
+    <dockpanel id="root" dock="fill" width="700" height="400" margin="1,1,0,1">
+      <dockpanel id="ad_panel" dock="right" height="100%" margin="3,0,3,0">
+        <customcontrol id="ad_control" dock="right" align_y="center" height="265" width="300" />
+      </dockpanel>
+      <customcontrol id="offline_control" dock="fill" minwidth="395" minheight="300"/>
+    </dockpanel>
+  </section>
+</theme>

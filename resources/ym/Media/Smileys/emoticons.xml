@@ -1,0 +1,1007 @@
+<emoticons base="http://download.yimg.com/ycs/msg/smileys/v1/emoticons/" signature="Z/42cpnNaQ/Gu4m7zhD9rvb3P2FPz7PuvwQ3GycemRBxLo76UvuAiqqZCpHt56eRf186kOwKLkAUpRlchTnxafr41YbHThNG1nNAxuDKH3ZxLvtbvV2yXvJCKCjbWv0kDCeqaUhWFm5xi57VFshhFKYexkY80C3NFJb4LD4Q4BTTTerZmbIyv0z84z6jRiiE1MLV3Fk9DGWqKDMU8uOPpdKCWAsjbYZOWimc85PfsQNeTq+IRPDXGKWxlw6ajgsqjHa6PpCyeBnZ5wEuQfrKkzHXwbTQXf+vE6p67bcJkBCn9CdDZ5BGWEYNNOaq19cDF85vKkh0X23lpxrqcs3kNQ==" v="1">
+	<emoticon fname="1" id="1" sendable="1" title="smile">
+		<shortcuts>
+			<shortcut>:)</shortcut>
+			<shortcut>:-)</shortcut>
+			<shortcut>(-:</shortcut>
+			<shortcut>(:)</shortcut>
+			<shortcut network="2">:)</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="esq2lwBbQt92U0SFK7klQw--" extension="gif" height="18" size="1197" width="18"/>
+			<type checksum="VSTlhO3g.rDoE_IJlnHqBg--" extension="swf" size="1158" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="2" id="2" sendable="1" title="frown">
+		<shortcuts>
+			<shortcut>:(</shortcut>
+			<shortcut>:-(</shortcut>
+			<shortcut network="2">:(</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="j_eIbVc.fOh2.v4Y44JWwA--" extension="gif" height="18" size="1001" width="18"/>
+			<type checksum="AzCTDPZfUqa_ju0JO7N6VQ--" extension="swf" size="1104" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="3" id="3" sendable="1" title="wink">
+		<shortcuts>
+			<shortcut>;)</shortcut>
+			<shortcut>;-)</shortcut>
+			<shortcut network="2">;)</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="S8jmeHUnzfe7Ye_ECdSRaA--" extension="gif" height="18" size="1001" width="18"/>
+			<type checksum="nh8jvp9l0wrK2m_Wa6lP8A--" extension="swf" size="2830" width="20"/>
+			<type extension="bmp"/>
+			<type duration="1.2" extension="wav" playcount="1" size="1234"/>
+		</file>
+	</emoticon>
+	<emoticon fname="7" id="7" sendable="1" title="confused">
+		<shortcuts>
+			<shortcut>:-/</shortcut>
+			<shortcut>:-</shortcut>
+			<shortcut network="2">:S</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="KK_b2.SzFRRnzbqDtGrX6w--" extension="gif" height="18" size="2728" width="20"/>
+			<type checksum="aC5C2rGKqAkD0rJlMOs8eA--" extension="swf" size="1985" width="25"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="8" id="8" sendable="1" title="lovestruck">
+		<shortcuts>
+			<shortcut>:x</shortcut>
+			<shortcut>:-x</shortcut>
+			<shortcut network="2">(L)</shortcut>
+			<shortcut/>
+		</shortcuts>
+		<file>
+			<type checksum=".hkQ2UuDyqbpph3.LgQQPw--" extension="gif" height="18" size="2323" width="18"/>
+			<type checksum="6ia9sb68SFFpluFIRyw1UA--" extension="swf" size="2033" width="22"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="9" id="9" sendable="1" title="blushing">
+		<shortcuts>
+			<shortcut><![CDATA[:">]]></shortcut>
+			<shortcut network="2">:$</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="LH25SUK9QV9kMA09Avwl9g--" extension="gif" height="18" size="1641" width="18"/>
+			<type checksum="XNZBDmC8TQG55TslUtt8Ig--" extension="swf" size="1100" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="10" id="10" sendable="1" title="tongue">
+		<shortcuts>
+			<shortcut>:-P</shortcut>
+			<shortcut>:P</shortcut>
+			<shortcut network="2">:P</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="A3Gb0uZtFqyRZkE.mHT6vA--" extension="gif" height="18" size="845" width="18"/>
+			<type checksum="4wLB3pOvQCA2HqKIKtFUlg--" extension="swf" size="2888" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="11" id="11" sendable="1" title="kiss">
+		<shortcuts>
+			<shortcut>:-*</shortcut>
+			<shortcut>:*</shortcut>
+			<shortcut network="2">(K)</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="j.A26S5hFh6Juvyvywe4fA--" extension="gif" height="18" size="1317" width="18"/>
+			<type checksum="ipmnr5Jr8JXyRC6DgasP0w--" extension="swf" size="2838" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="12" id="12" sendable="1" title="broken heart">
+		<shortcuts>
+			<shortcut>=((</shortcut>
+			<shortcut network="2">(U)</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="6d_Nigt.g4CvfUYQGvy7IA--" extension="gif" height="18" size="2318" width="18"/>
+			<type checksum="7UzyHMcRb7uc0FobSLvRwQ--" extension="swf" size="6226" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="13" id="13" sendable="1" title="surprise">
+		<shortcuts>
+			<shortcut>:-O</shortcut>
+			<shortcut>:O</shortcut>
+			<shortcut network="2">:-O</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="mfQtlWJA0LvP098Wa6e0LQ--" extension="gif" height="18" size="1668" width="18"/>
+			<type checksum="4TdE3K09Dy8oJyXNGu1lIg--" extension="swf" size="2167" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="14" id="14" sendable="1" title="angry">
+		<shortcuts>
+			<shortcut>X-(</shortcut>
+			<shortcut>X(</shortcut>
+			<shortcut network="2">:@</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="TUmZLP4p5chzofOgkm0igg--" extension="gif" height="18" size="4770" width="34"/>
+			<type checksum="ZzmphthoL_nhZmAJZ.y.qQ--" extension="swf" size="4795" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="16" id="16" sendable="1" title="cool">
+		<shortcuts>
+			<shortcut>B-)</shortcut>
+			<shortcut network="2">(H)</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="JuGloSt8yKtJ7wNYYY8Obw--" extension="gif" height="18" size="1017" width="18"/>
+			<type checksum="QYuvlL9VLHvGvZCOyYkQZg--" extension="swf" size="1583" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="19" id="19" sendable="1" title="devilish">
+		<shortcuts>
+			<shortcut><![CDATA[>:)]]></shortcut>
+			<shortcut network="2">(6)</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum=".DkjxyTPxRwDnIjdMqCE9w--" extension="gif" height="18" size="4005" width="18"/>
+			<type checksum="tzZ.x0IMinAHpDgUiQEBdA--" extension="swf" size="2915" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="20" id="20" sendable="1" title="crying">
+		<shortcuts>
+			<shortcut>:((</shortcut>
+			<shortcut>:-((</shortcut>
+			<shortcut network="2"><![CDATA[:'(]]></shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="OXXrU9TNdSGuhcHFpx_C.A--" extension="gif" height="18" size="2304" width="22"/>
+			<type checksum="VeS90cH6L0q6lu_z6wUpbg--" extension="swf" size="1325" width="27"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="22" id="22" sendable="1" title="straight face">
+		<shortcuts>
+			<shortcut>:|</shortcut>
+			<shortcut>:-|</shortcut>
+			<shortcut network="2">:|</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="zjQt02b6bKJvl6_9Fn5NJA--" extension="gif" height="18" size="613" width="18"/>
+			<type checksum="sIhlnFmEbShE3YxOTWFcAQ--" extension="swf" size="823" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="23" id="23" sendable="1" title="raised eyebrow">
+		<shortcuts>
+			<shortcut>/:)</shortcut>
+			<shortcut>/:-)</shortcut>
+			<shortcut network="2">^o)</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="e30su5DdnC7wwXZhBOxZLg--" extension="gif" height="18" size="821" width="18"/>
+			<type checksum="SqMiCVLYd3tLlVM9plexhQ--" extension="swf" size="2573" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="25" id="25" sendable="1" title="angel">
+		<shortcuts>
+			<shortcut>o:-)</shortcut>
+			<shortcut>0:-)</shortcut>
+			<shortcut>o:)</shortcut>
+			<shortcut>0:)</shortcut>
+			<shortcut network="2">(A)</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="c.5Kt84zfXUsvrkLhHmDWg--" extension="gif" height="18" size="7815" width="30"/>
+			<type checksum="14XrHpLxfy5ixrJQ.0ttRA--" extension="swf" size="3777" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="26" id="26" sendable="1" title="dork">
+		<shortcuts>
+			<shortcut>:-B</shortcut>
+			<shortcut>:B</shortcut>
+			<shortcut network="2">:-B</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="Yq8fQgsolqhW8YK_MD.jsQ--" extension="gif" height="18" size="1976" width="24"/>
+			<type checksum="dzsxg0RSbqLhtAVF14XiqQ--" extension="swf" size="1638" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="29" id="29" sendable="1" title="rolling eyes">
+		<shortcuts>
+			<shortcut>8-|</shortcut>
+			<shortcut>8-)</shortcut>
+			<shortcut network="2">8-)</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="T5ujiIy32wCCUYP64ukXCg--" extension="gif" height="18" size="977" width="18"/>
+			<type checksum="kwFn0z7wenwJh1qZn45TvA--" extension="swf" size="2380" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="31" id="31" sendable="1" title="puke">
+		<shortcuts>
+			<shortcut><![CDATA[:-&]]></shortcut>
+			<shortcut network="2">+o(</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="FF.dkw7hEj0PsuLdrcqGvA--" extension="gif" height="18" size="1819" width="18"/>
+			<type checksum="BO5nwjhEI.PaTawjrpDSwg--" extension="swf" size="3808" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="32" id="32" sendable="1" title="silent">
+		<shortcuts>
+			<shortcut>:-$</shortcut>
+			<shortcut network="2">:-#</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="WGHkYSYAFcWakEt4TgYS0g--" extension="gif" height="18" size="2713" width="18"/>
+			<type checksum="kuduh6DU3c2B3I6M7.z3Zw--" extension="swf" size="2228" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="36" id="36" sendable="1" title="party">
+		<shortcuts>
+			<shortcut><![CDATA[<:-P]]></shortcut>
+			<shortcut network="2"><![CDATA[<:o)]]></shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="_l5POxYV8vu2Qd36mws6LQ--" extension="gif" height="18" size="3932" width="38"/>
+			<type checksum="n0Orl_cUE_hWsQUOndSTJA--" extension="swf" size="5366" width="48"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="37" id="37" sendable="1" title="tired">
+		<shortcuts>
+			<shortcut>(:|</shortcut>
+			<shortcut>(:}</shortcut>
+			<shortcut network="2">(:|</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="eEBd6v1JeUg0GGdFG1Urug--" extension="gif" height="18" size="1811" width="18"/>
+			<type checksum="1B7y8AL_DKpM8YWp8ucvsA--" extension="swf" size="4900" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="39" id="39" sendable="1" title="thinking">
+		<shortcuts>
+			<shortcut>:-?</shortcut>
+			<shortcut network="2">*-)</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="2ksTclJem9ToHtMIPRremQ--" extension="gif" height="18" size="987" width="18"/>
+			<type checksum="WsovFoTxsh85kqHw1i3PVw--" extension="swf" size="2435" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="21" id="21" sendable="1" title="laughing">
+		<shortcuts>
+			<shortcut>:))</shortcut>
+			<shortcut>:-))</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="7CqPDuJe3JMJkuyCUceFug--" extension="gif" height="18" size="646" width="18"/>
+			<type checksum="BWYkHc_zRu0hbM9s3A5Ndg--" extension="swf" size="1731" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="24" id="24" sendable="1" title="rolling on the floor">
+		<shortcuts>
+			<shortcut>=))</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="eHdQH5s_.v5i2kRtok6Nzw--" extension="gif" height="18" size="11360" width="30"/>
+			<type checksum="qb0rRHC46y0omuQsCjtKJQ--" extension="swf" size="7558" width="40"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="4" id="4" sendable="1" title="big grin">
+		<shortcuts>
+			<shortcut>:D</shortcut>
+			<shortcut>;-D</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="8eBcgsfTr432jJNLtMpfNw--" extension="gif" height="18" size="536" width="18"/>
+			<type checksum="CalvAex.CpeyZ8t4JV2epg--" extension="swf" size="1501" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="5" id="5" sendable="1" title="batting eyelashes">
+		<shortcuts>
+			<shortcut>;;)</shortcut>
+			<shortcut>;;-)</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="26rHOQljFgtqYIEC_MhvAw--" extension="gif" height="18" size="1146" width="18"/>
+			<type checksum="xMZAX5.__NEtVZvvSzJ63w--" extension="swf" size="1371" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="6" id="6" sendable="1" title="big hug">
+		<shortcuts>
+			<shortcut><![CDATA[<:D>]]></shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="dIeM_qVHQieHcqq9Q131pg--" extension="gif" height="18" size="3488" width="42"/>
+			<type checksum="9XsupciluJSpCXaWIhwidA--" extension="swf" size="1320" width="53"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="15" id="15" sendable="1" title="smug">
+		<shortcuts>
+			<shortcut><![CDATA[:->]]></shortcut>
+			<shortcut><![CDATA[:>]]></shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="c.sJwV2unH1by7v06beUFw--" extension="gif" height="18" size="809" width="18"/>
+			<type checksum="2YxPfrOi93F9ftqcJqz10g--" extension="swf" size="1646" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="17" id="17" sendable="1" title="worried">
+		<shortcuts>
+			<shortcut>:-S</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="UU4c.o.Ex52k2W2Mtek66w--" extension="gif" height="18" size="1203" width="18"/>
+			<type checksum="F9PPQzWuqeMQwVnJQK6Xrw--" extension="swf" size="1190" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="18" id="18" sendable="1" title="whew">
+		<shortcuts>
+			<shortcut>#:-S</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="SPZdsRv70l5bbY8a1ph21Q--" extension="gif" height="18" size="4268" width="34"/>
+			<type checksum="3CSf4LFMsRSX_xz6keI7_g--" extension="swf" size="5409" width="30"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="27" id="27" sendable="1" title="talk to the hand">
+		<shortcuts>
+			<shortcut>=;</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="_nBXJIStZl8yD2uZJ8yBYQ--" extension="gif" height="18" size="1212" width="18"/>
+			<type checksum="cCGOiUYOW0QiMeXQtlXAVA--" extension="swf" size="2511" width="26"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="28" id="28" sendable="1" title="sleepy">
+		<shortcuts>
+			<shortcut>I-)</shortcut>
+			<shortcut>|-)</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="Y5aQ_QdPj3Wc9vJe8DwpnA--" extension="gif" height="18" size="1328" width="21"/>
+			<type checksum="ZEZrF8pm8uIs1pLTjzEnXw--" extension="swf" size="2343" width="26"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="30" id="30" sendable="1" title="loser">
+		<shortcuts>
+			<shortcut>L-)</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="GGXEpu9b3a0KP5GNpJ8law--" extension="gif" height="18" size="1715" width="24"/>
+			<type checksum="VSMY1si4KZmKiq8qCNzFyw--" extension="swf" size="2012" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="33" id="33" sendable="1" title="pouting">
+		<shortcuts>
+			<shortcut>[-(</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="lRZlOEWAi.gTLIQ09fIKlA--" extension="gif" height="18" size="1014" width="18"/>
+			<type checksum="KxL1auaMkHFGG9WmiVF4ug--" extension="swf" size="2015" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="34" id="34" sendable="1" title="clown">
+		<shortcuts>
+			<shortcut>:o)</shortcut>
+			<shortcut>:0</shortcut>
+			<shortcut><![CDATA[<@:)]]></shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="w2N84zRedRLy3s8fiFI2yA--" extension="gif" height="18" size="3435" width="28"/>
+			<type checksum="nHXIDkIg8_IbliPoAO6yyw--" extension="swf" size="3864" width="35"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="35" id="35" sendable="1" title="silly">
+		<shortcuts>
+			<shortcut>8-}</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="YclEM5qisAUCpfarQPFKWw--" extension="gif" height="18" size="2584" width="24"/>
+			<type checksum="9HcuyioF75_sxMDuwlNkZA--" extension="swf" size="2051" width="30"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="38" id="38" sendable="1" title="drooling">
+		<shortcuts>
+			<shortcut>=P~</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="v4.Te7f.5yHoziX..UEyPw--" extension="gif" height="18" size="595" width="18"/>
+			<type checksum="YOURZmBU0BZOKdNcAN309A--" extension="swf" size="2241" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="40" id="40" sendable="1" title="doh!">
+		<shortcuts>
+			<shortcut>#-o</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="bVhBftVc2He7ZITQ7PBg2A--" extension="gif" height="18" size="1327" width="24"/>
+			<type checksum="OcVcZJmOhLRQ77gv6hGYLA--" extension="swf" size="3801" width="30"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="41" id="41" sendable="1" title="clapping">
+		<shortcuts>
+			<shortcut><![CDATA[=D>]]></shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="5fkGsqWNpz0qY1cLVgE58A--" extension="gif" height="18" size="1287" width="18"/>
+			<type checksum="16tcYR8ylBDtTU0u7fPQ9A--" extension="swf" size="1638" width="30"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="42" id="42" sendable="1" title="nailbiting">
+		<shortcuts>
+			<shortcut>:-SS</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="0DDCaxXJfEHbZvnRq4hAHA--" extension="gif" height="18" size="2170" width="36"/>
+			<type checksum="yGO1uZW05vyuN1dgi.eBcA--" extension="swf" size="3121" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="43" id="43" sendable="1" title="hypnotized">
+		<shortcuts>
+			<shortcut>@-)</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="fvSjPngY4gQKkCqAg5eopA--" extension="gif" height="18" size="613" width="18"/>
+			<type checksum="nbAcOCsYJHyKhKXf5UqkHA--" extension="swf" size="1223" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="44" id="44" sendable="1" title="liar">
+		<shortcuts>
+			<shortcut>:^O</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="0hO89I0tsHYtmBYGULJ8GA--" extension="gif" height="18" size="975" width="18"/>
+			<type checksum="D_SuqHjwLHSsMaLLrYTnPg--" extension="swf" size="1611" width="27"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="45" id="45" sendable="1" title="waiting">
+		<shortcuts>
+			<shortcut>:-w</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="_M3Ns_5KZYjQMXfduvH4Zg--" extension="gif" height="18" size="1649" width="23"/>
+			<type checksum="N_HXzShHMc6RUzM90RS23g--" extension="swf" size="952" width="29"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="46" id="46" sendable="1" title="sigh">
+		<shortcuts>
+			<shortcut><![CDATA[;-<]]></shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="5Wchc7OTFWNNNmtZ1j58pw--" extension="gif" height="18" size="1515" width="24"/>
+			<type checksum="olUwmxf3TlRAHsD89o_bOw--" extension="swf" size="2445" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="47" id="47" sendable="1" title="phbbbt">
+		<shortcuts>
+			<shortcut><![CDATA[>:P]]></shortcut>
+		</shortcuts>
+		<file>
+			<type checksum=".T62kPSObpfC95MmYEyZTA--" extension="gif" height="18" size="781" width="18"/>
+			<type checksum="6mehQwlIYr_k0vmze9gflg--" extension="swf" size="2304" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="48" id="48" sendable="1" title="cowboy">
+		<shortcuts>
+			<shortcut><![CDATA[<):)]]></shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="3H7JLmheyQ02n8YQM9zv0w--" extension="gif" height="18" size="1831" width="18"/>
+			<type checksum=".fYrHLO0lcu1DoLj8Xh.Pg--" extension="swf" size="2603" width="25"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="100" id="100" sendable="1" title="on the phone">
+		<shortcuts>
+			<shortcut>:)]</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="shgFv0a2viVG4dfs2LWokA--" extension="gif" height="18" size="3606" width="31"/>
+			<type checksum="Zz370TAyphWMnEWWj9aOxA--" extension="swf" size="6202" width="39"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="101" id="101" sendable="1" title="call me">
+		<shortcuts>
+			<shortcut>:-c</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="B.HVgFTokn3mscotCWUvGQ--" extension="gif" height="18" size="3611" width="28"/>
+			<type checksum="8EU2UKn5iCxNJoRoHMZT9g--" extension="swf" size="1695" width="35"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="102" id="102" sendable="1" title="at wits' end">
+		<shortcuts>
+			<shortcut>~x(</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="R5ejlfdKxQlNpUYJG93Ffg--" extension="gif" height="18" size="6180" width="44"/>
+			<type checksum="BRYTIQkpHVAn6IIJCBLevQ--" extension="swf" size="7242" width="55"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="103" id="103" sendable="1" title="wave">
+		<shortcuts>
+			<shortcut>:-h</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="tcmTypoDTvesUiMreHdhmA--" extension="gif" height="18" size="2384" width="28"/>
+			<type checksum="OOmNt_gx2BWPFwy9s2dEGw--" extension="swf" size="1575" width="35"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="104" id="104" sendable="1" title="time out">
+		<shortcuts>
+			<shortcut>:-t</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="PPRUOn9Xg89UK1fMZCrFrg--" extension="gif" height="18" size="8282" width="30"/>
+			<type checksum="3BH88f0aHhc3dyt0h8C2kQ--" extension="swf" size="5099" width="38"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="105" id="105" sendable="1" title="daydreaming">
+		<shortcuts>
+			<shortcut><![CDATA[8->]]></shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="8MZZmcx9MxXvPagqf1WiXA--" extension="gif" height="18" size="1342" width="23"/>
+			<type checksum="oymdZGrPPE8DVLAlEV2M3Q--" extension="swf" size="2967" width="23"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="106" id="106" sendable="1" title="I don't know">
+		<shortcuts>
+			<shortcut>:-??</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="SdRoypzH30_WAyn_oADCIQ--" extension="gif" height="18" size="6445" width="40"/>
+			<type checksum="QkfvmbIeve7wqaIjhfZiMw--" extension="swf" size="3178" width="50"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="107" id="107" sendable="1" title="not listening">
+		<shortcuts>
+			<shortcut>%-(</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="l_g2IlS.XZG1HYPd0mx0wA--" extension="gif" height="18" size="8402" width="52"/>
+			<type checksum="L8TE7gdtHOXSZu1fUVBDag--" extension="swf" size="2415" width="65"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="108" id="108" sendable="1" title="puppy dog eyes">
+		<shortcuts>
+			<shortcut>:o3</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="9DDMG8Ckd68tXPLzJ_UoNg--" extension="gif" height="18" size="4091" width="31"/>
+			<type checksum="yziHzVsE8uyttyvA4Nf2bQ--" extension="swf" size="5830" width="39"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="109" id="109" sendable="1" title="don't want to see">
+		<shortcuts>
+			<shortcut>X_X</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="LZc7J30CcExL9bjlFfNaQg--" extension="gif" height="18" size="3349" width="25"/>
+			<type checksum="nCLLgq02w4R9.Xcp3alvBQ--" extension="swf" size="4339" width="23"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="110" id="110" sendable="1" title="hurry up!">
+		<shortcuts>
+			<shortcut>:!!</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="qlhS6wD_cY9fysfewfXR6Q--" extension="gif" height="18" size="6256" width="36"/>
+			<type checksum="h2xqcsnSU4t0Nieol3fF3A--" extension="swf" size="6362" width="33"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="111" id="111" sendable="1" title="rock on!">
+		<shortcuts>
+			<shortcut>\m/</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="Wa0tVkGonQ68fnJiXrhOow--" extension="gif" height="18" size="7031" width="32"/>
+			<type checksum="mqlqKzHReIvyFefspLlMLg--" extension="swf" size="4400" width="35"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="49" id="49" sendable="1" title="pig">
+		<shortcuts>
+			<shortcut>:@)</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="6UL80Zp_2l.SkU5zXmxP8A--" extension="gif" height="18" size="1412" width="18"/>
+			<type checksum="YLZ3.iccvjEqM.0LH96KNw--" extension="swf" size="2180" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="50" id="50" sendable="1" title="cow">
+		<shortcuts>
+			<shortcut>3:-O</shortcut>
+			<shortcut>3:-0</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="lZwGSzQQ9uJXQ5lh2zn8PQ--" extension="gif" height="18" size="1912" width="18"/>
+			<type checksum="nJiBph_F4AlBMeCTPnEquA--" extension="swf" size="4378" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="51" id="51" sendable="1" title="monkey">
+		<shortcuts>
+			<shortcut>:(|)</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="B7DxuDCQeflNCkTEOzbweg--" extension="gif" height="18" size="1195" width="21"/>
+			<type checksum="MQNirfdO_OzN3xP8NpQemA--" extension="swf" size="2975" width="27"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="52" id="52" sendable="1" title="chicken">
+		<shortcuts>
+			<shortcut><![CDATA[~:>]]></shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="43JLlEimZxmcChjPw3Pb8g--" extension="gif" height="18" size="814" width="18"/>
+			<type checksum="GRE9E85CvpjYVnvQG87Kgw--" extension="swf" size="1340" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="53" id="53" sendable="1" title="rose">
+		<shortcuts>
+			<shortcut>@};-</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="9iHkXacloKZAWXNMJ4r3Yw--" extension="gif" height="18" size="263" width="18"/>
+			<type checksum="SXSmZJm6386BoMayMaAC0A--" extension="swf" size="999" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="54" id="54" sendable="1" title="clover">
+		<shortcuts>
+			<shortcut>%%-</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="sd_GwaAeBRqK22PN5HWwEg--" extension="gif" height="18" size="377" width="18"/>
+			<type checksum="AKNi.AEKlkaIFetFHOGx1A--" extension="swf" size="955" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="55" id="55" sendable="1" title="flag">
+		<shortcuts>
+			<shortcut>**==</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="RFdbnMsshPp9QOfwBeUtVA--" extension="gif" height="18" size="1891" width="25"/>
+			<type checksum="SUHiiDLHfXdBYfi4W6yteA--" extension="swf" size="14726" width="32"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="56" id="56" sendable="1" title="pumpkin">
+		<shortcuts>
+			<shortcut>(~~)</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="yhleSoVYSiP.ZCheILdnjw--" extension="gif" height="18" size="1472" width="17"/>
+			<type checksum="ebTBT3oGW1rgJ6UqqI8ETQ--" extension="swf" size="1528" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="57" id="57" sendable="1" title="coffee">
+		<shortcuts>
+			<shortcut>~o)</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="sIyCceJJWa75eH4Hc_l8xw--" extension="gif" height="18" size="1129" width="18"/>
+			<type checksum="YEZ40Jtu0Uy46NMhclzArA--" extension="swf" size="4118" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="58" id="58" sendable="1" title="idea">
+		<shortcuts>
+			<shortcut>*-:)</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="UDbB358KH3WGa0_b8O9KbQ--" extension="gif" height="18" size="1802" width="30"/>
+			<type checksum="GZd5t.qqBVlkQIZ01emAfw--" extension="swf" size="1561" width="38"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="59" id="59" sendable="1" title="skull">
+		<shortcuts>
+			<shortcut>8-X</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="pXbzs009TXiqlLTbvFOgGg--" extension="gif" height="18" size="2702" width="18"/>
+			<type checksum="nBee6PzWkWMyCNFoX.Kz8Q--" extension="swf" size="1425" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="60" id="60" sendable="1" title="bug">
+		<shortcuts>
+			<shortcut>=:)</shortcut>
+			<shortcut>=:-)</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="sfVDPmYsEo4ufhQ_p6ZpEA--" extension="gif" height="18" size="1872" width="20"/>
+			<type checksum="512e3sxqdzO_Sg4BG4zpCw--" extension="swf" size="4459" width="25"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="61" id="61" sendable="1" title="alien">
+		<shortcuts>
+			<shortcut><![CDATA[>-)]]></shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="R3_TQBqddHAw2JrGfjZ9Uw--" extension="gif" height="18" size="1699" width="18"/>
+			<type checksum="V.iI3Oo2fEBXQxRd29cRPA--" extension="swf" size="5260" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="62" id="62" sendable="1" title="frustrated">
+		<shortcuts>
+			<shortcut>:-L</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="em9u5n_6NfoHuFY.tNQnTQ--" extension="gif" height="18" size="406" width="18"/>
+			<type checksum="4Z.NaiqiL357MagqQPfuBg--" extension="swf" size="1731" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="63" id="63" sendable="1" title="praying">
+		<shortcuts>
+			<shortcut><![CDATA[[-O<]]></shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="G7StekU3c2kJ1KrlUNlj9Q--" extension="gif" height="18" size="2183" width="18"/>
+			<type checksum="ggSRis9S7k8giay6WhCctw--" extension="swf" size="3634" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="64" id="64" sendable="1" title="money eyes">
+		<shortcuts>
+			<shortcut>$-)</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="C675d_RQE0N6_dhuV11nIA--" extension="gif" height="18" size="1050" width="18"/>
+			<type checksum="Ea2l25wyR.Rha.UaeekVGw--" extension="swf" size="1294" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="65" id="65" sendable="1" title="whistling">
+		<shortcuts>
+			<shortcut><![CDATA[:-"]]></shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="mlULWibPXE48kLsBEs1xUw--" extension="gif" height="18" size="3010" width="22"/>
+			<type checksum="IijoTF3CTXSE0eo51fcFAQ--" extension="swf" size="1857" width="28"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="66" id="66" sendable="1" title="feeling beat up">
+		<shortcuts>
+			<shortcut>b-(</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="zQjIrI2.K139xO2BYT.b8A--" extension="gif" height="18" size="5857" width="18"/>
+			<type checksum="LY0iMJYp08PPaFN2EMTE4g--" extension="swf" size="5068" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="67" id="67" sendable="1" title="peace sign">
+		<shortcuts>
+			<shortcut><![CDATA[:)>-]]></shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="WVtXuYma_FqkK2WQInv6DA--" extension="gif" height="18" size="2669" width="22"/>
+			<type checksum="ooDoMh9AafSOp7h8KaMffA--" extension="swf" size="2087" width="28"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="68" id="68" sendable="1" title="shame on you">
+		<shortcuts>
+			<shortcut>[-X</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="zyHi_Ty7vRFX.vYNSR82uw--" extension="gif" height="18" size="2538" width="22"/>
+			<type checksum="bBRs8Zxt_Zfe1L8jw94rWA--" extension="swf" size="1588" width="28"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="69" id="69" sendable="1" title="dancing">
+		<shortcuts>
+			<shortcut>:D/</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="_G5TujBGBcV2Noa4GsttdQ--" extension="gif" height="18" size="3448" width="26"/>
+			<type checksum="WqTccts.TqVRT_KhYDgLAA--" extension="swf" size="3106" width="33"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="70" id="70" sendable="1" title="bring it on">
+		<shortcuts>
+			<shortcut><![CDATA[>:/]]></shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="l33Pd8LP.HNAsrlB6eQSog--" extension="gif" height="18" size="2070" width="23"/>
+			<type checksum="QZ6qVBkir2Xw5.kMB0uzmw--" extension="swf" size="3050" width="29"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="71" id="71" sendable="1" title="hee hee">
+		<shortcuts>
+			<shortcut>;))</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="ILG2Z1jaHSX_wBCHjIXf6Q--" extension="gif" height="18" size="3870" width="18"/>
+			<type checksum="5l8yWVDRcajHZs2cE9MTGA--" extension="swf" size="1770" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="72" id="72" sendable="1" title="hiro">
+		<shortcuts>
+			<shortcut><![CDATA[o->]]></shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="0W91B92kZD2OqAxD199qVw--" extension="gif" height="18" size="409" width="18"/>
+			<type checksum="2Mx.B6EtPQ2_Iks9ayMh7Q--" extension="swf" size="834" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="73" id="73" sendable="1" title="billy">
+		<shortcuts>
+			<shortcut><![CDATA[o=>]]></shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="cuGnPW5T0S0L5swMl63Ymw--" extension="gif" height="18" size="471" width="18"/>
+			<type checksum="BV5QJfWrCGY5C8ZqC2DQuQ--" extension="swf" size="1330" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="74" id="74" sendable="1" title="april">
+		<shortcuts>
+			<shortcut>o-+</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="NHER4jQdAJMrXkGC2ydLEg--" extension="gif" height="18" size="449" width="18"/>
+			<type checksum="piZ4i2lTWdhFwXwt3DTGqg--" extension="swf" size="931" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="75" id="75" sendable="1" title="yin yang">
+		<shortcuts>
+			<shortcut>(%)</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="85ij94GujJBla1Ojq0ejAA--" extension="gif" height="18" size="414" width="18"/>
+			<type checksum="1_w79Olnu0hABNnXluhf5w--" extension="swf" size="527" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="76" id="76" sendable="1" title="chatterbox">
+		<shortcuts>
+			<shortcut>:-@</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="0h0xC1uINlL7hNN5wtAvmA--" extension="gif" height="18" size="6207" width="36"/>
+			<type checksum="gGXCbnZI8I1.2n7ND8Pfzg--" extension="swf" size="1640" width="45"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="77" id="77" sendable="1" title="not worthy">
+		<shortcuts>
+			<shortcut>^:)^</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="IKQp3.7h4B7.fzT9KGhqiQ--" extension="gif" height="18" size="2867" width="32"/>
+			<type checksum="RUtRzg9n3aAzcaTeLhRYwA--" extension="swf" size="1970" width="40"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="78" id="78" sendable="1" title="oh go on">
+		<shortcuts>
+			<shortcut>:-j</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="6RCf4r9WZCov7kjc8yCAFg--" extension="gif" height="18" size="4341" width="26"/>
+			<type checksum="i0BlgY2tRqZ8s9I1IUvLwQ--" extension="swf" size="3560" width="33"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="79" id="79" sendable="1" title="star">
+		<shortcuts>
+			<shortcut>(*)</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="sJUJNUJzFnUtr3jmojknSQ--" extension="gif" height="18" size="981" width="18"/>
+			<type checksum="GL4J2lrEIgoOOqjNoAs8Vw--" extension="swf" size="1595" width="20"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="112" id="112" sendable="1" title="thumbs down">
+		<shortcuts>
+			<shortcut>:-q</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="mMIVHTimRrk5bsn_3iikdw--" extension="gif" height="18" size="3962" width="28"/>
+			<type checksum=".6ntOuV4Ra02F8EPCdAXew--" extension="swf" size="2474" width="33"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="113" id="113" sendable="1" title="thumbs up">
+		<shortcuts>
+			<shortcut>:-bd</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="ZqxACg3.mCNZDr0aXyoKyQ--" extension="gif" height="18" size="4038" width="39"/>
+			<type checksum="GD4qBPBJ7SSE04oeMkodcA--" extension="swf" size="1940" width="40"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="114" id="114" sendable="1" title="it wasn't me!">
+		<shortcuts>
+			<shortcut>^#(^</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="1VIv8rtB5nDct528ye6usw--" extension="gif" height="18" size="10381" width="40"/>
+			<type checksum="_YDAp1NsEPHtGaRwQQv9fw--" extension="swf" size="6104" width="40"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+	<emoticon fname="115" id="115" sendable="1" title="bumble bee">
+		<shortcuts>
+			<shortcut>:bz</shortcut>
+		</shortcuts>
+		<file>
+			<type checksum="yzoU.KYsRCbiUxjPKo_edw--" extension="gif" height="22" size="5258" width="29"/>
+			<type checksum="Hbj4w9QvpiZn5u7rjs074A--" extension="swf" size="3007" width="30"/>
+			<type extension="bmp"/>
+		</file>
+	</emoticon>
+</emoticons>

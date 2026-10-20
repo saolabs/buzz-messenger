@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<theme app="Y!Msgr" version="2" >
+
+  <section id="IMWindow" >
+
+    <!-- Toolbar area -->
+
+    <override id="IMWnd.ToolbarArea" imagefile="toolbar_back.png" resizemargin="0,0,190,0" />
+
+    <!-- TextAd area -->
+    <override id="IMWnd.StatusBarTag" alpha="69" />
+    <override id="IMWnd.StatusBar" alpha="107" />
+    <override id="IMWnd.StatusBarUrl" alpha="107" />
+    <override id="IMWnd.StatusBarUrl2" alpha="107" />
+
+  </section>
+
+</theme>

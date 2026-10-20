@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<theme app="Y!Msgr" version="2">
+  <section id="SlotManagerControls" layered="false" caption="false" maximizable="false" minimizable="false" systemmenu="false">
+    <dockpanel id="Main" width="100%" imagefile="BottomPluginPanel.png" resizemargin="5,0,5,5" margin="0,0,0,3" >
+      <dockpanel id="left" width="50%">
+      <textbutton id="UpButton" font="defaultfontnormal" dock="right" text=" " height="15" width="75%" 
+                    iconalign_x="center" iconalign_y="center" icondock="fill" iconfile="..\images\single_arrow_up.png" onestate="true"
+                    imagefile="ScrollButton.png" resizemargin="5,5,5,5" margin="8,1,8,1" />
+      </dockpanel>
+      <dockpanel id="rigth" width="50%">
+        <textbutton id="DownButton" font="defaultfontnormal" dock="left" text=" " height="15" width="75%"
+                    iconalign_x="center" iconalign_y="center" icondock="fill" iconfile="..\images\single_arrow_down.png" onestate="true"
+                    imagefile="ScrollButton.png" resizemargin="5,5,5,5" margin="8,1,8,1" />
+      </dockpanel>
+    </dockpanel>
+  </section>
+</theme>

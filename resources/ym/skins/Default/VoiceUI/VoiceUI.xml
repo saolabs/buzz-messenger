@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<theme app="Y!Msgr" version="2" >
+
+  <style id="style.cp.textbutton" height="23" minwidth="60" align_y="center" show="hidden" font="defaultfontbold" margin="10,1,10,3" resizemargin="2,9,2,8" textalign_x="center" textalign_y="center" type="normal" textcolor="media_panel_font_dim_color" textcolor_hover="media_panel_font_color"/>
+
+  <section id="VoicePanel" caption="false" resizable="false" systemmenu="false">
+    <dockpanel id="root" dock="fill" width="300">
+      <dockpanel id="VoicePanel_Main" dock="top" width="100%" height="29" margin="2,0,7,0" spacersize="3" resizemargin="5,5,5,0" imagefile="media_bar_background.png">
+        <customattr name="bg_video" value="media_bar_background.png" />
+        <customattr name="bg_voice" value="voice_background.png" />
+        <textbutton id="vp.idle_call_btn" dock="left" show="hidden" res_id="1538" text="Call Back" style="style.cp.textbutton" imagefile="callback_button.png" textcolor="200,200,200" />
+        <textbutton id="vp.end_call" show="hidden" dock="left" text="End Call" res_id="1552" style="style.cp.textbutton" type="normal" imagefile="end_button.png" textcolor="C09E9E" />
+        <textbutton id="vp.hold_call" show="hidden" dock="left" text="Hold" res_id="1550" style="style.cp.textbutton" imagefile="hold_button.png" textcolor="AAAAAA" />
+        <textbutton id="vp.resume_call" show="hidden" dock="left" text="Resume" res_id="1551" style="style.cp.textbutton" type="normal" imagefile="resume_button.png" textcolor="FFF1D6" />
+        <textbutton id="cp.test_error_messages" dock="left" text="Error" style="style.cp.textbutton" type="normal" imagefile="end_button.png" textcolor="A7BD9C" />
+
+        <label id="vp.call_time" dock="right" height="100%" text="4:20" textalign_x="center" textalign_y="center" textcolor="media_panel_font_color" font="defaultfontnormal" />
+        <dockpanel width="3" dock="right" />
+        <pnganimation id="vp.waitingstate" dock="left" align_y="center" imagefile="..\images\spinner.png" height="19" width="19" run="1" framerate="8" />
+        <dockpanel width="5" dock="left" />
+
+        <textbutton id="vp.dialpad_btn" dock="right" imagefile="dialpad_btn.png" width="22" height="23" align_y="center" resizemargin="0,0,0,0" />
+        <dockpanel id="vp.volume" dock="right" spacersize="1">
+          <canvas dock="left" height="23" width="27" align_y="center">
+            <slider id="vp.volume.mic.meter_bar" xpos="19" ypos="3" enabled="false" align_y="center" type="normal" width="4" height="17" imagefile_on="meter_on.png" imagefile_off="meter_off.png" position="75"/>
+            <imagebutton id="vp.volume.mic.toggle" xpos="0" ypos="0" height="23" width="27" type="autotoggle" imagefile="mic_btn.png"/>
+          </canvas>
+          <dockpanel width="3" dock="left" />
+          <canvas dock="left" height="23" width="27" align_y="center">
+            <slider id="vp.volume.out.meter_bar" xpos="19" ypos="3" enabled="false" align_y="center" type="normal" width="4" height="17" imagefile_on="meter_on.png" imagefile_off="meter_off.png" position="75"/>
+            <imagebutton id="vp.volume.out.toggle" xpos="0" ypos="0" height="23" width="27" type="autotoggle" imagefile="speaker_btn.png"/>
+          </canvas>
+        </dockpanel>
+        <dockpanel width="3" dock="right" />
+        <label id="vp.call_status_msg" dock="left" text="[Video and Voice with Sam will start in 3.. 2.. 1"  width="100%" minwidth="40" scroll="auto" scrollspace_width="30" scroll_period="35" textalign_x="left" textalign_y="center" align_y="center" textcolor="media_panel_font_color" font="defaultfontnormal" />
+      </dockpanel>
+    </dockpanel>
+  </section>
+  <section id="VideoLayoutControl" >
+    <dockpanel id="root" dock="fill" backcolor="0,0,0" margin="2,4,2,4" spacersize="5">
+      <imagebutton id="fullscreen" dock="top" align_x="center" type="autotoggle"  imagefile="video_fullscreen_mode.png" />
+      <imagebutton id="sidebyside" dock="top" align_x="center" type="toggle" imagefile="video_sbs_mode.png" />
+      <imagebutton id="pip_swap" dock="top" align_x="center" type="autotoggle" imagefile="video_pip_swap.png" />
+    </dockpanel>
+  </section>
+  <section id="PiPToggleControl" >
+    <dockpanel id="root" dock="fill" backcolor="0,0,0">
+      <imagebutton id="PiPToggle" dock="top" type="toggle" imagefile="video_hide_pip.png" />
+    </dockpanel>
+  </section>
+  <section id="VideoFrameOverlay" caption="false" systemmenu="false">
+    <dockpanel id="root" width="200" height="200" backcolor="000000" margin="1,1,1,1">
+      <canvas dock="fill" backcolor="272727">
+        <dockpanel xpos="0" ypos="0"  align_y="center" height="100%" width="100%" >
+          <image id="background" show="hidden" dock="top" height="100%" width="100%" align_x="center" alpha="50" imagefile="" />
+        </dockpanel>
+        <dockpanel xpos="0" ypos="0" width="100%" height="100%">
+          <dockpanel id="VFO.Waiting" dock="top" align_x="center" width="100%" height="70%">
+            <dockpanel width="100%" align_y="center" spacersize="15">
+              <label id="VFO.Waiting.Label" dock="top" text="[Initializing Video" width="100%"  textalign_x="center" textalign_y="center" textcolor="a0a0a0" font="defaultfontlargebold" />
+              <pnganimation id="VFO.Waiting.Spinner" dock="top" align_x="center" imagefile="..\images\spinner_big.png" height="88" width="88" run="1" framerate="8" />
+            </dockpanel>
+          </dockpanel>
+          <dockpanel id="VFO.NoCam" dock="fill" >
+            <dockpanel dock="fill" backcolor="272727">
+              <dockpanel dock="right" align_y="center" width="100%">
+                <image id="VFO.NoCamImg" dock="top" align_x="center" imagefile="no_camera.png" />
+              </dockpanel>
+            </dockpanel>
+          </dockpanel>
+        </dockpanel>
+      </canvas>
+    </dockpanel>
+  </section>
+  <section id="HoldStateControl" caption="false" systemmenu="false">
+    <canvas id="root" width="300" height="300" backcolor="52,52,52" backcolor2="0,0,0" backgradientmode="1">
+      <dockpanel xpos="0" ypos="0" width="100%" height="100%">
+        <dockpanel dock="fill" dock2="left" align_y="center" height="100%" width="100%" >
+          <image id="background" show="hidden" dock="top" height="100%" width="100%" align_x="center" alpha="50" imagefile="" />
+        </dockpanel>
+      </dockpanel>
+      <dockpanel xpos="0" ypos="0" width="100%" height="100%">
+        <dockpanel dock="left" align_y="center" width="100%">
+          <dockpanel dock="top" align_x="center" >
+            <imagebutton id="Resume" dock="top" align_x="center" imagefile="play.png" />
+            <dockpanel id="RemoteHold" dock="top" width="100%" align_x="center" spacersize="8">
+              <image imagefile="pause.png" dock="left" />              
+              <label dock="left" text="You've been put on hold" res_id="1567" scroll="auto" scrollspace_width="30" scroll_period="35" maxwidth="250" align_y="center" textalign_x="center" textcolor="B0B0B0" opacity="70" font="defaultfontlargebold" />
+            </dockpanel>
+          </dockpanel>
+        </dockpanel>
+      </dockpanel>
+    </canvas>
+  </section>
+  <section id="PSTNDialer" text="[Hung Nguyen" caption="true" maximizable="false" minimizable="true" resizable="false" systemmenu="true" icon="icon_pstn.ico">
+    <dockpanel id="root" dock="fill" margin="1,1,1,0" minwidth="320">
+      <dockpanel id="cp.infobar" dock="top" height="26" maxheight="26" width="100%" margin="0,2,0,2">
+        <dockpanel id="cp.toolbar" dock="right" height="100%" margin="5,0,0,0">
+          <textbutton id="cp.call_dropdown_btn" type="toggle" dock="right" align_y="center" show="visible" height="100%" iconalign_x="center" iconalign_y="center" icondock="center" iconfile="..\ContactCard\MenuButton.png"/>
+        </dockpanel>
+        <dockpanel id="cp.buddyinfo" dock="left" height="100%" width="100%" margin="3,0,0,0" spacersize="3" clipedge="right">
+          <image id="cp.DisplayImg" dock="left" height="30" width="30" imagefile="test.png" align_y="center" />
+          <image id="cp.StatusIcon" dock="left" imagefile="..\images\online.png" align_y="center" />
+          <label id="cp.buddy_name" dock="left" height="100%" text="[Hung Nguyen" textalign_x="left" textalign_y="center" textcolor="dialog_text" font="defaultfontbold" />
+          <label id="cp.phone_num_info" dock="left" height="100%" text="[(408) 480-4487 (Mobile)" textalign_x="left" textalign_y="center" textcolor="dialog_text" font="defaultfontnormal" optional="true" />
+        </dockpanel>
+      </dockpanel>
+      <customcontrol id="VoicePanel" dock="top" height="28" width="100%" />
+      <dockpanel dock="top" height="2" width="100%" />
+      <customcontrol id="cp.history_wnd" dock="top" width="100%" height="50"/>
+      <!-- Dialpad area.  Give left margin 13 pixels to balance out the close icon -->
+      <dockpanel id="cp.dialpad" dock="top" align_x="center" width="160" margin="0,2,0,2">
+        <dockpanel dock="top" width="132" margin="2,0,2,0">
+          <dockpanel id="cp.dialpad.editpanel" dock="top" height="18" width="100%" margin="2,0,2,0" backcolor="control_nb" outline="true" outlinecolor="control_nt">
+          <label id="cp.dialpad.edit" dock="top" height="18" width="100%" textcolor="control_nt" textalign_y="center" />
+          </dockpanel>
+        <dockpanel height="4" dock="top"/>
+          <dockpanel dock="top" width="100%">
+            <imagebutton id="dialpad.1" dock="left" imagefile="voice_dialpad_1.png" />
+            <imagebutton id="dialpad.2" dock="left" imagefile="voice_dialpad_2.png" />
+            <imagebutton id="dialpad.3" dock="left" imagefile="voice_dialpad_3.png" />
+          </dockpanel>
+          <dockpanel dock="top" width="100%">
+            <imagebutton id="dialpad.4" dock="left" imagefile="voice_dialpad_4.png" />
+            <imagebutton id="dialpad.5" dock="left" imagefile="voice_dialpad_5.png" />
+            <imagebutton id="dialpad.6" dock="left" imagefile="voice_dialpad_6.png" />
+          </dockpanel>
+          <dockpanel dock="top" width="100%">
+            <imagebutton id="dialpad.7" dock="left" imagefile="voice_dialpad_7.png" />
+            <imagebutton id="dialpad.8" dock="left" imagefile="voice_dialpad_8.png" />
+            <imagebutton id="dialpad.9" dock="left" imagefile="voice_dialpad_9.png" />
+          </dockpanel>
+          <dockpanel dock="top" width="100%">
+            <imagebutton id="dialpad.10" dock="left" imagefile="voice_dialpad_10.png" />
+            <imagebutton id="dialpad.0" dock="left" imagefile="voice_dialpad_0.png" />
+            <imagebutton id="dialpad.11" dock="left" imagefile="voice_dialpad_11.png" />
+          </dockpanel>
+        </dockpanel>
+      </dockpanel>
+    </dockpanel>
+  </section>
+  <section id="MediaSetupWnd" text="[Voice and Video Setup" res_id="2010" caption="true" maximizable="false" minimizable="false" resizable="false" systemmenu="true" >
+    <dockpanel id="root" dock="fill" margin="10,10,10,10" width="400">
+      <label id="SW.Title" dock="top" width="100%" res_id="2011" text="[Check your voice and video settings" font="defaultfontnormal"/>
+      <dockpanel id="SW.Mic" dock="top" width="100%" margin="0,10,0,5">
+        <dockpanel dock="top" width="100%" spacersize="5" margin="0,0,0,5">
+          <combobox id="SW.Mic.Combobox" dock="right" width="250" />
+          <label id="SW.Mic.Label" dock="left" align_y="center" res_id="2012" text="[1. Microphone" font="defaultfontlargebold"/>
+          <slider id="SW.Mic.meter_bar" dock="left" enabled="false" align_y="center" type="normal" width="4" height="17" imagefile_on="meter_on.png" imagefile_off="meter_off.png" position="75"/>
+        </dockpanel>
+        <dockpanel dock="left" width="10" />
+        <dockpanel dock="right" width="10" />
+        <dockpanel id="SW.Mic.Msg" dock="top" width="100%" backcolor="255,0,0" margin="1,1,1,1">
+          <dockpanel dock="fill" backcolor="255,255,255" margin="3,1,3,1">
+            <dockpanel dock="left" margin="5,10,5,0">
+              <image dock="top" width="16" height="16" imagefile="..\images\alert.png" />
+            </dockpanel>
+            <dockpanel dock="fill" margin="0,5,0,5">
+              <label id="SW.Mic.Msg.Line1" dock="top" multiline="false" font="defaultfontnormal" res_id="2013" text="[We cannot detect your voice in the microphone." />
+              <label id="SW.Mic.Msg.Line2" dock="top" multiline="false" font="defaultfontnormal" res_id="2014" text="[- Is your microphone plugged into your computer correctly?" />
+              <label id="SW.Mic.Msg.Line3" dock="top" multiline="false" font="defaultfontnormal" res_id="2015" text="[- Is your microphone positioned close to your mouth?" />
+              <label id="SW.Mic.Msg.Line4" dock="top" multiline="false" font="defaultfontnormal" res_id="2016" text="[- Is your microphone not on mute?" />
+            </dockpanel>
+          </dockpanel>
+        </dockpanel>
+      </dockpanel>
+      <dockpanel id="SW.Speaker" dock="top" width="100%" margin="0,10,0,5">
+        <dockpanel dock="top" width="100%" spacersize="5" margin="0,0,0,5">
+          <combobox  id="SW.Speaker.Combobox" dock="right" width="250" />
+          <label id="SW.Speaker.Label" dock="left" align_y="center" res_id="2017" text="[2. Speakers" font="defaultfontlargebold"/>          
+        </dockpanel>
+        <dockpanel id="SW.Speaker.Control" dock="top" width="100%" margin="0,0,0,5" spacersize="5">
+          <image dock="right" align_y="center" imagefile="vol_control_loud.png" />
+          <slider id="SW.Speaker.Control.Slider" dock="right" type="normal" imagefile_thumb="..\images\slider_thumb.png" imagefile="..\images\slider_bar.png" position="50"/>
+          <image dock="right" align_y="center" imagefile="vol_control_quiet.png" />
+          <label id="SW.Speaker.Control.Label" dock="right" res_id="2018" text="[Adjust system volume:" font="defaultfontnormal" />
+          <dockpanel dock="right" width="5" />
+          <textbutton id="SW.Speaker.Control.PlaySound" dock="right" res_id="2019" text="[Play test sound" font="defaultfontnormal" font_hover="defaultfontunderline" textcolor="text_hyperlink"/>
+        </dockpanel>
+        <dockpanel dock="left" width="10" />
+        <dockpanel dock="right" width="10" />
+        <dockpanel id="SW.Speaker.Msg" dock="top" width="100%" backcolor="255,0,0" margin="1,1,1,1">
+          <dockpanel dock="fill" backcolor="255,255,255" margin="3,1,3,1">
+            <dockpanel dock="left" margin="5,10,5,0">
+              <image dock="top" width="16" height="16" imagefile="..\images\alert.png" />
+            </dockpanel>
+            <dockpanel dock="fill" margin="0,5,0,5">
+              <label id="SW.Speaker.Msg.Line1" dock="top" multiline="false" font="defaultfontnormal" res_id="2020" text="[If you cannot hear the sound, or the sound is too soft:" />
+              <label id="SW.Speaker.Msg.Line2" dock="top" multiline="false" font="defaultfontnormal" res_id="2021" text="[- Are your speakers plugged into your computer correctly?" />
+              <label id="SW.Speaker.Msg.Line3" dock="top" multiline="false" font="defaultfontnormal" res_id="2022" text="[- Are your speakers attached to a power source?" />
+              <label id="SW.Speaker.Msg.Line4" dock="top" multiline="false" font="defaultfontnormal" res_id="2023" text="[- Are your speakers turned on and the volume turned up?" />
+            </dockpanel>
+          </dockpanel>
+        </dockpanel>
+      </dockpanel>
+      <dockpanel id="SW.Camera" dock="top" width="100%" margin="0,10,0,5">
+        <dockpanel dock="top" width="100%" spacersize="5" margin="0,0,0,5">
+          <combobox id="SW.Camera.Combobox" dock="right" width="270" />
+          <label id="SW.Camera.Label" dock="left" align_y="center" res_id="2024" text="[3. Camera" font="defaultfontlargebold"/>
+        </dockpanel>
+        <customcontrol id="SW.Camera.Preview" dock="top" align_x="center" width="160" height="120" />
+        <dockpanel dock="left" width="10" />
+        <dockpanel dock="right" width="10" />
+       
+        <dockpanel id="SW.Camera.Msg" dock="top" width="100%" backcolor="255,0,0" margin="1,1,1,1">
+          <dockpanel dock="fill" backcolor="255,255,255" margin="3,1,3,1">
+            <dockpanel dock="left" margin="5,10,5,0">
+              <image dock="top" width="16" height="16" imagefile="..\images\alert.png" />
+            </dockpanel>
+            <dockpanel dock="fill" margin="0,5,0,5">
+              <label id="SW.Camera.Msg.Line1" dock="top" multiline="false" font="defaultfontnormal" res_id="2025" text="[We cannot detect your camera." />
+              <label id="SW.Camera.Msg.Line2" dock="top" multiline="false" font="defaultfontnormal" res_id="2026" text="[- Is your camera being used in another application?" />
+              <label id="SW.Camera.Msg.Line3" dock="top" multiline="false" font="defaultfontnormal" res_id="2027" text="[- Is your camera plugged into your computer?" />
+              <label id="SW.Camera.Msg.Line4" dock="top" multiline="false" font="defaultfontnormal" res_id="2028" text="[- Is your camera installed and configured correctly?" />
+              <dockpanel dock="top" height="5" />
+              <dockpanel dock="top">
+                <label id="SW.Camera.Msg.Refresh" dock="top" multiline="false" font="defaultfontnormal" res_id="2029" text="[Did you resolve the issue?" />
+                <textbutton id="SW.Camera.Link.Refresh" dock="right" res_id="2030" text="[Try detecting the camera again." font="defaultfontnormal" font_hover="defaultfontunderline" textcolor="text_hyperlink"/>
+              </dockpanel>
+              <dockpanel dock="top" height="5" />
+              <textbutton id="SW.Camera.Help" dock="left" res_id="2031" text="[Help" font="defaultfontnormal" font_hover="defaultfontunderline" textcolor="text_hyperlink"/>
+            </dockpanel>
+          </dockpanel>
+        </dockpanel>
+      
+      </dockpanel>
+      <dockpanel dock="top" width="100%">
+        <commoncontrol type="Button" id="SW.Close" height="20" width="60" dock="right" text="[Close" res_id="238" font="defaultfontnormal"/>       
+      </dockpanel>
+    </dockpanel>
+  </section>
+</theme>

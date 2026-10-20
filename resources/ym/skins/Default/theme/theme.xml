@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<theme>
+  <styles>
+    <!-- the imagefile should have both the active and inactive states in it (identical sizes) -->
+      <style id="mainframewindow" imagefile="mainframewindow.png" logo="Yahoo!_Messenger.png"
+                ellipsis="ellipsis.png" 
+								resizemargin="4,44,4,5"
+								resizemargin_top="120,0,60,0"
+								resizemargin_bottom="3,0,9,0"
+								resizemargin_left="0,0,0,9"
+								resizemargin_right="0,0,0,9"
+								active_font="defaultfontbold" active_textcolor="activemaincaption"
+								inactive_font="defaultfontbold" inactive_textcolor="itactivemaincaption"
+								icon_xpos="10" icon_ypos="7"
+								title_xpos="-100" title_ypos="-100"/>
+
+    <style id="framewindow" imagefile="framewindow.png"
+								resizemargin="3,28,5,4"
+								resizemargin_top="120,0,60,0"
+								resizemargin_bottom="0,0,9,0"
+								resizemargin_left="0,1,0,9"
+								resizemargin_right="0,1,0,9"
+								active_font="defaultfontbold" active_textcolor="activemaincaption"
+								inactive_font="defaultfontbold" inactive_textcolor="itactivemaincaption"
+								icon_xpos="10" icon_ypos="6"
+								title_xpos="30" title_ypos="0"/>
+
+
+    <!-- the imagefile should have both the active and inactive states in it (identical sizes) -->
+    <style id="toolwindow"  imagefile="toolwindow.png"
+								resizemargin="2,17,2,3"
+								resizemargin_top="13,0,13,0"
+								resizemargin_bottom="3,0,3,0"
+								resizemargin_left="0,1,0,3"
+								resizemargin_right="0,1,0,3"
+								active_font="defaultfontnormal" active_textcolor="activecaption"
+								inactive_font="defaultfontnormal" inactive_textcolor="itactivecaption"
+                icon_xpos="5" icon_ypos="5"
+								title_xpos="24" title_ypos="3"/>
+
+    <!-- the closebutton's image file should have all 5 states in it -->
+    <style id="closebutton"		imagefile="close.png"		align_x="right" xpos="2" ypos="4"/>
+    <!-- the maximizebutton's image file should have all 5 states in it -->
+    <style id="maximizebutton"	imagefile="max.png"	align_x="right" xpos="16" ypos="4"/>
+    <!-- the restorebutton's image file should have all 5 states in it -->
+    <style id="restorebutton"	imagefile="restore.png"	align_x="right" xpos="16" ypos="4"/>
+    <!-- the minimizebutton's image file should have all 5 states in it -->
+    <style id="minimizebutton"	imagefile="min.png"	align_x="right" xpos="30" ypos="4"/>
+    <!-- the helpbutton's image file should have all 5 states in it -->
+    <style id="helpbutton"		imagefile="marble.png"		align_x="right" xpos="49" ypos="4"/>
+    <!-- the helpbutton's image file should have all 5 states in it -->
+    <style id="dialog_helpbutton"		imagefile="help.png"		align_x="right" xpos="44" ypos="4"/>
+
+    <!-- the toolclosebutton's image file should have all 5 states in it -->
+    <style id="tool_closebutton" imagefile="tool_close.bmp" align_x="right" xpos="2" ypos="1"/>
+
+    <!-- the systemmenu's image file should have all 4 images in it (close, maximize, minimize, restore) -->
+    <style id="systemmenu"		imagefile="sys_menu.bmp"/>
+
+    <!-- pushbuttons have all the same attributes that a textbutton does -->
+    <!-- pushbutton images have 6 states -->
+    <style id="pushbutton"  imagefile="pushbuttons.png" resizemargin="4,4,4,11" textcolor="defaulttextcolor" shadow="1" shadow_color="defaultshadowcolor" shadow_xoffset="1" shadow_yoffset="1" font="defaultfontnormal"/>
+
+    <!-- images specified as 2 rows of button states, 1) unselected, 2) selected -->
+    <!-- there are 4 states per button (normal/hover/pushed/disabled) -->
+    <style id="radio"		imagefile="radio.png" font="defaultfontnormal"/>
+
+    <!-- images specified as 3 rows of button states, 1) unchecked, 2) checked, 3) half-check -->
+    <!-- there are 4 states per button (normal/hover/pushed/disabled) -->
+    <style id="checkbox"    imagefile="checkbox.bmp" font="defaultfontnormal"/>
+
+    <!-- combobox button images have 4 states (normal/hover/pushed/disabled) -->
+    <style id="combobox"    imagefile="combo_back.bmp" resizemargin="2,2,2,2" imagefile_overlay="combo_arrow.bmp"/>
+
+    <!-- groupbox images have 2 states (with text/without text) -->
+    <style id="groupbox"	imagefile="groupbox.png" resizemargin="6,13,3,3" font="defaultfontnormal"/>
+
+    <!-- headerctrl images have 4 states (normal/hover/pushed/disabled) -->
+    <style id="headerctrl"  imagefile="headerctrl.bmp" resizemargin="2,2,2,2"/>
+
+    <style id="listctrl"/>
+
+    <!-- menu images -->
+    <!-- imagefile: the background image -->
+    <!-- imagefile_buttons: (the scroll buttons) Row1) UP, Row2) DOWN, each row has 4 states (normal/hover/pushed/disabled) -->
+    <!-- imagefile_baritem: (state images for a menu bar item) 4 states (normal/hover/pushed/disabled) -->
+    <!-- imagefile_menuitem: (state images for a menu item) 4 states (normal/hover/pushed/disabled) -->
+    <!--resizemargin_baritem="299,0,9,0"-->
+    <style id="menu"		
+							    imagefile="menu_bg.png"
+								imagefile_buttons="menu_scroll.bmp"
+								imagefile_menuitem="menuitem.png"
+								imagefile_mainbaritem="mainmenubar.png"
+								imagefile_baritem="menubar.png" />
+
+
+    <!-- progressbar images have 2 states (frame/fill) -->
+    <style id="progressbar" imagefile="progressbar.bmp" resizemargin="5,5,5,5"/>
+
+    <!-- tab button images have 5 states in them (normal/hover/pushed/hotpushed/disabled) -->
+    <style id="tabctrl"		imagefile="tab_border" imagefile_buttons="tabs.png"/>
+
+    <style id="rebar"/>
+    <style id="editctrl"/>
+
+    <!-- toolbar buttons have 5 states in them (normal/hover/pushed/hotpushed/disabled) -->
+    <style id="toolbar"		imagefile="toolbar_buttons.png" imagefile_separator="toolbar_sep.bmp"/>
+
+    <!-- status bar images both have a single image -->
+    <style id="statusbar"	imagefile="statusbar.bmp" resizemargin="2,0,0,0" imagefile_grip="grabber.png"/>
+
+    <!-- images specified as 2 rows of button states, top row for up, bottom row for down -->
+    <!-- there are 4 states per button (normal/hover/pushed/disabled) -->
+    <style id="scrollbar_v" imagefile="scroll_vbg.png"
+								imagefile_buttons="scroll_buttons.png"
+								imagefile_overlay="scroll_varrows.png"
+								imagefile_thumb="scroll_thumb.png"
+								imagefile_grip="scroll_v_grip.png"/>
+
+    <!-- images specified as 2 rows of button states, top row for left, bottom row for right -->
+    <!-- there are 4 states per button (normal/hover/pushed/disabled) -->
+    <style id="scrollbar_h" imagefile="scroll_hbg.png"
+								imagefile_buttons="scroll_buttons.png"
+								imagefile_overlay="scroll_harrows.png"
+								imagefile_thumb="scroll_thumb_h.png"
+								imagefile_grip="scroll_h_grip.png"/>
+
+    <!-- trackbar_v images have 3 rows of button states, 1) NO point, 2) LEFT point, 3) RIGHT point -->
+    <!-- there are 4 states per button (normal/hover/pushed/disabled) -->
+    <style id="trackbar_v"	imagefile="trackbar_vthumb.bmp"/>
+
+    <!-- trackbar_v images have 3 rows of button states, 1) NO point, 2) UP point, 3) DOWN point -->
+    <!-- there are 4 states per button (normal/hover/pushed/disabled) -->
+    <style id="trackbar_h"	imagefile="trackbar_hthumb.bmp"/>
+
+    <!-- updown images have 2 rows of button states, top row for UP, bottom row for DOWN -->
+    <!-- there are 4 states per button (normal/hover/pushed/disabled) -->
+    <style id="updown"		imagefile="up_down.bmp"/>
+
+    <!-- leftright images have 2 rows of button states, top row for LEFT, bottom row for RIGHT -->
+    <!-- there are 4 states per button (normal/hover/pushed/disabled) -->
+    <style id="leftright"	imagefile="left_right.bmp"/>
+
+    <style id="tooltip"/>
+
+  </styles>
+
+  <!-- ************************************************************************************************* -->
+  <!-- for backward compatibility with YbSkin, these are used to get free-floating objects from the skin -->
+
+  <images>
+    <image id="Y!Logo" imagefile="messenger.png" resizemargin="1,1,1,1"/>
+
+    <imagelist imagefile="triangletray.png">
+      <image id="voice_triangletray_normal"/>
+      <image id="voice_triangletray_hover"/>
+      <image id="voice_triangletray_press"/>
+      <image id="voice_triangletray_disabled"/>
+    </imagelist>
+
+    <imagelist imagefile="dialbtn_pad.bmp">
+      <image id="voice_dialbtn_pad_normal"/>
+      <image id="voice_dialbtn_pad_hover"/>
+      <image id="voice_dialbtn_pad_press"/>
+      <image id="voice_dialbtn_pad_disable"/>
+    </imagelist>
+
+    <imagelist imagefile="voice_ctrls.bmp">
+      <image id="no_mic_audio"/>
+      <image id="mic_audio"/>
+      <image id="mute_mic_audio"/>
+      <image id="mic_audio_lowest"/>
+      <image id="mic_audio_lower"/>
+      <image id="mic_audio_low"/>
+      <image id="no_speaker_audio"/>
+      <image id="speaker_audio"/>
+      <image id="mute_speaker_audio"/>
+      <image id="speaker_audio_lowest"/>
+      <image id="speaker_audio_lower"/>
+      <image id="speaker_audio_low"/>
+    </imagelist>
+
+    <imagelist imagefile="voice_ringer.bmp">
+      <image id="voice_ringer_normal_ringing"/>
+      <image id="voice_ringer_normal_ringing_hover"/>
+      <image id="voice_ringer_normal_no_ringing"/>
+      <image id="voice_ringer_normal_no_ringing_hover"/>
+    </imagelist>
+
+    <imagelist imagefile="voice_lights.bmp">
+      <image id="voice_lights_No_Audio"/>
+      <image id="voice_lights_Audio"/>
+      <image id="voice_lights_Mute"/>
+    </imagelist>
+
+    <imagelist imagefile="email.png">
+      <image id="email_empty"/>
+      <image id="email_new"/>
+    </imagelist>
+
+    <imagelist imagefile="voice_callbtn.png">
+      <image id="normal_callbtn"/>
+      <image id="hover_callbtn"/>
+      <image id="enabled_callbtn"/>
+      <image id="muted_callbtn"/>
+      <image id="disabled_callbtn"/>
+      <image id="background_callbtn"/>
+      <image id="voicesmiley_callbtn"/>
+      <image id="voicesmileyhover_callbtn"/>
+      <image id="musicsharing_callbtn"/>
+      <image id="musicsharinghover_callbtn"/>
+    </imagelist>
+
+    <image id="voice_toolbar" imagefile="voice_tbar.png" resizemargin="25,0,25,0"/>
+    <image id="voice_tbar_hold" imagefile="voice_tbar_hold.png" resizemargin="25,0,25,0"/>
+    <image id="voice_toolbar_incoming" imagefile="voice_tbar_incoming.png" resizemargin="25,0,25,0"/>
+
+    <image id="silver_bg" imagefile="silver_bg.bmp" resizemargin="5,5,5,5"/>
+
+    <image id="sw_back" imagefile="statusbar.bmp"/>
+    <image id="div_rule" imagefile="divrule.bmp"/>
+    <image id="div_rule_inv" imagefile="divruleinv.bmp"/>
+    <image id="div_rule_vert" imagefile="divrulevert.bmp"/>
+    <image id="tickmenu" imagefile="menu_tick.png"/>
+    <image id="tickmenu_h" imagefile="menu_tick_hot.png"/>
+    <image id="tray_icons" imagefile="navicons.bmp"/>
+    <image id="tray_icons_h" imagefile="navicons_on.bmp"/>
+    <image id="sw_progress" imagefile="progress.bmp"/>
+    <!-- from Indigo -->
+    <image id="menu_separator" imagefile="menu_separator.png"/>
+    <image id="menuitem_h" imagefile="menuitem.png"/>
+    <image id="menuitem" imagefile="menu_bg.png"/>
+
+    <imagelist imagefile="icons_tbar_normal.bmp">
+      <image id="mt0"/>
+      <image id="mt1"/>
+      <image id="mt2"/>
+      <image id="mt3"/>
+      <image id="mt4"/>
+      <image id="mt5"/>
+      <image id="mt6"/>
+      <image id="mt7"/>
+      <image id="mt8"/>
+      <image id="mt9"/>
+      <image id="mt10"/>
+      <image id="mt11"/>
+      <image id="mt12"/>
+      <image id="mt13"/>
+      <image id="mt14"/>
+      <image id="mt15"/>
+      <image id="mt16"/>
+    </imagelist>
+
+    <imagelist imagefile="icons_tbar_hot.bmp">
+      <image id="mth0"/>
+      <image id="mth1"/>
+      <image id="mth2"/>
+      <image id="mth3"/>
+      <image id="mth4"/>
+      <image id="mth5"/>
+      <image id="mth6"/>
+      <image id="mth7"/>
+      <image id="mth8"/>
+      <image id="mth9"/>
+      <image id="mth10"/>
+      <image id="mth11"/>
+      <image id="mth12"/>
+      <image id="mth13"/>
+      <image id="mth14"/>
+      <image id="mth15"/>
+      <image id="mth16"/>
+    </imagelist>
+
+    <imagelist imagefile="icons_tbar_disabled.bmp">
+      <image id="mtd0"/>
+      <image id="mtd1"/>
+      <image id="mtd2"/>
+      <image id="mtd3"/>
+      <image id="mtd4"/>
+      <image id="mtd5"/>
+      <image id="mtd6"/>
+      <image id="mtd7"/>
+      <image id="mtd8"/>
+      <image id="mtd9"/>
+      <image id="mtd10"/>
+      <image id="mtd11"/>
+      <image id="mtd12"/>
+      <image id="mtd13"/>
+      <image id="mtd14"/>
+      <image id="mtd15"/>
+      <image id="mtd16"/>
+    </imagelist>
+
+    <imagelist imagefile="subhdr_left.png" resizemargin="3,3,3,3" >
+      <image id="slot-caption_w" />
+      <image id="slot-caption_w_unknown" />
+      <image id="slot-caption_hover_w" />
+      <image id="slot-caption_w_unknown2" />
+    </imagelist>
+    <imagelist imagefile="subhdr_mid.png" resizemargin="3,3,3,3" >
+      <image id="slot-caption_mid" />
+      <image id="slot-caption_mid_unknown" />
+      <image id="slot-caption_hover_mid" />
+      <image id="slot-caption_mid_unknown2" />
+    </imagelist>
+    <imagelist imagefile="subhdr_right.png" resizemargin="3,3,3,3" >
+      <image id="slot-caption_e" />
+      <image id="slot-caption_e_unknown" />
+      <image id="slot-caption_hover_e" />
+      <image id="slot-caption_e_unknown2" resizemargin="3,3,3,3" />
+    </imagelist>
+    <imagelist imagefile="subhdr_mid.png" resizemargin="3,3,3,3" >
+      <image id="slot-caption-detach" />
+      <image id="slot-caption-detach_unknown" />
+      <image id="slot-caption-detach_hover" />
+      <image id="slot-caption-detach_unknown2" />
+    </imagelist>
+    <imagelist imagefile="subhdr_right.png" resizemargin="3,3,3,3" >
+      <image id="slot-caption-close" />
+      <image id="slot-caption-close_unknown" />
+      <image id="slot-caption-close_hover" />
+      <image id="slot-caption-close_unknown2" />
+    </imagelist>
+
+    <imagelist imagefile="subhdr_cls_left.png" resizemargin="3,3,3,3">
+      <image id="slot-caption_min_w" />
+      <image id="slot-caption_min_w_unknown" />
+      <image id="slot-caption_min_hover_w" />
+      <image id="slot-caption_min_w_unknown2" />
+    </imagelist>
+    <imagelist imagefile="subhdr_cls_mid.png" resizemargin="3,3,3,3">
+      <image id="slot-caption_min_mid" />
+      <image id="slot-caption_min_mid_unknown" />
+      <image id="slot-caption_min_hover_mid" />
+      <image id="slot-caption_min_mid_unknown2" />
+    </imagelist>
+    <imagelist imagefile="subhdr_cls_right.png" resizemargin="3,3,3,3" >
+      <image id="slot-caption_min_e" />
+      <image id="slot-caption_min_e_unknown" />
+      <image id="slot-caption_min_hover_e" />
+      <image id="slot-caption_min_e_unknown2" />
+    </imagelist>
+    <imagelist imagefile="subhdr_cls_mid.png" resizemargin="3,3,3,3" >
+      <image id="slot-caption-detach_min" />
+      <image id="slot-caption-detach_min_unknown" />
+      <image id="slot-caption-detach_min_hover" />
+      <image id="slot-caption-detach_min_unknown2" />
+    </imagelist>
+    <imagelist imagefile="subhdr_cls_right.png" resizemargin="3,3,3,3" >
+      <image id="slot-caption-close_min" />
+      <image id="slot-caption-close_min_unknown" />
+      <image id="slot-caption-close_min_hover" />
+      <image id="slot-caption-close_min_unknown2" />
+    </imagelist>
+
+    <image id="grabbie" imagefile="grabbie.png" />
+    <image id="grabbie-back" imagefile="grabbie_back.png" resizemargin="5,0,5,0" />
+    <image id="slot-empty-bg" imagefile="slot_empty_bg.png" />
+    <image id="slot-border-top" imagefile="headerbg.png" resizemargin="5,1,5,1" />
+    <image id="slot-border-btn-bkgnd" imagefile="headerbg.png"/>
+    <image id="slot-border-bottom" imagefile="slotborder.png" resizemargin="5,1,5,1" />
+
+    <image id="slot-border_w" imagefile="slotborder_we_left.png" />
+    <image id="slot-border_e" imagefile="slotborder_we_right.png" />
+
+    <image id="photoshare_slider_tray" imagefile="photoshare_slider_tray.png" resizemargin="3,3,3,3" />
+
+    <imagelist imagefile="photoshare_slider_box.png" resizemargin="3,3,3,3" >
+      <image id="photoshare_slider_box" />
+      <image id="photoshare_slider_box_h" />
+    </imagelist>
+    <imagelist imagefile="photoshare_slider_grip.png" resizemargin="3,3,3,3" >
+      <image id="photoshare_slider_grip" />
+      <image id="photoshare_slider_grip_h" />
+    </imagelist>
+  </images>
+</theme>
