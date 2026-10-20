@@ -52,7 +52,11 @@ Workflow dùng `GITHUB_TOKEN` có sẵn, không cần tạo personal access toke
 
 ## Ký ứng dụng
 
-Đóng gói và ký ứng dụng là hai việc riêng. Bản không ký vẫn là bộ cài hoàn chỉnh nhưng có thể bị hệ điều hành cảnh báo hoặc chặn. Để phân phối cho người dùng thông thường, nên chuẩn bị ký Windows và ký/notarize macOS.
+Từ `0.1.1`, `electron-builder.config.cjs` chọn chữ ký ad-hoc cho macOS nếu không có `CSC_LINK` hoặc `CSC_NAME`. Chữ ký này niêm phong app và các helper/framework sau khi đóng gói, tránh giữ lại chữ ký linker không hợp lệ của Electron. Entitlements ad-hoc nằm ở `build/entitlements.adhoc.mac.plist`, gồm quyền JIT và quyền cần để nạp framework trong bản ad-hoc.
+
+Chữ ký ad-hoc không xác nhận nhà phát triển với Apple và không thay thế notarization. Bản tải từ Internet vẫn có thể bị Gatekeeper chặn. Để mở theo thiết lập Gatekeeper mặc định khi phân phối rộng rãi, cần Developer ID và notarization; xem [Apple Platform Security](https://support.apple.com/en-ie/guide/security/sec3ad8e6e53/web).
+
+Sau khi đóng gói, hai job macOS chạy `scripts/verify-mac-signatures.mjs`: kiểm tra `codesign --verify --deep --strict` và thử khởi động executable trong 8 giây trên runner mới. Kiểm tra này phát hiện chữ ký hỏng và lỗi thoát ngay khi khởi động; nó không mô phỏng Gatekeeper đối với file tải từ Internet.
 
 Workflow đã nối các **repository secrets** tùy chọn vào bước đóng gói:
 
@@ -62,7 +66,7 @@ Workflow đã nối các **repository secrets** tùy chọn vào bước đóng 
 | macOS notarization | `APPLE_ID`, `APPLE_APP_SPECIFIC_PASSWORD`, `APPLE_TEAM_ID` |
 | Windows signing | `WIN_CSC_LINK`, `WIN_CSC_KEY_PASSWORD` |
 
-Các giá trị `*_CSC_LINK` dùng định dạng chứng chỉ mà electron-builder hỗ trợ, chẳng hạn nội dung base64 của chứng chỉ `.p12`/`.pfx`, cùng mật khẩu tương ứng. Chứng chỉ macOS cần danh tính Developer ID Application hợp lệ. Không commit chứng chỉ hoặc mật khẩu vào repository. Khi chưa có secrets, workflow vẫn build; bản tạo ra chưa được bảo đảm ký/notarize. Sau khi cấu hình, kiểm tra log và kết quả ký thực tế trước khi công bố.
+Các giá trị `*_CSC_LINK` dùng định dạng chứng chỉ mà electron-builder hỗ trợ, chẳng hạn nội dung base64 của chứng chỉ `.p12`/`.pfx`, cùng mật khẩu tương ứng. Chứng chỉ macOS cần danh tính Developer ID Application hợp lệ. Không commit chứng chỉ hoặc mật khẩu vào repository. Khi có `MAC_CSC_LINK`, cấu hình nhường việc chọn danh tính cho electron-builder thay vì ép ad-hoc; khi chưa có secrets, bản macOS dùng ad-hoc và chưa notarize. Sau khi cấu hình chứng chỉ, kiểm tra log và kết quả ký thực tế trước khi công bố.
 
 ## Build thủ công
 

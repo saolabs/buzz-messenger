@@ -23,6 +23,8 @@ Tải bộ cài đã công bố tại [GitHub Releases](https://github.com/saola
 
 Tên file bắt đầu bằng `buzz-messenger-<version>-`. Nếu chưa thấy bản Release, bộ cài chưa được công bố. Người phát triển xem [hướng dẫn phát hành](docs/PHAT-HANH.md).
 
+Từ `0.1.1`, bản thử nghiệm macOS được ký ad-hoc và chưa notarize. Gatekeeper vẫn có thể yêu cầu cho phép mở bản tải từ Internet; xem [hướng dẫn cài macOS](docs/HUONG-DAN.md#macos-chặn-mở-ứng-dụng). Thay bản macOS `0.1.0` vì bản đó có chữ ký không hợp lệ.
+
 ## Giao diện
 
 | Danh sách bạn bè | Cửa sổ chat |
@@ -52,7 +54,7 @@ BUZZ! được gửi qua Messenger dưới dạng chữ `BUZZ!!!`. Người dùn
 
 ## Tình trạng hiện tại
 
-Dự án đang ở giai đoạn phát triển, phiên bản `0.1.0`. Luồng đăng nhập và nhắn tin Messenger thật đã được nối; ứng dụng dùng Electron + React + TypeScript, đọc và thao tác trên trang Messenger bằng Chromium nhúng, không cần server riêng của Buzz! Messenger.
+Dự án đang ở giai đoạn phát triển, phiên bản `0.1.1`. Luồng đăng nhập và nhắn tin Messenger thật đã được nối; ứng dụng dùng Electron + React + TypeScript, đọc và thao tác trên trang Messenger bằng Chromium nhúng, không cần server riêng của Buzz! Messenger.
 
 Các nút gọi video/thoại, gửi tệp, IMVironment, Activities và một số công cụ cổ điển hiện chỉ có giao diện. Chọn **Hội thoại → Mở trong Messenger** để dùng những chức năng Messenger chưa được đưa vào app.
 

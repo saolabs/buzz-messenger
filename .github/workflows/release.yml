@@ -112,6 +112,9 @@ jobs:
           APPLE_ID: ${{ matrix.platform == 'mac' && secrets.APPLE_ID || '' }}
           APPLE_APP_SPECIFIC_PASSWORD: ${{ matrix.platform == 'mac' && secrets.APPLE_APP_SPECIFIC_PASSWORD || '' }}
           APPLE_TEAM_ID: ${{ matrix.platform == 'mac' && secrets.APPLE_TEAM_ID || '' }}
+      - name: Verify macOS signatures and startup
+        if: matrix.platform == 'mac'
+        run: node scripts/verify-mac-signatures.mjs ${{ matrix.arch }} --launch
       - uses: actions/upload-artifact@v7
         with:
           name: installers-${{ matrix.platform }}-${{ matrix.arch }}

@@ -1,6 +1,6 @@
 {
   "name": "buzz-messenger",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Buzz! Messenger — Facebook Messenger với giao diện chat cổ điển, BUZZ! và emoticon",
   "author": "SaoLabs",
@@ -18,9 +18,9 @@
     "test": "node --import tsx --test tests/*.test.ts",
     "extract": "python3 -I scripts/extract_installer.py 10.0.0.1102_ymsgr1000_1102_us.exe _extracted && python3 -I scripts/swf_to_svg.py _extracted/Messenger/login.swf _extracted/Messenger/Media/login && python3 -I scripts/bmp_to_png.py _extracted/Messenger/skins && python3 -I scripts/brand_logo.py _extracted/Messenger/Media/login/connected.svg _extracted/icon.svg && electron scripts/render-icon.mjs _extracted/icon.svg _extracted/icon.png && npm run assets:prepare",
     "assets:prepare": "node scripts/prepare-assets.mjs",
-    "dist:mac": "npm run build && electron-builder --mac",
-    "dist:win": "npm run build && electron-builder --win",
-    "dist:linux": "npm run build && electron-builder --linux"
+    "dist:mac": "npm run build && electron-builder --config electron-builder.config.cjs --mac",
+    "dist:win": "npm run build && electron-builder --config electron-builder.config.cjs --win",
+    "dist:linux": "npm run build && electron-builder --config electron-builder.config.cjs --linux"
   },
   "dependencies": {
     "react": "^19.1.1",

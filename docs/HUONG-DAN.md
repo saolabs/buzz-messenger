@@ -16,6 +16,12 @@ Tải bản dành cho máy của bạn tại [GitHub Releases](https://github.co
 
 File đầy đủ có dạng `buzz-messenger-<version>-<platform>-<arch>...`. Xem [bảng chọn bộ cài](../README.vi.md#tải-và-cài-đặt).
 
+### macOS chặn mở ứng dụng
+
+Bản `0.1.0` có lỗi chữ ký macOS sau đóng gói; dùng `0.1.1` trở lên. Các bản thử nghiệm hiện được ký ad-hoc, chưa có Developer ID/notarization nên Gatekeeper vẫn có thể chặn khi tải từ Internet.
+
+Nếu đã xác nhận đúng bản từ repository này và muốn cho phép app chạy, làm theo [hướng dẫn của Apple](https://support.apple.com/en-au/102445): thử mở app, vào **Cài đặt hệ thống → Quyền riêng tư & Bảo mật**, rồi chọn **Vẫn mở / Open Anyway** cho ứng dụng nếu macOS cung cấp tùy chọn đó. Nếu macOS tiếp tục báo app hỏng hoặc không có tùy chọn cho phép, giữ lại thông báo để chẩn đoán; đừng coi việc bỏ cảnh báo là bằng chứng app hoạt động đúng.
+
 ## Đăng nhập
 
 1. Mở app, nhập thông tin đăng nhập Facebook.

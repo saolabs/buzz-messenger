@@ -23,6 +23,8 @@ Get a published installer from [GitHub Releases](https://github.com/saolabs/buzz
 
 Filenames start with `buzz-messenger-<version>-`. If no release is listed yet, the installers haven't been published. Maintainers can use the [release workflow guide, in Vietnamese](docs/PHAT-HANH.md).
 
+macOS preview builds from `0.1.1` use ad-hoc signatures and aren't notarized. Gatekeeper may still require permission to open downloaded copies; see [Apple's instructions](https://support.apple.com/en-au/102445). Replace the macOS `0.1.0` build, which had an invalid signature.
+
 ## A look inside
 
 | Buddy list | Conversation |
@@ -52,7 +54,7 @@ BUZZ! is sent through Messenger as the text `BUZZ!!!`. Buzz! Messenger recognize
 
 ## Current status
 
-The project is under development at version `0.1.0`, with real Messenger sign-in and messaging connected. It uses Electron, React, and TypeScript, reading and interacting with Messenger's web interface through embedded Chromium. It doesn't require a separate Buzz! Messenger server.
+The project is under development at version `0.1.1`, with real Messenger sign-in and messaging connected. It uses Electron, React, and TypeScript, reading and interacting with Messenger's web interface through embedded Chromium. It doesn't require a separate Buzz! Messenger server.
 
 Video/voice calling, file sending, IMVironment, Activities, and some other classic controls currently have a visual presence only. Choose **Conversation → Open in Messenger** to use Messenger features that aren't available in the app.
 
