@@ -54,7 +54,7 @@ BUZZ! được gửi qua Messenger dưới dạng chữ `BUZZ!!!`. Người dùn
 
 ## Tình trạng hiện tại
 
-Dự án đang ở giai đoạn phát triển, phiên bản `0.1.1`. Luồng đăng nhập và nhắn tin Messenger thật đã được nối; ứng dụng dùng Electron + React + TypeScript, đọc và thao tác trên trang Messenger bằng Chromium nhúng, không cần server riêng của Buzz! Messenger.
+Dự án đang ở giai đoạn phát triển, phiên bản `0.1.2`. Luồng đăng nhập và nhắn tin Messenger thật đã được nối; ứng dụng dùng Electron + React + TypeScript, đọc và thao tác trên trang Messenger bằng Chromium nhúng, không cần server riêng của Buzz! Messenger.
 
 Các nút gọi video/thoại, gửi tệp, IMVironment, Activities và một số công cụ cổ điển hiện chỉ có giao diện. Chọn **Hội thoại → Mở trong Messenger** để dùng những chức năng Messenger chưa được đưa vào app.
 

@@ -56,7 +56,7 @@ Từ `0.1.1`, `electron-builder.config.cjs` chọn chữ ký ad-hoc cho macOS n�
 
 Chữ ký ad-hoc không xác nhận nhà phát triển với Apple và không thay thế notarization. Bản tải từ Internet vẫn có thể bị Gatekeeper chặn. Để mở theo thiết lập Gatekeeper mặc định khi phân phối rộng rãi, cần Developer ID và notarization; xem [Apple Platform Security](https://support.apple.com/en-ie/guide/security/sec3ad8e6e53/web).
 
-Sau khi đóng gói, hai job macOS chạy `scripts/verify-mac-signatures.mjs`: kiểm tra `codesign --verify --deep --strict` và thử khởi động executable trong 8 giây trên runner mới. Kiểm tra này phát hiện chữ ký hỏng và lỗi thoát ngay khi khởi động; nó không mô phỏng Gatekeeper đối với file tải từ Internet.
+Sau khi đóng gói, hai job macOS chạy `scripts/verify-mac-signatures.mjs`: kiểm tra `codesign --verify --deep --strict`, rồi chạy app với `--smoke-test` trong profile tạm. App phải hiện cửa sổ, vẽ nội dung React, gọi được IPC qua preload và tải được tài nguyên skin/media. Chế độ này không khởi động Messenger hay dùng phiên đăng nhập đã lưu. Quá 30 giây không hoàn tất là lỗi; không còn coi tiến trình chạy nền là bằng chứng giao diện hoạt động. Kiểm tra này không mô phỏng Gatekeeper đối với file tải từ Internet.
 
 Workflow đã nối các **repository secrets** tùy chọn vào bước đóng gói:
 

@@ -54,7 +54,7 @@ BUZZ! is sent through Messenger as the text `BUZZ!!!`. Buzz! Messenger recognize
 
 ## Current status
 
-The project is under development at version `0.1.1`, with real Messenger sign-in and messaging connected. It uses Electron, React, and TypeScript, reading and interacting with Messenger's web interface through embedded Chromium. It doesn't require a separate Buzz! Messenger server.
+The project is under development at version `0.1.2`, with real Messenger sign-in and messaging connected. It uses Electron, React, and TypeScript, reading and interacting with Messenger's web interface through embedded Chromium. It doesn't require a separate Buzz! Messenger server.
 
 Video/voice calling, file sending, IMVironment, Activities, and some other classic controls currently have a visual presence only. Choose **Conversation → Open in Messenger** to use Messenger features that aren't available in the app.
 

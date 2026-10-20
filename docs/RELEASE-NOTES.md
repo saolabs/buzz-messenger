@@ -1,7 +1,13 @@
-## macOS packaging fix in v0.1.1
+## macOS window fix in v0.1.2
+
+- Opens the main window before accessing Keychain or starting Messenger. A Keychain confirmation after an app signature change can otherwise block the main thread long enough for the first renderer's connection to time out, leaving the app running without a window.
+- Enables the renderer sandbox and restores the main window when the Dock icon is activated after loading. The preload uses only APIs supported in the sandbox.
+- Replaces the process-only startup check with a packaged app smoke test: the main window must be visible, React must render, preload IPC must respond, and bundled skin/media resources must load. The test uses a disposable profile without connecting to Messenger.
+
+## macOS packaging
 
 - Replaces the invalid macOS signature in v0.1.0 with a complete ad-hoc signature for the app and its nested helpers/frameworks.
-- Adds strict signature verification and an 8-second startup check to both macOS CI jobs.
+- Both macOS CI jobs verify signatures and test the packaged window before uploading installers.
 - These preview macOS builds are **ad-hoc signed, not Developer ID signed or notarized**. Gatekeeper may still block downloaded copies. See [Apple's instructions](https://support.apple.com/en-au/102445) and the [Vietnamese installation guide](https://github.com/saolabs/buzz-messenger/blob/main/docs/HUONG-DAN.md#macos-chặn-mở-ứng-dụng).
 
 ## Download

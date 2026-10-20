@@ -1,9 +1,18 @@
 import { app, BrowserWindow, ipcMain, Menu, nativeImage, protocol, safeStorage, screen, shell } from "electron";
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { isAbsolute, join } from "node:path";
 import { TEXT_SIZES, ZOOMS, type ContactView, type ConversationView, type SessionView, type SignIn } from "../src/core/types.ts";
 import { MessengerService } from "./messenger-service.ts";
 import { Vault } from "./vault.ts";
+import { runStartupSmoke } from "./startup-smoke.ts";
+
+// Smoke runs use an isolated profile and never start the Messenger service.
+const smokeTest = process.argv.includes("--smoke-test");
+if (smokeTest) {
+  const profile = process.env.BUZZ_SMOKE_USER_DATA;
+  if (!profile || !isAbsolute(profile)) throw new Error("Smoke test requires an absolute BUZZ_SMOKE_USER_DATA path.");
+  app.setPath("userData", profile);
+}
 
 // Tài nguyên runtime nằm trong resources/ym; electron-builder copy cùng bộ này ra ngoài app.asar.
 const ROOT = app.isPackaged ? join(process.resourcesPath, "ym") : join(app.getAppPath(), "resources/ym");
@@ -67,7 +76,7 @@ function serve(request: Request): Response {
 }
 
 function load(win: BrowserWindow, view: string) {
-  if (process.env.ELECTRON_RENDERER_URL) win.loadURL(`${process.env.ELECTRON_RENDERER_URL}#${view}`);
+  if (!app.isPackaged && process.env.ELECTRON_RENDERER_URL) win.loadURL(`${process.env.ELECTRON_RENDERER_URL}#${view}`);
   else win.loadFile(join(__dirname, "../renderer/index.html"), { hash: view });
 }
 
@@ -92,7 +101,7 @@ function createWindow(view: View, inactive = false) {
     frame: false,
     backgroundColor: "#f9f9f2",
     show: false,
-    webPreferences: { preload: join(__dirname, "../preload/preload.js"), sandbox: false, zoomFactor: settings.zoom },
+    webPreferences: { preload: join(__dirname, "../preload/preload.js"), sandbox: true, zoomFactor: settings.zoom },
   });
   views.set(win, view);
   win.on("closed", () => views.delete(win));
@@ -281,7 +290,22 @@ app.whenReady().then(() => {
   if (process.platform === "darwin" && !app.isPackaged && existsSync(ICON)) app.dock?.setIcon(ICON);
   buddyWin = createWindow("buddy");
   buddyWin.on("closed", () => app.quit());
-  void startService(buddyWin);
+  if (smokeTest) runStartupSmoke(buddyWin);
+  else {
+    const host = buddyWin;
+    // Accessing safeStorage can wait on a macOS Keychain prompt. Let the first
+    // renderer paint and connect before opening the vault, or its IPC startup
+    // can time out while the main thread waits for the user's confirmation.
+    host.once("ready-to-show", () => setImmediate(() => {
+      if (!host.isDestroyed()) void startService(host);
+    }));
+  }
+});
+app.on("activate", () => {
+  if (!buddyWin || buddyWin.isDestroyed() || buddyWin.webContents.isLoading()) return;
+  if (buddyWin.isMinimized()) buddyWin.restore();
+  buddyWin.show();
+  buddyWin.focus();
 });
 let quitting = false;
 app.on("before-quit", (e) => {
