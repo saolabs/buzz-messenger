@@ -98,7 +98,14 @@ jobs:
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y libarchive-tools
       - run: npm ci
       - name: Build installers
-        run: npm run ${{ matrix.script }} -- --${{ matrix.arch }} --publish never
+        shell: bash
+        run: |
+          for signing_var in CSC_LINK CSC_KEY_PASSWORD APPLE_ID APPLE_APP_SPECIFIC_PASSWORD APPLE_TEAM_ID; do
+            if [[ -z "${!signing_var}" ]]; then
+              unset "$signing_var"
+            fi
+          done
+          npm run ${{ matrix.script }} -- --${{ matrix.arch }} --publish never
         env:
           CSC_LINK: ${{ matrix.platform == 'mac' && secrets.MAC_CSC_LINK || matrix.platform == 'win' && secrets.WIN_CSC_LINK || '' }}
           CSC_KEY_PASSWORD: ${{ matrix.platform == 'mac' && secrets.MAC_CSC_KEY_PASSWORD || matrix.platform == 'win' && secrets.WIN_CSC_KEY_PASSWORD || '' }}
