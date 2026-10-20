@@ -156,7 +156,7 @@ jobs:
             `${prefix}-mac-arm64.dmg`, `${prefix}-mac-arm64.zip`,
             `${prefix}-mac-x64.dmg`, `${prefix}-mac-x64.zip`,
             `${prefix}-win-x64-setup.exe`, `${prefix}-win-x64-portable.exe`,
-            `${prefix}-linux-x64.AppImage`, `${prefix}-linux-x64.deb`,
+            `${prefix}-linux-x86_64.AppImage`, `${prefix}-linux-amd64.deb`,
           ].sort();
           const files = readdirSync('release-assets').sort();
           if (JSON.stringify(files) !== JSON.stringify(expected)) throw new Error(`Unexpected installers: ${files}`);

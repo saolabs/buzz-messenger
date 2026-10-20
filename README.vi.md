@@ -19,7 +19,7 @@ Tải bộ cài đã công bố tại [GitHub Releases](https://github.com/saola
 | Windows, Intel/AMD 64-bit | `win-x64-setup.exe` hoặc `win-x64-portable.exe` |
 | Mac Apple Silicon | `mac-arm64.dmg` hoặc `mac-arm64.zip` |
 | Mac Intel | `mac-x64.dmg` hoặc `mac-x64.zip` |
-| Linux, Intel/AMD 64-bit | `linux-x64.AppImage` hoặc `linux-x64.deb` |
+| Linux, Intel/AMD 64-bit | `linux-x86_64.AppImage` hoặc `linux-amd64.deb` |
 
 Tên file bắt đầu bằng `buzz-messenger-<version>-`. Nếu chưa thấy bản Release, bộ cài chưa được công bố. Người phát triển xem [hướng dẫn phát hành](docs/PHAT-HANH.md).
 

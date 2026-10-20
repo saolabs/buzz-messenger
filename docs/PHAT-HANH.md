@@ -15,6 +15,8 @@ Người dùng tải bộ cài tại [GitHub Releases](https://github.com/saolab
 
 Tên file có phiên bản, nền tảng và kiến trúc. Ví dụ `buzz-messenger-0.1.0-win-x64-setup.exe` và `buzz-messenger-0.1.0-mac-arm64.dmg`. Windows ARM, Linux ARM và bản 32-bit chưa nằm trong workflow.
 
+Linux dùng tên kiến trúc theo định dạng gói: `linux-x86_64.AppImage` và `linux-amd64.deb`. Cả hai đều dành cho Intel/AMD 64-bit, tương ứng với `x64` trong ma trận build.
+
 ## Đưa mã nguồn lên GitHub lần đầu
 
 Repository cần có mã nguồn, `package-lock.json`, `.github/workflows/release.yml` và toàn bộ `resources/ym/`. APK, bộ cài gốc, `_extracted/`, `node_modules/`, `out/` và `dist/` đã được Git bỏ qua.

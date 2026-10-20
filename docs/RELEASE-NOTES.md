@@ -7,7 +7,7 @@ Choose the installer for your computer. Node.js, npm, and source builds are not 
 | Windows, Intel/AMD 64-bit | `win-x64-setup.exe` (installer) or `win-x64-portable.exe` (no installation) |
 | Mac with Apple Silicon | `mac-arm64.dmg` or `mac-arm64.zip` |
 | Mac with Intel processor | `mac-x64.dmg` or `mac-x64.zip` |
-| Linux, Intel/AMD 64-bit | `linux-x64.AppImage` or `linux-x64.deb` (Debian/Ubuntu) |
+| Linux, Intel/AMD 64-bit | `linux-x86_64.AppImage` or `linux-amd64.deb` (Debian/Ubuntu) |
 
 Every filename starts with `buzz-messenger-<version>-`. Checksums are included in `SHA256SUMS.txt`.
 

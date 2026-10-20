@@ -19,7 +19,7 @@ Get a published installer from [GitHub Releases](https://github.com/saolabs/buzz
 | Windows, Intel/AMD 64-bit | `win-x64-setup.exe` or `win-x64-portable.exe` |
 | Mac with Apple Silicon | `mac-arm64.dmg` or `mac-arm64.zip` |
 | Mac with Intel processor | `mac-x64.dmg` or `mac-x64.zip` |
-| Linux, Intel/AMD 64-bit | `linux-x64.AppImage` or `linux-x64.deb` |
+| Linux, Intel/AMD 64-bit | `linux-x86_64.AppImage` or `linux-amd64.deb` |
 
 Filenames start with `buzz-messenger-<version>-`. If no release is listed yet, the installers haven't been published. Maintainers can use the [release workflow guide, in Vietnamese](docs/PHAT-HANH.md).
 
