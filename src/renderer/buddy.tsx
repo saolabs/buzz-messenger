@@ -1,11 +1,13 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import type { ContactView, SessionView, Status } from "../core/types.ts";
+import { foldContactName as fold } from "../core/contact-search.ts";
 import { Frame, useZoomItems, type Menu } from "./frame.tsx";
 import { LANGS, useLang, useT, type Lang } from "./i18n.ts";
 import { Rich, useEmoticons } from "./rich.tsx";
 import { Combo, Icon, mediaUrl, playSound, PUSH_DEFAULT, SkinContext, skinUrl, Slice } from "./skin.tsx";
 
 export const statusIcon = (s: Status) => `images/${s}.png`;
+export const GroupIcon = ({ className = "" }: { className?: string }) => <svg className={className} aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="#81728f"><circle cx="10.5" cy="4" r="2.3" /><path d="M6.5 13v-3a4 4 0 0 1 8 0v3z" /><circle cx="5" cy="5.5" r="2.3" stroke="#f9f9f2" strokeWidth=".6" /><path d="M1 14v-3a4 4 0 0 1 8 0v3z" stroke="#f9f9f2" strokeWidth=".6" /></svg>;
 
 // Phiên đăng nhập Messenger (main process giữ, renderer chỉ hiển thị).
 export function useSession() {
@@ -100,7 +102,7 @@ function MePanel({ name, avatar, status, onStatus, onRename }: { name: string; a
               {msg ? <span>{msg}</span> : <span className="placeholder">{t("me.placeholder")}</span>}
             </Slice>
           )}
-          <Slice src="images/btn-no-border-right.png" n={8} states={[0, 1, 2]} m={[2, 10, 3, 6]} className="btn me-status-drop" onClick={() => setEditing(true)}>
+          <Slice src="images/btn-no-border-right.png" n={8} states={[0, 2, 1]} m={[2, 10, 3, 6]} className="btn me-status-drop" onClick={() => setEditing(true)}>
             <Icon src="images/single_arrow_down.png" w={7} h={5} />
           </Slice>
         </div>
@@ -111,7 +113,7 @@ function MePanel({ name, avatar, status, onStatus, onRename }: { name: string; a
 
 function Tabs({ tab, onTab }: { tab: "contacts" | "updates"; onTab: (t: "contacts" | "updates") => void }) {
   // TabLeft/TabRight.png: 8 trạng thái 28px, 0-3 chưa chọn, 4-7 đã chọn (thường/hover/nhấn/tắt)
-  const states = (on: boolean) => (on ? [4, 5, 6] : [0, 1, 2]);
+  const states = (on: boolean) => (on ? [4, 6, 5] : [0, 2, 1]);
   const t = useT();
   return (
     <div className="fl-tabs">
@@ -150,11 +152,11 @@ function SearchBar({ query, onQuery }: { query: string; onQuery: (q: string) => 
   return (
     <Slice src="FriendList/SearchBar.png" m={[40, 7, 10, 7]} className="search-area">
       <button className="add hot" title={t("menu.addContact")}>
-        <Icon src="images/addbuddy.png" n={8} states={[0, 1, 2]} w={13} h={13} />
+        <Icon src="images/addbuddy.png" n={8} states={[0, 2, 1]} w={13} h={13} />
       </button>
       <div className="edit">
         <Icon src="FriendList/SearchOptions.png" n={4} w={16} h={13} />
-        <input placeholder={t("search.placeholder")} value={query} onChange={(e) => onQuery(e.target.value)} />
+        <input placeholder={t("search.placeholder")} maxLength={100} value={query} onChange={(e) => onQuery(e.target.value)} />
         {query && (
           <button className="hot" onClick={() => onQuery("")}>
             <Icon src="images/Clear.png" n={4} states={[0, 1, 2]} w={13} h={13} />
@@ -165,20 +167,20 @@ function SearchBar({ query, onQuery }: { query: string; onQuery: (q: string) => 
   );
 }
 
-function ContactRow({ c, selected, onSelect }: { c: ContactView; selected: boolean; onSelect: () => void }) {
+function ContactRow({ c, selected, onSelect, onOpen }: { c: ContactView; selected: boolean; onSelect: () => void; onOpen?: () => void }) {
   const emoticons = useEmoticons();
   const t = useT();
   const avatar = useAvatar(c.avatar);
   return (
     <div
-      className={`fl-row ${c.status === "offline" ? "offline" : ""} ${c.unread ? "unread" : ""} ${selected ? "selected" : ""}`}
+      className={`fl-row ${c.status === "offline" && c.kind !== "group" ? "offline" : ""} ${c.unread ? "unread" : ""} ${selected ? "selected" : ""}`}
       onMouseDown={onSelect}
-      onDoubleClick={() => window.ym.openIm(c.id)}
-      title={`${c.name} — ${t(`status.${c.status}`)}`}
+      onDoubleClick={() => onOpen ? onOpen() : window.ym.openIm(c.id)}
+      title={`${c.name} — ${c.kind === "group" ? t("group.chat") : t(`status.${c.status}`)}`}
     >
       <Slice src="images/bg_hover.png" m={[2, 2, 2, 2]} className="bg hover" />
       <Slice src="images/bg_selected.png" m={[2, 2, 2, 2]} className="bg selected" />
-      <Icon src={statusIcon(c.status)} w={10} h={10} className="opi" />
+      {c.kind === "group" ? <GroupIcon className="opi" /> : <Icon src={statusIcon(c.status)} w={10} h={10} className="opi" />}
       <img className="avatar" src={avatar} alt="" referrerPolicy="no-referrer" />
       <div className="name">{c.name}</div>
       {/* Messenger không có status message như Y!M → dòng thứ hai là tin gần nhất trong inbox. */}
@@ -191,34 +193,94 @@ function ContactRow({ c, selected, onSelect }: { c: ContactView; selected: boole
   );
 }
 
-// So khớp không dấu, không phân biệt hoa thường: gõ "nguyen" ra "Nguyễn".
-const fold = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[đĐ]/g, "d").toLowerCase();
-
 function ContactList({ contacts, query, loading }: { contacts: ContactView[]; query: string; loading: boolean }) {
   const skin = useContext(SkinContext);
   const t = useT();
   const [selected, setSelected] = useState<string>();
   const [open, setOpen] = useState(true);
+  const [groupsOpen, setGroupsOpen] = useState(true);
   const [more, setMore] = useState(false);
+  const moreBusy = useRef(false);
+  const [moreError, setMoreError] = useState("");
+  const [moreInfo, setMoreInfo] = useState("");
+  const [retry, setRetry] = useState(0);
+  const [search, setSearch] = useState<{ query: string; loading: boolean; contacts: ContactView[]; error?: string }>({ query: "", loading: false, contacts: [] });
+  const [opening, setOpening] = useState(false);
+  const openingBusy = useRef(false);
+  const [openError, setOpenError] = useState("");
+  const trimmed = query.trim();
+  useEffect(() => {
+    let current = true;
+    setOpenError("");
+    setSearch({ query: trimmed, loading: !!trimmed, contacts: [] });
+    if (trimmed) setOpen(true);
+    const timer = trimmed ? setTimeout(() => {
+      window.ym.searchContacts(trimmed).then(result => {
+        if (current) setSearch({ query: trimmed, loading: false, contacts: result.contacts, error: result.ok ? undefined : result.error ?? t("search.failed") });
+      }).catch(() => { if (current) setSearch({ query: trimmed, loading: false, contacts: [], error: t("search.failed") }); });
+    }, 400) : undefined;
+    return () => {
+      current = false;
+      clearTimeout(timer);
+      // Cancels the page as soon as a query changes, including Clear/sign-out.
+      void window.ym.searchContacts("").catch(() => {});
+    };
+  }, [trimmed, retry]);
+  const remote = search.query === trimmed ? search : { loading: !!trimmed, contacts: [] as ContactView[], error: undefined };
   const q = fold(query.trim());
-  const list = contacts.filter((c) => fold(c.name).includes(q));
-  const online = list.filter((c) => c.status !== "offline").length;
+  const local = contacts.filter((c) => fold(c.name).includes(q));
+  const remoteNames = new Set(remote.contacts.map(c => c.name.normalize("NFC")));
+  const list = q ? [...remote.contacts, ...local.filter(c => !remoteNames.has(c.name.normalize("NFC")))] : contacts;
+  const friends = list.filter(c => c.kind !== "group"), groups = list.filter(c => c.kind === "group");
+  const row = (c: ContactView) => <ContactRow key={c.id} c={c} selected={selected === c.id} onSelect={() => setSelected(c.id)} onOpen={() => void openContact(c)} />;
+  const openContact = async (c: ContactView) => {
+    if (!c.searchResult) { window.ym.openIm(c.id); return; }
+    if (openingBusy.current) return;
+    openingBusy.current = true;
+    setOpening(true); setOpenError("");
+    try { const result = await window.ym.openSearchContact(c.id); if (!result.ok) setOpenError(result.error ?? t("search.openFailed")); }
+    catch { setOpenError(t("search.openFailed")); }
+    finally { openingBusy.current = false; setOpening(false); }
+  };
   // Cuộn gần đáy → nhờ main quét inbox sâu hơn (Facebook chỉ tải thêm hội thoại khi danh sách chạm đáy).
+  const loadMore = async () => {
+    if (moreBusy.current || q) return;
+    moreBusy.current = true;
+    setMore(true);
+    setMoreError("");
+    setMoreInfo("");
+    try {
+      const result = await window.ym.loadMore();
+      if (!result.ok) setMoreError(result.error ?? t("contacts.loadFailed"));
+      else if (!result.added) setMoreInfo(t("contacts.noMore"));
+    } catch { setMoreError(t("contacts.loadFailed")); }
+    finally { moreBusy.current = false; setMore(false); }
+  };
   const onScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const el = e.currentTarget;
-    if (more || q || el.scrollTop + el.clientHeight < el.scrollHeight - 40) return;
-    setMore(true);
-    window.ym.loadMore().finally(() => setMore(false));
+    if (el.scrollTop + el.clientHeight >= el.scrollHeight - 40) void loadMore();
   };
   return (
     <div className="fl-box" onScroll={onScroll}>
       <div className="fl-group" onClick={() => setOpen(!open)}>
         <img src={skinUrl(skin, open ? "expanded.gif" : "collapsed.gif")} alt="" />
-        {t("group.friends")} ({online}/{list.length})
+        {t("group.friends")} ({friends.filter(c => c.status !== "offline").length}/{friends.length})
       </div>
-      {open && list.map((c) => <ContactRow key={c.id} c={c} selected={selected === c.id} onSelect={() => setSelected(c.id)} />)}
-      {open && !list.length && <div className="fl-empty">{loading ? t("contacts.loading") : t("search.empty", { q: query })}</div>}
-      {more && <div className="fl-empty">{t("contacts.loadingMore")}</div>}
+      {open && friends.map(row)}
+      {!!groups.length && <>
+        <div className="fl-group" onClick={() => setGroupsOpen(!groupsOpen)}><img src={skinUrl(skin, groupsOpen ? "expanded.gif" : "collapsed.gif")} alt="" />{t("group.chats")} ({groups.length})</div>
+        {groupsOpen && groups.map(row)}
+      </>}
+      {open && q && remote.loading && <div className="fl-empty" role="status">{t("search.loading")}</div>}
+      {open && q && remote.error && <div className="fl-empty" role="alert">{remote.error} <button onClick={() => setRetry(n => n + 1)}>{t("search.retry")}</button></div>}
+      {opening && <div className="fl-empty" role="status">{t("search.opening")}</div>}
+      {openError && <div className="fl-empty" role="alert">{openError}</div>}
+      {open && !list.length && !remote.loading && !remote.error && <div className="fl-empty">{loading ? t("contacts.loading") : t("search.empty", { q: query })}</div>}
+      {open && !q && !loading && <div className="fl-empty">
+        <button className="load-more" disabled={more} onClick={() => void loadMore()}>{t(more ? "contacts.loadingMore" : "contacts.loadMore")}</button>
+        {moreError && <div role="alert">{moreError}</div>}
+        {moreInfo && <div role="status">{moreInfo}</div>}
+      </div>}
     </div>
   );
 }
@@ -261,7 +323,8 @@ function Login({ session, onInvisible, onPin }: { session: SessionView; onInvisi
   const [auto, setAuto] = useState(session.autoSignIn);
   const [invisible, setInvisible] = useState(false);
   const [empty, setEmpty] = useState(false);
-  const busy = session.phase === "signingIn";
+  const connected = session.phase === "signedIn";
+  const busy = session.phase === "signingIn" || connected;
   // Các khung của login.swf (scripts/swf_to_svg.py): mặt bạc ngủ → tỉnh → đang kết nối → mặt vàng cười.
   const [awake, setAwake] = useState(false);
   useEffect(() => {
@@ -278,7 +341,7 @@ function Login({ session, onInvisible, onPin }: { session: SessionView; onInvisi
     window.ym.signIn({ username: id.trim(), password, remember, autoSignIn: auto });
   };
   const enter = (e: React.KeyboardEvent) => e.key === "Enter" && submit();
-  const message = empty
+  const message = connected ? t("login.connected") : empty
     ? t("login.empty")
     : session.error
       ? t(`login.error.${session.error as "rejected" | "timeout" | "vault"}`)
@@ -290,7 +353,7 @@ function Login({ session, onInvisible, onPin }: { session: SessionView; onInvisi
   return (
     <div className="login">
       <div className="login-main">
-      <img src={mediaUrl(`login/${phase}.svg`)} alt="Buzz! Messenger" className="login-logo" />
+      <img src={mediaUrl(`login/${phase}.svg`)} alt={connected ? t("login.connected") : "Buzz! Messenger"} className="login-logo" />
       <fieldset className="login-form" disabled={busy}>
         <label>
           {t("login.id")}
@@ -311,9 +374,11 @@ function Login({ session, onInvisible, onPin }: { session: SessionView; onInvisi
             <input type="checkbox" checked={invisible} onChange={(e) => setInvisible(e.target.checked)} /> {t("login.invisible")}
           </label>
         </div>
-        <div className={`login-error ${empty || session.error ? "" : "info"}`}>{message}</div>
+        <div className={`login-error ${!connected && (empty || session.error) ? "" : "info"}`} role={connected ? "status" : undefined}>{message}</div>
         {/* Như Y!M: đang đăng nhập thì nút thành "Hủy". Nút là <div> nên vẫn bấm được khi fieldset bị khóa. */}
-        {busy ? (
+        {connected ? (
+          <div className="login-btn" aria-hidden="true" />
+        ) : busy ? (
           <Slice src="theme/pushbuttons.png" n={6} states={[0, 1, 2]} m={[4, 4, 4, 11]} className="btn pushbutton login-btn" onClick={() => window.ym.cancelSignIn()}>
             {t("login.cancel")}
           </Slice>
@@ -457,7 +522,15 @@ function useContacts(signedIn: boolean) {
 
 export function BuddyWindow({ skins }: { skins: string[] }) {
   const session = useSession();
-  const signedIn = session?.phase === "signedIn";
+  const connected = session?.phase === "signedIn";
+  const username = session?.username;
+  const [readyFor, setReadyFor] = useState<string | null>(null);
+  const signedIn = connected && readyFor === username;
+  useEffect(() => {
+    if (!connected || !username) { setReadyFor(null); return; }
+    const timer = setTimeout(() => setReadyFor(username), 2000);
+    return () => clearTimeout(timer);
+  }, [connected, username]);
   const contacts = useContacts(signedIn);
   // Trạng thái của chính mình chỉ hiển thị trong app (Messenger không có Busy/Invisible tương ứng).
   const [status, setStatus] = useState<Status>("online");
@@ -472,12 +545,12 @@ export function BuddyWindow({ skins }: { skins: string[] }) {
   const zoomItems = useZoomItems();
   const wasSignedIn = useRef(false);
   useEffect(() => {
-    if (signedIn && !wasSignedIn.current) {
+    if (connected && !wasSignedIn.current) {
       setStatus(invisible.current ? "offline" : "online");
       playSound("online.wav");
     }
-    wasSignedIn.current = signedIn;
-  }, [signedIn]);
+    wasSignedIn.current = connected;
+  }, [connected]);
   const menus: Menu[] = [
     {
       label: t("menu.messenger"),

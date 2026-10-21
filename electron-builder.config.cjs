@@ -8,6 +8,8 @@ module.exports = {
   ...build,
   mac: {
     ...build.mac,
+    entitlements: "build/entitlements.mac.plist",
+    entitlementsInherit: "build/entitlements.mac.plist",
     ...(!hasDeveloperIdentity && {
       identity: "-",
       entitlements: "build/entitlements.adhoc.mac.plist",

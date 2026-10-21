@@ -421,6 +421,29 @@ test("scrolling can continue beyond the first bounded inbox scan and return to t
   }
 });
 
+test("inbox scrolls its inner viewport instead of a non-scrolling grid wrapper", () => {
+  const { d, run } = fixture();
+  try {
+    const grid = d.window.document.querySelector('[role="grid"]')!;
+    const viewport = d.window.document.createElement("div");
+    viewport.style.overflowY = "auto";
+    while (grid.firstChild) viewport.append(grid.firstChild);
+    grid.append(viewport);
+    Object.defineProperty(viewport, "scrollHeight", { value: 5000 });
+    Object.defineProperty(viewport, "clientHeight", { value: 500 });
+    let scrolls = 0;
+    viewport.addEventListener("scroll", () => scrolls++);
+    assert.equal(run("inbox").more, true);
+    assert.equal(run("scroll-inbox"), true);
+    assert.equal(viewport.scrollTop, 450);
+    run("seek-inbox", { scrollTop: 3600 });
+    assert.equal(run("inbox").nextOffset, 3600);
+    run("reset-inbox");
+    assert.equal(viewport.scrollTop, 0);
+    assert.equal(scrolls, 3);
+  } finally { d.window.close(); }
+});
+
 test("hidden dialogs and login controls do not block a ready Messenger page", () => {
   const { d, run } = fixture();
   try {

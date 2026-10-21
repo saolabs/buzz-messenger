@@ -61,7 +61,33 @@ Mặc định mỗi người có một cửa sổ chat riêng. Bật **Xem → G
 
 Khi phát hiện tin đến từ người chưa có cửa sổ chat, app có thể mở cửa sổ mà không lấy focus. Tin mới có âm báo; tab hoặc thanh tác vụ nhấp nháy tùy trạng thái cửa sổ.
 
-Để gọi điện, thả cảm xúc hoặc gửi tệp, chọn **Hội thoại → Mở trong Messenger**. Cửa sổ Messenger này dùng cùng phiên đăng nhập với app.
+### Gọi thoại và video
+
+Bấm **Gọi thoại** hoặc **Gọi video** trên thanh công cụ của hội thoại. App mở đúng hội thoại trong cửa sổ Messenger dùng chung phiên đăng nhập, kiểm tra người nhận rồi kích hoạt nút gọi tương ứng. Điều khiển và kết thúc cuộc gọi trong cửa sổ Messenger. Khi cửa sổ gọi còn mở, bấm lại nút sẽ đưa cửa sổ đó lên, không tự gọi thêm lần nữa.
+
+Cho phép microphone khi gọi thoại; gọi video cần cả microphone và camera. App chỉ cho trang gọi Messenger đang hiển thị dùng các thiết bị tương ứng sau thao tác gọi của bạn; không xin quyền khi khởi động.
+
+| Hệ điều hành | Xin quyền và cấp lại quyền |
+| --- | --- |
+| **macOS** | Lần đầu gọi, macOS hiện hộp thoại xin quyền. Nếu đã từ chối hoặc bị hạn chế, app hiện hướng dẫn và nút **Mở cài đặt / Open Settings**. Vào **Cài đặt hệ thống → Quyền riêng tư & Bảo mật → Microphone / Camera**, bật Buzz! Messenger rồi thoát và mở lại app. Khi chạy `npm run dev`, tên ứng dụng xin quyền thường là **Electron**. Bản đóng gói phải được build lại để có khai báo mục đích sử dụng thiết bị. |
+| **Windows** | App kiểm tra quyền hệ thống trước khi gọi. Nếu bị chặn, nút **Open Settings** mở trang quyền thiết bị. Bật **Settings → Privacy & security → Microphone / Camera → Microphone / Camera access** và **Let desktop apps access your microphone / camera**. Windows không dùng hộp thoại `askForMediaAccess` của macOS. |
+| **Linux (AppImage / DEB)** | Không có API hộp thoại xin quyền hệ điều hành chung cho mọi desktop. Trang gọi dùng WebRTC qua quyền media giới hạn của Electron. Nếu không có âm thanh/hình ảnh, kiểm tra thiết bị đầu vào trong Settings → Sound, camera, thiết bị đang bị app khác chiếm và dịch vụ PipeWire/PulseAudio. Các bản Flatpak/Snap nếu bổ sung sau này cần cấu hình sandbox riêng; hiện dự án không phát hành hai định dạng này. |
+
+Mở trang cài đặt không đồng nghĩa đã cấp quyền: app dừng lần gọi đó, không tự gọi tiếp. Nếu quyền do tổ chức quản lý, cần quản trị viên cho phép. Việc có quyền không bảo đảm thiết bị tồn tại hoặc hoạt động.
+
+Tham khảo: [API quyền của Electron](https://www.electronjs.org/docs/latest/api/system-preferences#systempreferencesgetmediaaccessstatusmediatype-windows-macos), [quyền camera/microphone trên Windows](https://support.microsoft.com/en-us/windows/privacy/windows-camera-microphone-and-privacy).
+
+Nếu Messenger yêu cầu PIN/xác minh, không có nút gọi khả dụng hoặc không xác minh được đúng người nhận, app báo lỗi dưới thanh công cụ và giữ cửa sổ Messenger để bạn xử lý. Không tự bấm lại sau khi đã thử bắt đầu cuộc gọi. Luồng gọi đã có kiểm tra tự động với dữ liệu giả lập; cần thử cuộc gọi thật để xác nhận âm thanh/hình ảnh trên máy của bạn.
+
+Để thả cảm xúc, chọn **Hội thoại → Mở trong Messenger**.
+
+### Gửi tệp, ảnh và nhóm chat
+
+Bấm biểu tượng đính kèm hoặc kéo thả tệp/ảnh vào ô soạn. Kiểm tra khay chờ, bỏ tệp không cần và bấm **Gửi** để tải lên Messenger. Giới hạn 10 tệp/lần, 25 MB/tệp và 50 MB tổng; thả tệp không tự gửi. Nút miệng mở các âm thanh vui đi kèm. Nút T chỉnh chữ trong Buzz; Messenger nhận văn bản thuần.
+
+Nhóm đã xác nhận có mục riêng trong danh sách, hiển thị tên/biệt danh người gửi và bảng thành viên. Bấm thành viên để mở chat riêng sau khi app xác minh đúng người nhận. Bảng có tải lại/tải thêm; chưa có thao tác quản trị nhóm.
+
+Tìm liên hệ sẽ lọc tên đã lưu và tìm thêm trên Messenger. Cuộn danh bạ xuống cuối để tải thêm; cuộn lịch sử lên đầu hoặc bấm **Tải tin nhắn cũ hơn** để nạp tiếp.
 
 ## Đổi giao diện
 
@@ -83,7 +109,7 @@ Skin, ngôn ngữ, độ phóng, cỡ chữ và lựa chọn gom tab được l�
 | Tài khoản, mật khẩu của phiên, cookie, PIN đã lưu và lịch sử chat | Vault mã hóa trong `secure/` |
 | Khóa vault | `secure/key.secure`, được bọc bằng kho khóa hệ điều hành |
 
-Vault giữ tối đa 500 tin gần nhất cho mỗi cuộc trò chuyện. Đây là lịch sử cục bộ phục vụ hiển thị, không phải bản sao lưu đầy đủ của Messenger.
+Vault giữ tối đa 5.000 tin gần nhất cho mỗi cuộc trò chuyện. Đây là lịch sử cục bộ phục vụ hiển thị, không phải bản sao lưu đầy đủ của Messenger.
 
 - **Có Remember:** giữ mật khẩu và cookie qua lần thoát bình thường để có thể đăng nhập lại.
 - **Không Remember:** thông tin vẫn được dùng trong phiên và có thể nằm trong vault mã hóa; mật khẩu và cookie được xóa khi đăng xuất hoặc thoát bình thường. Việc dọn này không được bảo đảm nếu tiến trình bị buộc dừng hoặc máy mất điện.
@@ -110,6 +136,6 @@ App kết nối với Facebook/Messenger và tải nội dung từ các nguồn 
 ## Giới hạn hiện tại
 
 - Chưa có tìm người ngoài inbox, thêm liên hệ hoặc nhóm danh bạ tự tạo.
-- Các nút Video/Voice Call, IMVironment, Activities, Photos, Audibles, Format, Send File và Add/Ignore User chưa có chức năng trong giao diện cổ điển.
+- Các nút IMVironment, Activities, Photos, Audibles, Format, Send File và Add/Ignore User chưa có chức năng trong giao diện cổ điển.
 - Chưa xác nhận hoạt động thực tế trên Windows và Linux.
 - Đồng bộ và nhận diện media phụ thuộc cấu trúc trang Messenger; thay đổi từ Facebook có thể khiến một phần chức năng ngừng hoạt động.

@@ -1,13 +1,36 @@
-## macOS window fix in v0.1.2
+# Buzz! Messenger v0.2.0
 
-- Opens the main window before accessing Keychain or starting Messenger. A Keychain confirmation after an app signature change can otherwise block the main thread long enough for the first renderer's connection to time out, leaving the app running without a window.
-- Enables the renderer sandbox and restores the main window when the Dock icon is activated after loading. The preload uses only APIs supported in the sandbox.
-- Replaces the process-only startup check with a packaged app smoke test: the main window must be visible, React must render, preload IPC must respond, and bundled skin/media resources must load. The test uses a disposable profile without connecting to Messenger.
+## What's new
+
+- Group chats have their own buddy-list section, sender names/nicknames, and a paginated member panel with admin labels. Click a member to open a private chat after Messenger verifies the recipient.
+- Send files and images with the attachment picker or drag and drop. Preview/remove selections before sending; dropping a file never sends it automatically. Limits: 10 files, 25 MB per file, 50 MB total.
+- The composer adds bundled sound clips and local text styling. Formatting affects Buzz only; Messenger receives plain text.
+- Contact search now queries Messenger beyond the loaded buddy list and resolves the actual private thread before opening it. Names with and without Vietnamese accents are supported.
+- Contact and older-message pagination now use the correct scrolling surfaces and wait for delayed Messenger history loads.
+- Improved message identity reconciliation prevents duplicate group rows when Messenger switches between names/nicknames or reloads history. Existing media and encrypted repair backups are retained.
+- Corrected multiline message rendering, composer layout, toolbar hover/pressed states and contact search width. The buddy window starts centered along the right screen edge; successful sign-in displays its connected icon for two seconds.
+- Added guarded Messenger web API enrichment for supported conversations, with DOM fallback before a send is attempted and no automatic resend after an uncertain result.
+
+## Verification and limits
+
+- 123 core tests, TypeScript checks and renderer/main/preload builds pass. Offline Electron fixtures cover calls, uploads/composer, pagination, search, groups and verified member opening.
+- Real-session checks on macOS cover contact search, older history, group sender/member display, duplicate repair and opening a member's private chat. Automated fixture sends/uploads do not establish delivery to real recipients.
+- File sending and live voice/video calls still need end-to-end checks with real recipients on each supported platform. Group administration, reply/reactions/@mentions and sent/delivered/read indicators are not included.
+- Messenger integration still needs embedded Chromium and an authenticated Messenger session. Internal web APIs are experimental and can change; this is not an independent HTTP Messenger client.
+- [Next implementation plan](https://github.com/saolabs/buzz-messenger/blob/main/docs/ROADMAP.md): in-chat search, clipboard images and persistent drafts first, then image navigation/favorites and research for reply/reactions/mentions.
+
+## Tiếng Việt — thay đổi chính
+
+- Hỗ trợ nhóm, biệt danh người gửi, bảng thành viên/quản trị viên; bấm thành viên mở đúng chat riêng.
+- Gửi tệp/ảnh qua nút đính kèm hoặc kéo thả, có xem trước và chỉ gửi khi bấm Gửi.
+- Sửa tìm liên hệ, tải thêm danh bạ/tin cũ, tin nhóm bị lặp và hiển thị xuống dòng; giữ ảnh và bản sao sửa cache.
+- Hoàn thiện thanh soạn, âm thanh vui, định dạng chữ cục bộ và vị trí cửa sổ sát cạnh phải, căn giữa theo chiều dọc.
+- Kế hoạch tiếp theo đã lưu trong ROADMAP; các mục chưa hoàn thành không nằm trong bản này.
 
 ## macOS packaging
 
-- Replaces the invalid macOS signature in v0.1.0 with a complete ad-hoc signature for the app and its nested helpers/frameworks.
-- Both macOS CI jobs verify signatures and test the packaged window before uploading installers.
+- Retains complete ad-hoc signing of the app and nested helpers/frameworks when no Developer ID certificate is configured.
+- Both macOS CI jobs verify signatures and launch the packaged renderer with an isolated profile before uploading installers. Camera/microphone purpose strings and entitlements are included for user-initiated Messenger calls.
 - These preview macOS builds are **ad-hoc signed, not Developer ID signed or notarized**. Gatekeeper may still block downloaded copies. See [Apple's instructions](https://support.apple.com/en-au/102445) and the [Vietnamese installation guide](https://github.com/saolabs/buzz-messenger/blob/main/docs/HUONG-DAN.md#macos-chặn-mở-ứng-dụng).
 
 ## Download

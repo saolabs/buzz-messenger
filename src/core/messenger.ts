@@ -73,6 +73,8 @@ export type MessengerRead = {
   revision: number;
 };
 export type NativeOptions = {
+  group?: boolean;
+  groupMembers?: { id: string; name: string; nickname?: string; isSelf: boolean }[];
   historyLimit?: number;
   threadId?: string;
   recipient?: string;
@@ -85,11 +87,13 @@ export type NativeOptions = {
   attachmentId?: string;
   load?: boolean;
   nativePlayback?: boolean;
+  callKind?: "voice" | "video";
 };
 // Public rendered DOM only. No private React stores, endpoints, tokens or requests are inspected.
 export function messengerDOM(
   action:
     | "read"
+    | "status"
     | "inbox"
     | "scroll-inbox"
     | "seek-inbox"
@@ -100,7 +104,9 @@ export function messengerDOM(
     | "focus"
     | "click"
     | "hover"
-    | "media-source",
+    | "media-source"
+    | "call-check"
+    | "start-call",
   options: NativeOptions = {},
   parseStamp = messengerTimestamp,
 ): any {
@@ -173,6 +179,7 @@ export function messengerDOM(
         dialogTitle,
       ),
     );
+  if (action === "status") return { blocked, blockedReason, rateLimited, recoveryRequired };
   const hash = (s: string) => {
     let a = 2166136261,
       b = 2246822519,
@@ -242,6 +249,7 @@ export function messengerDOM(
         "Chưa đọc được danh sách chat. Kiểm tra đăng nhập/PIN hoặc giao diện Messenger.",
       );
     const scroll =
+      scrollParent(grid.querySelector('a[href*="/messages/"]')) ??
       scrollParent(grid) ??
       (grid.scrollHeight > grid.clientHeight + 10
         ? (grid as HTMLElement)
@@ -518,11 +526,17 @@ export function messengerDOM(
     const platformId =
       article.getAttribute("data-message-id") ??
       node.getAttribute("data-message-id");
-    const id =
-      platformId ??
-      `dom:${hash(JSON.stringify([threadId, direction, text, parsed.timestamp === null ? match[2] : Math.floor(parsed.timestamp / 60_000)]))}`;
+    const fingerprint = [threadId, direction, text, parsed.timestamp === null ? match[2] : Math.floor(parsed.timestamp / 60_000)];
+    const legacyId = `dom:${hash(JSON.stringify(fingerprint))}`;
+    const authorName = norm(match[1]);
+    const authorKey = (s: string) => s.normalize("NFC").trim().toLowerCase();
+    const authors = options.groupMembers?.filter(m => direction === "outgoing" ? m.isSelf : [m.name, m.nickname].some(n => n && authorKey(n) === authorKey(authorName))) ?? [];
+    const authorId = authors.length === 1 ? authors[0].id : undefined;
+    const id = platformId ?? (options.group ? `dom:${hash(JSON.stringify([...fingerprint, authorId ?? authorName]))}` : legacyId);
     messages.push({
       id,
+      sender: { name: authorName, ...(authorId ? { id: authorId } : {}) },
+      ...(options.group && !platformId ? { legacyFingerprintId: legacyId } : {}),
       text,
       direction,
       timestamp: parsed.timestamp,
@@ -662,6 +676,24 @@ export function messengerDOM(
     throw new Error(
       "Sai hội thoại, cần xác minh hoặc tin nhắn chưa định danh duy nhất.",
     );
+  if (action === "call-check" || action === "start-call") {
+    if (options.callKind !== "voice" && options.callKind !== "video") throw new Error("Loại cuộc gọi không hợp lệ.");
+    const pattern = options.callKind === "video"
+      ? /^(?:(?:start|make|begin) (?:a |an )?)?video call(?: with .+)?$|^(?:bat dau )?(?:cuoc )?goi(?: bang)? video(?: (?:cho|voi) .+)?$/
+      : /^(?:(?:start|make|begin) (?:a |an )?)?(?:voice|audio) call(?: with .+)?$|^(?:bat dau )?(?:cuoc )?goi(?: bang)? (?:thoai|am thanh)(?: (?:cho|voi) .+)?$/;
+    // Match a unique accessible control outside inbox rows and message content.
+    // The thread, selection and recipient checks above run again at click time.
+    const main = composer?.closest('[role="main"]');
+    const buttons = Array.from(document.querySelectorAll<HTMLElement>('button[aria-label],[role="button"][aria-label]'))
+      .filter((e) => visible(e) && !grid?.contains(e) && !e.closest('[role="article"],[data-message-id]') && (!main || main.contains(e)))
+      .filter((e) => pattern.test(plain(e.getAttribute("aria-label") ?? "").trim().replace(/\s+/g, " ")));
+    if (buttons.length !== 1) throw new Error("Không tìm thấy duy nhất nút gọi phù hợp. Kiểm tra trong cửa sổ Messenger vừa mở.");
+    const button = buttons[0];
+    if (button.hasAttribute("disabled") || button.getAttribute("aria-disabled") === "true")
+      throw new Error("Messenger hiện không cho phép gọi trong hội thoại này.");
+    if (action === "start-call") button.click();
+    return true;
+  }
   if (action === "media-source") {
     const message = messages.find((m) => m.id === options.messageId);
     const attachment = message?.attachments?.find(

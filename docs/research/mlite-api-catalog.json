@@ -1,0 +1,352 @@
+{
+  "analyzed_at": "2026-10-21",
+  "analysis_type": "static",
+  "source_apk": {
+    "file": "com.facebook.mlite.apk",
+    "package": "com.facebook.mlite",
+    "version": "62.2.1.14.283",
+    "version_code": 162713145,
+    "sha256": "3ae161483afbed5a2dd98890cb35380de1fee7b6127a58c2251b9c91378e5b2d"
+  },
+  "authenticated_network_tests": false,
+  "warning": "Observed in this APK only. Server support, current account authentication, and current E2EE compatibility are unverified. Decompiled Java is reconstructed, not original source.",
+  "http": [
+    {
+      "url": "https://api.facebook.com/method/auth.login",
+      "transport_method": "POST",
+      "evidence": "request_builder_and_host_resolver",
+      "parameters": [
+        "email",
+        "password",
+        "credentials_type",
+        "error_detail_type",
+        "device_id",
+        "generate_session_cookies",
+        "generate_machine_id",
+        "machine_id"
+      ],
+      "conditional_two_factor_parameters": [
+        "userid",
+        "twofactor_code",
+        "first_factor"
+      ],
+      "sources": [
+        "classes/X_1U5.java",
+        "classes/X_1TU.java",
+        "classes/X_0OT.java",
+        "decompiled/LX_0Pt___A_25.java"
+      ]
+    },
+    {
+      "url": "https://b-api.facebook.com/method/auth.getSessionForApp",
+      "transport_method": "POST",
+      "parameters": [
+        "access_token",
+        "new_app_id"
+      ],
+      "sources": [
+        "decompiled/LX_1U4___D_21.java",
+        "classes/X_0OT.java"
+      ]
+    },
+    {
+      "url": "https://graph.facebook.com/graphql",
+      "transport_method": "POST",
+      "parameters": [
+        "query_id",
+        "query_name"
+      ],
+      "additional_parameters_observed_in_queue_path": [
+        "query_params",
+        "flat_buffer_idl",
+        "oss_response_format"
+      ],
+      "sources": [
+        "decompiled/LX_0OU____init__57.java",
+        "decompiled/LX_0hk___call_60.java",
+        "classes/X_0OT.java"
+      ]
+    },
+    {
+      "url_prefixes": [
+        "https://rupload.facebook.com/messenger_image/",
+        "https://rupload.facebook.com/messenger_audio/",
+        "https://rupload.facebook.com/messenger_video/",
+        "https://rupload.facebook.com/messenger_file/"
+      ],
+      "transport_methods": [
+        "GET",
+        "POST"
+      ],
+      "authorization_scheme": "OAuth",
+      "upload_headers": [
+        "Offset",
+        "X-Entity-Length",
+        "X-Entity-Name",
+        "X-Entity-Type"
+      ],
+      "response_fields": [
+        "offset",
+        "media_id",
+        "success"
+      ],
+      "sources": [
+        "expanded/LX_1ba___C_32.java",
+        "decompiled/LX_1ba___B_5.java"
+      ]
+    }
+  ],
+  "graphql_queries": [
+    {
+      "request_identity": 0,
+      "name": "AudioAttachmentDetailsQuery",
+      "query_id": "740823326125062",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 2,
+      "name": "ContactBatchUploadMutation",
+      "query_id": "128266071116093",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 3,
+      "name": "ContactById",
+      "query_id": "247798889223880",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 4,
+      "name": "ContactUploadSessionCloseMutation",
+      "query_id": "1782906195365179",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 5,
+      "name": "ContactUploadSessionCreateAndMaybeBatchUploadMutation",
+      "query_id": "1390438167709097",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 6,
+      "name": "ContactsById",
+      "query_id": "2064941877149245",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 7,
+      "name": "ContactsQuery",
+      "query_id": "359153961295912",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 8,
+      "name": "ContinuousContactUploadSettingUpdateMutation",
+      "query_id": "336187076775701",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 9,
+      "name": "EntitySearch",
+      "query_id": "230677880984559",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 10,
+      "name": "FacebookNotificationQuery",
+      "query_id": "241559876327155",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 13,
+      "name": "FetchMLiteZeroTokenQuery",
+      "query_id": "795624537256155",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 14,
+      "name": "FileAttachmentUrlQuery",
+      "query_id": "401375310697214",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 15,
+      "name": "GdprConsent",
+      "query_id": "356208611561460",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 16,
+      "name": "GifAttachmentQuery",
+      "query_id": "1957555704294812",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 17,
+      "name": "ImageAttachmentDetailsQuery",
+      "query_id": "1181355405369314",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 19,
+      "name": "MessageQuery",
+      "query_id": "364638224337931",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 20,
+      "name": "MessageReactionMutation",
+      "query_id": "268959453538558",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 21,
+      "name": "MessageThreadAndContactQuery",
+      "query_id": "1267258626782119",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 24,
+      "name": "ProfileDetailsQuery",
+      "query_id": "297802904402532",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 25,
+      "name": "SelfUpdateReleaseInfo",
+      "query_id": "494328624374627",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 26,
+      "name": "StickerByIdForMessageQuery",
+      "query_id": "319467535303474",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 27,
+      "name": "StickerByIdQuery",
+      "query_id": "188046288654814",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 28,
+      "name": "StickerCategoriesQuery",
+      "query_id": "473009519756397",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 29,
+      "name": "StickerCategoryByIdQuery",
+      "query_id": "231957877368419",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 30,
+      "name": "StickerPackHalfPreviewQuery",
+      "query_id": "1043261822550738",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 31,
+      "name": "StickerPackQuery",
+      "query_id": "2274192622793174",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 32,
+      "name": "StickerSearchQuery",
+      "query_id": "265293147233486",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 33,
+      "name": "ThreadByIdQuery",
+      "query_id": "627533151032557",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 34,
+      "name": "ThreadListInitialQuery",
+      "query_id": "1990976881198949",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 36,
+      "name": "VideoAttachmentDetailsQuery",
+      "query_id": "588381951650612",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 37,
+      "name": "ViewerConfigurationQuery",
+      "query_id": "383922112060872",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 38,
+      "name": "WorkCommunityPeekQueryHack",
+      "query_id": "140975353234031",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    },
+    {
+      "request_identity": 39,
+      "name": "XMAQuery",
+      "query_id": "1924407034315956",
+      "source": "classes/X_1TZ.java: B maps names; C maps query IDs; A is a separate mapping"
+    }
+  ],
+  "mqtt": {
+    "host": "mqtt-mini.facebook.com",
+    "port": 443,
+    "tls": true,
+    "configured_override_port": 9002,
+    "sources": [
+      "decompiled/LX_0go___B_52.java"
+    ],
+    "other_host_configuration_only": "edge-mqtt.facebook.com",
+    "wired_native_topics": [
+      {
+        "topic": "/ls_req",
+        "topic_id": 178,
+        "role": "publish_from_native_callback",
+        "source": "classes/com_facebook_msys_mci_MqttNetworkSessionPlugin.java"
+      },
+      {
+        "topic": "/ls_resp",
+        "topic_id": 179,
+        "role": "conditional_msys_subscription_to_native",
+        "source": "classes/X_0Vx.java"
+      }
+    ],
+    "connection_metadata": [
+      "ls_sv",
+      "ls_fdid"
+    ],
+    "topic_registry_only": [
+      "/send_message",
+      "/send_message2",
+      "/send_message_response",
+      "/t_ms",
+      "/messenger_sync",
+      "/messenger_sync_ack",
+      "/messenger_sync_create_queue",
+      "/messenger_sync_get_diffs"
+    ],
+    "registry_source": "decompiled/LX_0UP___B_0.java"
+  },
+  "native_evidence": {
+    "libomnibus_strings": [
+      "/auth/login",
+      "/ls_req",
+      "/ls_resp",
+      "ls_request_type",
+      "MSMSignalProtocolWrapper"
+    ],
+    "dex_loader_markers": [
+      "LibSignalProtocolCV2"
+    ],
+    "interpretation": "Native and Signal-related markers exist; current Messenger E2EE/secure-storage compatibility is unproven."
+  },
+  "evidence_root": "../../_extracted/mlite/"
+}

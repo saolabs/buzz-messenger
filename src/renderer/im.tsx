@@ -1,10 +1,12 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import type { Attachment, ConversationView, Message } from "../core/types.ts";
-import { statusIcon, useAvatar, useSession } from "./buddy.tsx";
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
+import type { Attachment, CallKind, ConversationView, Message } from "../core/types.ts";
+import { GroupIcon, statusIcon, useAvatar, useSession } from "./buddy.tsx";
+import { Composer } from "./composer.tsx";
+import { GroupMembers } from "./group-members.tsx";
 import { Frame, useZoomItems, type Menu } from "./frame.tsx";
 import { useLang, useT } from "./i18n.ts";
 import { Rich, useEmoticons } from "./rich.tsx";
-import { Icon, mediaUrl, playSound, PUSH_DEFAULT, SkinContext, skinUrl, Slice } from "./skin.tsx";
+import { Icon, playSound, SkinContext, skinUrl, Slice } from "./skin.tsx";
 
 // BUZZ! đi qua Messenger dưới dạng tin chữ; bên nào nhận được dòng này thì rung cửa sổ.
 const BUZZ = "BUZZ!!!";
@@ -16,22 +18,21 @@ const PARTICIPANT = /\$PARTICIPANT_FIRST_NAME\((\d+)\)/g;
 const isSystemText = (text: string) => /\$PARTICIPANT_FIRST_NAME\(\d+\)|tin nhắn tự hủy|disappearing messages/i.test(text);
 const time = (at: number, lang: string) => new Date(at).toLocaleTimeString(lang, { hour: "2-digit", minute: "2-digit" });
 
-// Nút toolbar lớn (cao 57px): nền btn-single-toolbar.png chỉ hiện khi hover/nhấn, icon 8 trạng thái.
-function ToolbarButton({ icon, w, h, label }: { icon: string; w: number; h: number; label: string }) {
+// Nút toolbar lớn: sprite 8 trạng thái có frame 1 = nhấn, 2 = hover; nền thường ẩn.
+function ToolbarButton({ icon, w, h, label, onClick, disabled = false }: { icon: string; w: number; h: number; label: string; onClick?: () => void; disabled?: boolean }) {
   const t = useT();
   return (
-    <Slice src="images/btn-single-toolbar.png" n={8} states={[-1, 1, 2]} m={[2, 11, 2, 9]} className="btn hot tb-btn" title={`${label} ${t("notYet")}`}>
-      <Icon src={icon} n={8} states={[0, 1, 2]} w={w} h={h} />
+    <Slice src="images/btn-single-toolbar.png" n={8} states={[-1, 2, 1]} m={[2, 11, 2, 9]} className="btn hot tb-btn"
+      title={onClick ? label : `${label} ${t("notYet")}`} role={onClick ? "button" : undefined}
+      tabIndex={onClick && !disabled ? 0 : undefined} aria-disabled={onClick ? disabled : undefined}
+      onClick={disabled ? undefined : onClick}
+      onKeyDown={(e) => {
+        if (onClick && !disabled && !e.repeat && (e.key === "Enter" || e.key === " ")) {
+          e.preventDefault(); onClick();
+        }
+      }}>
+      <Icon src={icon} n={8} states={[0, 2, 1]} w={w} h={h} />
       {label}
-    </Slice>
-  );
-}
-
-// Nút nhỏ trên thanh soạn tin: nền btn_bkgnd_invis_on_normal.png (8 trạng thái 24px), ẩn khi bình thường.
-function SmallTool({ icon, w, title, onClick }: { icon: string; w: number; title: string; onClick?: () => void }) {
-  return (
-    <Slice src="IMWindow/btn_bkgnd_invis_on_normal.png" n={8} states={[-1, 1, 2]} m={[4, 6, 4, 13]} className="btn hot tool" style={{ width: w + 10 }} title={title} onClick={onClick}>
-      <Icon src={icon} n={8} states={[0, 1, 2]} w={w} h={18} />
     </Slice>
   );
 }
@@ -104,35 +105,84 @@ function Conversation({ view, pending, onSend }: { view: ConversationView | unde
   const lang = useLang();
   const session = useSession();
   const contact = view?.contact;
+  const [calling, setCalling] = useState<CallKind>();
+  const [callError, setCallError] = useState("");
+  const callBusy = useRef(false);
+  const currentContact = useRef(contact?.id);
+  currentContact.current = contact?.id;
+  useEffect(() => setCallError(""), [contact?.id]);
+  const startCall = async (kind: CallKind) => {
+    if (!contact || callBusy.current) return;
+    const id = contact.id;
+    callBusy.current = true;
+    setCalling(kind);
+    setCallError("");
+    try {
+      const result = await window.ym.startCall(id, kind);
+      if (!result.ok && currentContact.current === id) setCallError(result.error ?? t("im.callUnavailable"));
+    } catch {
+      if (currentContact.current === id) setCallError(t("im.callUnavailable"));
+    } finally {
+      callBusy.current = false;
+      setCalling(undefined);
+    }
+  };
   const messages = view?.messages ?? [];
   const avatar = useAvatar(contact?.avatar);
-  const [draft, setDraft] = useState("");
-  const [picker, setPicker] = useState(false);
-  const [hoverEmo, setHoverEmo] = useState("");
   const historyRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [historyInfo, setHistoryInfo] = useState("");
+  const historyBusy = useRef(false);
+  const historyRun = useRef(0);
+  const historyAtTop = useRef(false);
+  const pinned = useRef(true);
+  const layout = useRef<{ contact?: string; first?: string; last?: string; height: number; pending: number } | undefined>(undefined);
 
   useEffect(() => {
-    historyRef.current?.scrollTo({ top: historyRef.current.scrollHeight });
-  }, [messages.length, pending.length, emoticons.length]);
-  useEffect(() => inputRef.current?.focus(), [contact?.id]);
+    historyRun.current++;
+    historyBusy.current = false;
+    setHistoryLoading(false);
+    setHistoryInfo("");
+  }, [contact?.id]);
+  useLayoutEffect(() => {
+    const el = historyRef.current;
+    if (!el) return;
+    const previous = layout.current;
+    const first = messages[0]?.id, last = messages.at(-1)?.id;
+    if (!previous || previous.contact !== contact?.id || !previous.first || pending.length > previous.pending) {
+      el.scrollTop = el.scrollHeight;
+      pinned.current = true;
+    } else if (first !== previous.first && !pinned.current) {
+      el.scrollTop += el.scrollHeight - previous.height;
+    } else if (pinned.current) el.scrollTop = el.scrollHeight;
+    layout.current = { contact: contact?.id, first, last, height: el.scrollHeight, pending: pending.length };
+  }, [contact?.id, messages, pending.length, emoticons.length]);
 
-  const send = () => {
-    const text = draft.trim();
-    if (!text) return;
-    onSend(text);
-    setDraft("");
+  const loadOlder = async () => {
+    if (!contact || historyBusy.current) return;
+    historyBusy.current = true;
+    const run = ++historyRun.current;
+    setHistoryLoading(true);
+    setHistoryInfo("");
+    try {
+      const result = await window.ym.loadHistory(contact.id);
+      if (run === historyRun.current) setHistoryInfo(result.ok ? (result.added ? "" : t("im.historyEmpty")) : result.error ?? t("im.historyFailed"));
+    } catch {
+      if (run === historyRun.current) setHistoryInfo(t("im.historyFailed"));
+    } finally {
+      if (run === historyRun.current) { historyBusy.current = false; setHistoryLoading(false); }
+    }
   };
-  const insert = (code: string) => {
-    const el = inputRef.current!;
-    const pos = el.selectionStart ?? draft.length;
-    setDraft(draft.slice(0, pos) + code + draft.slice(el.selectionEnd ?? pos));
-    setPicker(false);
-    requestAnimationFrame(() => {
-      el.focus();
-      el.selectionStart = el.selectionEnd = pos + code.length;
-    });
+  const scrollHistory = (e: React.UIEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    pinned.current = el.scrollHeight - el.clientHeight - el.scrollTop < 40;
+    if (el.scrollTop > 80) historyAtTop.current = false;
+    if (el.scrollTop <= 40 && el.scrollHeight > el.clientHeight + 40 && !historyAtTop.current) {
+      historyAtTop.current = true;
+      void loadOlder();
+    }
   };
+
   const last = messages.findLast((m) => m.direction === "incoming");
   const me = session?.displayName ?? session?.username ?? "";
   const myAvatar = useAvatar(session?.avatar);
@@ -141,8 +191,8 @@ function Conversation({ view, pending, onSend }: { view: ConversationView | unde
   return (
     <>
       <div className="im-toolbar">
-        <ToolbarButton icon="images/video.png" w={24} h={31} label={t("im.video")} />
-        <ToolbarButton icon="images/voice.png" w={21} h={32} label={t("im.voice")} />
+        <ToolbarButton icon="images/video.png" w={24} h={31} label={t(calling === "video" ? "im.callOpening" : "im.video")} disabled={!contact || Boolean(calling) || session?.phase !== "signedIn"} onClick={() => void startCall("video")} />
+        <ToolbarButton icon="images/voice.png" w={21} h={32} label={t(calling === "voice" ? "im.callOpening" : "im.voice")} disabled={!contact || Boolean(calling) || session?.phase !== "signedIn"} onClick={() => void startCall("voice")} />
         <div className="tb-spacer" />
         <ToolbarButton icon="IMWindow/IMTheme.png" w={43} h={30} label={t("im.imvironment")} />
         <ToolbarButton icon="IMWindow/Activities.png" w={33} h={31} label={t("im.activities")} />
@@ -150,36 +200,46 @@ function Conversation({ view, pending, onSend }: { view: ConversationView | unde
       </div>
 
       <div className="im-friendbar">
-        {contact && <Icon src={statusIcon(contact.status)} w={10} h={10} />}
+        {contact && (contact.kind === "group" ? <GroupIcon /> : <Icon src={statusIcon(contact.status)} w={10} h={10} />)}
         <span>{name}</span>
+        {contact?.kind === "group" && <span className="group-count">{t("group.chat")}{contact.memberCount !== undefined ? ` · ${contact.memberCount} ${t("group.members").toLocaleLowerCase()}` : ""}</span>}
         <span className="friend-msg" />
-        <Slice src="IMWindow/btn_bkgnd_invis_on_normal.png" n={8} states={[-1, 1, 2]} m={[3, 3, 3, 3]} className="btn hot small-btn" title={t("notYet")}>
-          <Icon src="images/addbuddy_clr.png" n={8} states={[0, 1, 2]} w={13} h={13} /> {t("im.addUser")}
+        <Slice src="IMWindow/btn_bkgnd_invis_on_normal.png" n={8} states={[-1, 2, 1]} m={[3, 3, 3, 3]} className="btn hot small-btn" title={t("notYet")}>
+          <Icon src="images/addbuddy_clr.png" n={8} states={[0, 2, 1]} w={13} h={13} /> {t("im.addUser")}
         </Slice>
-        <Slice src="IMWindow/btn_bkgnd_invis_on_normal.png" n={8} states={[-1, 1, 2]} m={[3, 3, 3, 3]} className="btn hot small-btn" title={t("notYet")}>
-          <Icon src="images/ignorebuddy.png" n={8} states={[0, 1, 2]} w={13} h={13} /> {t("im.ignoreUser")}
+        <Slice src="IMWindow/btn_bkgnd_invis_on_normal.png" n={8} states={[-1, 2, 1]} m={[3, 3, 3, 3]} className="btn hot small-btn" title={t("notYet")}>
+          <Icon src="images/ignorebuddy.png" n={8} states={[0, 2, 1]} w={13} h={13} /> {t("im.ignoreUser")}
         </Slice>
       </div>
+      {callError && <div className="send-error call-error" role="alert">{t("im.callFailed", { error: callError })}</div>}
 
       <div className="im-toggle">
         <button className="hot">
-          <Icon src="IMWindow/im_view_toggle.png" n={8} states={[0, 1, 2]} w={23} h={12} />
+          <Icon src="IMWindow/im_view_toggle.png" n={8} states={[0, 2, 1]} w={23} h={12} />
         </button>
         <div className="bevel" />
       </div>
 
       <div className="im-main">
         <div className="im-left">
-          <div className="im-history" ref={historyRef}>
+          <div className="im-history" ref={historyRef} onScroll={scrollHistory}>
             {!view && <div className="stamp">{t("im.loading")}</div>}
+            {view && <div className="history-more">
+              <button className="load-more" disabled={historyLoading || session?.phase !== "signedIn"} onClick={() => void loadOlder()}>{t(historyLoading ? "im.loadingHistory" : "im.loadHistory")}</button>
+              {historyInfo && <div role="status">{historyInfo}</div>}
+            </div>}
             {messages.map((m) =>
               m.direction === "system" || isSystemText(m.text) ? (
-                <div key={m.id} className="line system">
-                  {m.text.replace(PARTICIPANT, (_, id) => (id === session?.userId ? t("im.you") : name.split(" ").at(-1) ?? name))}
+                <div key={m.id} className="line system" data-message-id={m.id}>
+                  {m.text.replace(PARTICIPANT, (_, id) => {
+                    if (id === session?.userId) return t("im.you");
+                    const member = view?.group?.members.find(p => p.id === id);
+                    return member?.nickname || member?.name || (contact?.kind === "group" ? t("group.unknownSender") : name.split(" ").at(-1) ?? name);
+                  })}
                 </div>
               ) : (
-                <div key={m.id} className="line">
-                  <span className={`who ${m.direction === "outgoing" ? "me" : "them"}`}>{m.direction === "outgoing" ? me : name}</span>:{" "}
+                <div key={m.id} className="line" data-message-id={m.id}>
+                  <span className={`who ${m.direction === "outgoing" ? "me" : "them"}`}>{contact?.kind === "group" ? m.sender?.nickname || (m.direction === "outgoing" ? me : m.sender?.name || t("group.unknownSender")) : m.direction === "outgoing" ? me : name}</span>:{" "}
                   {isBuzz(m) ? (
                     <span className="buzz">{BUZZ}</span>
                   ) : m.attachments?.length && PLACEHOLDER.test(m.text.trim()) ? null : (
@@ -201,48 +261,11 @@ function Conversation({ view, pending, onSend }: { view: ConversationView | unde
             ))}
           </div>
 
-          <div className="im-input-panel">
-            <div className="im-imtoolbar">
-              <SmallTool icon="IMWindow/im_tb_emoticon.png" w={25} title={t("im.emoticons")} onClick={() => setPicker(!picker)} />
-              <SmallTool icon="IMWindow/im_tb_audibles.png" w={20} title={`${t("im.audibles")} ${t("notYet")}`} />
-              <SmallTool icon="IMWindow/im_tb_format.png" w={13} title={`${t("im.format")} ${t("notYet")}`} />
-              <SmallTool icon="IMWindow/im_tb_buzz.png" w={18} title={t("im.buzz")} onClick={() => onSend(BUZZ)} />
-              <SmallTool icon="images/SendFile.png" w={17} title={`${t("im.sendFile")} ${t("notYet")}`} />
-              {picker && (
-                <div className="emo-picker" onMouseLeave={() => setPicker(false)}>
-                  <div className="tip">{hoverEmo || t("im.emoticons")}</div>
-                  {emoticons.map((e) => (
-                    <button key={e.id} onClick={() => insert(e.codes[0])} onMouseEnter={() => setHoverEmo(`${e.title}   ${e.codes[0]}`)}>
-                      <img src={mediaUrl(e.file)} alt={e.codes[0]} />
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-            <div className="im-bevel" />
-            <div className="im-input">
-              <textarea
-                ref={inputRef}
-                value={draft}
-                maxLength={5000}
-                onChange={(e) => setDraft(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
-                    e.preventDefault();
-                    send();
-                  }
-                }}
-              />
-              <Slice src="theme/pushbuttons.png" n={6} states={PUSH_DEFAULT} m={[4, 4, 4, 11]} className="btn pushbutton send" onClick={send}>
-                {t("im.send")}
-              </Slice>
-            </div>
-          </div>
+          <Composer contactId={contact?.id} disabled={session?.phase !== "signedIn"} onSend={onSend} />
         </div>
 
-        <Slice src="IMWindow/im_tb_disp_img_toggle_bg.png" m={[4, 4, 4, 4]} className="im-display">
-          <img src={avatar} width={96} height={96} alt="" referrerPolicy="no-referrer" />
-          <img src={myAvatar} width={48} height={48} alt="" referrerPolicy="no-referrer" />
+        <Slice src="IMWindow/im_tb_disp_img_toggle_bg.png" m={[4, 4, 4, 4]} className={`im-display ${contact?.kind === "group" ? "group-display" : ""}`}>
+          {contact?.kind === "group" ? <GroupMembers key={contact.id} contactId={contact.id} initial={view?.group} /> : <><img src={avatar} width={96} height={96} alt="" referrerPolicy="no-referrer" /><img src={myAvatar} width={48} height={48} alt="" referrerPolicy="no-referrer" /></>}
         </Slice>
       </div>
 
@@ -297,7 +320,7 @@ export function ImWindow() {
     const known = seen.current.get(id);
     const recent = (m: Message) => (m.timestamp ?? m.observedAt) > Date.now() - 120_000;
     const fresh = known
-      ? view.messages.filter((m) => m.direction === "incoming" && !known.has(m.id))
+      ? view.messages.filter((m) => m.direction === "incoming" && !m.baseline && !known.has(m.id))
       : openedByIncoming.current.has(id)
         ? view.messages.filter((m) => m.direction === "incoming" && recent(m))
         : [];
@@ -385,8 +408,8 @@ export function ImWindow() {
   return (
     <div className={shaking ? "shake" : ""} style={{ height: "100%" }}>
       <Frame
-        title={contact ? `${contact.name} (${t(`status.${contact.status}`)})` : "Buzz! Messenger"}
-        icon={contact && <Icon src={statusIcon(contact.status)} w={10} h={10} style={{ margin: "auto" }} />}
+        title={contact ? `${contact.name} (${contact.kind === "group" ? t("group.chat") : t(`status.${contact.status}`)})` : "Buzz! Messenger"}
+        icon={contact && (contact.kind === "group" ? <GroupIcon /> : <Icon src={statusIcon(contact.status)} w={10} h={10} style={{ margin: "auto" }} />)}
         menus={menus}
       >
         {tabs.length > 1 && (

@@ -1,10 +1,13 @@
 // Lớp đồng bộ Y!M ↔ Facebook Messenger, thay cho engine AI của master-chat:
 // đăng nhập, quét inbox → buddy list, đọc hội thoại đang mở, gửi tin. Không tự trả lời.
 import type { BrowserWindow } from "electron";
+import { randomUUID } from "node:crypto";
+import type { MessengerContactHit } from "../src/core/contact-search.ts";
+import type { ContactSearchResult, GroupMembersResult } from "../src/core/types.ts";
 import { Browsers } from "./browser.ts";
 import type { Vault } from "./vault.ts";
-import { arrivedWhileOnline, ingest, latestId, previewMessage, reconcileInbox } from "../src/core/conversation.ts";
-import type { Account, ContactView, Conversation, ConversationView, Message, SessionView, SignIn } from "../src/core/types.ts";
+import { arrivedWhileOnline, ingestLatest, ingestHistory, latestId, previewMessage, reconcileInbox } from "../src/core/conversation.ts";
+import type { Account, CallKind, ContactView, Conversation, ConversationView, LoadMoreResult, Message, SessionView, SignIn } from "../src/core/types.ts";
 import type { MediaPayload } from "../src/core/media.ts";
 
 // Một tài khoản Facebook cho mỗi lần đăng nhập Y!M.
@@ -16,7 +19,7 @@ const WATCH_EVERY = 1_000;
 const CHECK_PARALLEL = 3;
 const CHECK_RETRIES = 6;
 const SIGN_IN_TIMEOUT = 120_000;
-const KEEP_MESSAGES = 500;
+const KEEP_MESSAGES = 5000;
 const SEND_TIMEOUT = "Quá 60 giây chưa xác nhận đã gửi. Kiểm tra trong Messenger (Hội thoại → Mở trong Messenger) trước khi gửi lại.";
 
 // Log có giờ (tới mili giây) để đo độ trễ tin đến → bật cửa sổ.
@@ -37,7 +40,13 @@ export class MessengerService {
   private onlineSince = 0;
   // Đã có ít nhất một lượt quét sau đăng nhập (tín hiệu dự phòng từ inbox chỉ dùng từ lượt thứ hai).
   private scansSinceOnline = 0;
-  private loadingMore: Promise<void> | null = null;
+  private loadingMore: Promise<LoadMoreResult> | null = null;
+  private searchAbort?: AbortController;
+  private searchOpenAbort = new AbortController();
+  private searchHits = new Map<string, { query: string; hit: MessengerContactHit }>();
+  private openingSearch = new Map<string, Promise<{ id?: string; error?: string }>>();
+  private openingMembers = new Map<string, Promise<{ id?: string; error?: string }>>();
+  private histories = new Map<string, Promise<LoadMoreResult>>();
   private watched = new Set<string>();
   private errors = new Map<string, string>();
   private timers: ReturnType<typeof setTimeout>[] = [];
@@ -73,6 +82,7 @@ export class MessengerService {
     return this.vault.read().accounts.find((a) => a.id === ACCOUNT);
   }
   private setSession(patch: Partial<SessionView>) {
+    if (patch.phase && patch.phase !== "signedIn") this.resetSearch();
     if (patch.phase && patch.phase !== this.session.phase) log(`phiên: ${patch.phase}`);
     this.session = { ...this.session, ...patch };
     this.events.session(this.session);
@@ -89,6 +99,7 @@ export class MessengerService {
   }
 
   async signIn(input: SignIn) {
+    this.resetSearch();
     const run = ++this.signInRun;
     const username = input.username.trim();
     const previous = this.account();
@@ -197,6 +208,7 @@ export class MessengerService {
   }
 
   async signOut() {
+    this.resetSearch();
     this.signInRun++;
     this.clearTimers();
     this.watched.clear();
@@ -214,6 +226,7 @@ export class MessengerService {
 
   // Thoát app: không chọn "Remember" thì không để lại mật khẩu/ phiên trên máy.
   async shutdown() {
+    this.resetSearch();
     this.stopped = true;
     this.clearTimers();
     const a = this.account();
@@ -231,6 +244,18 @@ export class MessengerService {
   openInMessenger(id: string) {
     const c = this.conversationById(id);
     if (c) void this.browsers.openConversation(c).catch(() => undefined);
+  }
+
+  async startCall(id: string, kind: CallKind): Promise<{ ok: boolean; error?: string }> {
+    if (this.stopped || this.session.phase !== "signedIn") return { ok: false, error: "Cần đăng nhập Messenger trước khi gọi." };
+    const c = this.conversationById(id);
+    if (!c) return { ok: false, error: "Không tìm thấy hội thoại." };
+    try {
+      await this.browsers.startCall(c, kind);
+      return { ok: true };
+    } catch (error) {
+      return { ok: false, error: error instanceof Error ? error.message : String(error) };
+    }
   }
 
   showMessenger() {
@@ -327,19 +352,146 @@ export class MessengerService {
     this.events.incoming(id);
   }
 
+  private resetSearch() {
+    this.searchAbort?.abort();
+    this.searchOpenAbort.abort();
+    this.searchOpenAbort = new AbortController();
+    this.searchHits.clear();
+  }
+
+  async searchContacts(query: string): Promise<ContactSearchResult> {
+    this.searchAbort?.abort();
+    this.searchHits.clear();
+    const controller = this.searchAbort = new AbortController();
+    const run = this.signInRun;
+    query = query.trim();
+    if (!query) return { ok: true, contacts: [] };
+    if (query.length > 100 || this.stopped || this.session.phase !== "signedIn") return { ok: false, contacts: [], error: "Cần đăng nhập Messenger và nhập tên tối đa 100 ký tự." };
+    try {
+      const hits = await this.browsers.searchContacts(ACCOUNT, query, controller.signal);
+      controller.signal.throwIfAborted();
+      if (run !== this.signInRun || this.session.phase !== "signedIn") throw new Error("Phiên tìm kiếm đã thay đổi.");
+      const contacts = hits.map(hit => {
+        const id = `search:${randomUUID()}`;
+        this.searchHits.set(id, { query, hit });
+        return { id, searchResult: true, name: hit.name, avatar: hit.avatar, status: "offline" as const, unread: false };
+      });
+      return { ok: true, contacts };
+    } catch (error) {
+      return { ok: false, contacts: [], error: controller.signal.aborted ? "Tìm kiếm đã dừng." : error instanceof Error ? error.message : "Không tìm được liên hệ trên Messenger." };
+    }
+  }
+
+  openSearchContact(id: string) {
+    const existing = this.openingSearch.get(id);
+    if (existing) return existing;
+    const task = this.resolveSearchContact(id).finally(() => this.openingSearch.delete(id));
+    this.openingSearch.set(id, task);
+    return task;
+  }
+  private async resolveSearchContact(id: string): Promise<{ id?: string; error?: string }> {
+    const saved = this.searchHits.get(id), run = this.signInRun, signal = this.searchOpenAbort.signal;
+    if (!saved || this.stopped || this.session.phase !== "signedIn") return { error: "Kết quả tìm kiếm đã hết hạn. Hãy tìm lại liên hệ." };
+    try {
+      const thread = await this.browsers.resolveSearchContact(ACCOUNT, saved.query, saved.hit, signal);
+      const contactId = await this.vault.mutate(state => {
+        signal.throwIfAborted();
+        if (run !== this.signInRun || this.stopped || this.session.phase !== "signedIn") throw new Error("Phiên đăng nhập đã thay đổi.");
+        let c = state.conversations.find(c => c.accountId === ACCOUNT && c.platformId === thread.platformId);
+        if (!c) {
+          c = { ...thread, id: randomUUID(), accountId: ACCOUNT, initialized: false, messages: [], discoveredAt: Date.now() };
+          state.conversations.push(c);
+        } else {
+          c.url = thread.url;
+          c.name = thread.name;
+          if (thread.avatar) c.avatar = thread.avatar;
+        }
+        return c.id;
+      });
+      signal.throwIfAborted();
+      if (run !== this.signInRun) throw new Error("Phiên đăng nhập đã thay đổi.");
+      this.events.contacts(this.contacts());
+      return { id: contactId };
+    } catch (error) { return { error: error instanceof Error ? error.message : "Không mở được liên hệ." }; }
+  }
+
+  openGroupMember(id: string, memberId: string): Promise<{ id?: string; error?: string }> {
+    const key = `${id}:${memberId}`, existing = this.openingMembers.get(key);
+    if (existing) return existing;
+    const task = this.resolveGroupMember(id, memberId).finally(() => this.openingMembers.delete(key));
+    this.openingMembers.set(key, task);
+    return task;
+  }
+  private async resolveGroupMember(id: string, memberId: string): Promise<{ id?: string; error?: string }> {
+    const c = this.conversationById(id), run = this.signInRun, signal = this.searchOpenAbort.signal;
+    if (!c || c.kind !== "group" || !/^\d{1,30}$/.test(memberId) || this.stopped || this.session.phase !== "signedIn") return { error: "Thành viên nhóm không hợp lệ." };
+    const check = () => {
+      signal.throwIfAborted();
+      if (run !== this.signInRun || this.stopped || this.session.phase !== "signedIn") throw new Error("Phiên Messenger đã thay đổi.");
+    };
+    try {
+      const thread = await this.browsers.resolveGroupMember(c, memberId, signal);
+      check();
+      const contactId = await this.vault.mutate(state => {
+        check();
+        let saved = state.conversations.find(x => x.accountId === ACCOUNT && x.platformId === thread.platformId);
+        if (saved?.kind === "group") throw new Error("Messenger chưa xác nhận được chat riêng.");
+        if (!saved) {
+          saved = { ...thread, id: randomUUID(), accountId: ACCOUNT, initialized: false, messages: [], discoveredAt: Date.now() };
+          state.conversations.push(saved);
+        } else Object.assign(saved, thread);
+        return saved.id;
+      });
+      check(); this.events.contacts(this.contacts());
+      return { id: contactId };
+    } catch (error) { return { error: error instanceof Error ? error.message : "Không mở được chat riêng." }; }
+  }
+
   // Người dùng cuộn buddy list xuống đáy. Gộp các lần gọi chồng nhau.
   loadMore() {
-    if (this.session.phase !== "signedIn") return Promise.resolve();
+    if (this.session.phase !== "signedIn") return Promise.resolve({ ok: false, added: 0, error: "Cần đăng nhập Messenger." });
+    const before = this.contacts().length;
     this.loadingMore ??= this.scan(true)
-      .catch(() => undefined)
+      .then(() => ({ ok: true, added: Math.max(0, this.contacts().length - before) }))
+      .catch((error) => ({ ok: false, added: 0, error: error instanceof Error ? error.message : "Không tải được danh bạ." }))
       .finally(() => (this.loadingMore = null));
     return this.loadingMore;
+  }
+
+  loadHistory(id: string): Promise<LoadMoreResult> {
+    const existing = this.histories.get(id);
+    if (existing) return existing;
+    const run = this.signInRun;
+    const task = (async (): Promise<LoadMoreResult> => {
+      if (this.stopped || this.session.phase !== "signedIn") return { ok: false, added: 0, error: "Cần đăng nhập Messenger." };
+      await this.reads.get(id);
+      if (run !== this.signInRun || this.stopped || this.session.phase !== "signedIn") return { ok: false, added: 0, error: "Phiên Messenger đã thay đổi." };
+      const c = this.conversationById(id);
+      if (!c) return { ok: false, added: 0, error: "Không tìm thấy hội thoại." };
+      if (c.messages.length >= KEEP_MESSAGES) return { ok: false, added: 0, error: "Đã nạp giới hạn 5.000 tin trong hội thoại này." };
+      try {
+        const observed = await this.browsers.readHistory(c);
+        if (run !== this.signInRun || this.stopped) return { ok: false, added: 0, error: "Phiên Messenger đã thay đổi." };
+        const added = await this.vault.mutate(state => {
+          const saved = state.conversations.find(x => x.id === id && x.accountId === ACCOUNT);
+          if (saved) this.applyThreadInfo(saved);
+          return saved ? ingestHistory(saved, observed) : 0;
+        });
+        const saved = this.conversationById(id);
+        if (saved) this.events.conversation(id, this.view(saved));
+        return { ok: true, added };
+      } catch (error) {
+        return { ok: false, added: 0, error: error instanceof Error ? error.message : "Không tải được lịch sử." };
+      }
+    })().finally(() => { if (this.histories.get(id) === task) this.histories.delete(id); });
+    this.histories.set(id, task);
+    return task;
   }
 
   private async refreshWatched() {
     // Đang gửi trên trang live thì không đọc chen vào (lần đọc có thể tải lại trang giữa lúc gửi).
     // Mỗi hội thoại một trang riêng → đọc song song, cửa sổ này chậm không kéo cửa sổ khác.
-    await Promise.all([...this.watched].filter((id) => !this.sending.has(id)).map((id) => this.read(id, "live")));
+    await Promise.all([...this.watched].filter((id) => !this.sending.has(id) && !this.histories.has(id)).map((id) => this.read(id, "live")));
   }
   private sending = new Set<string>();
 
@@ -357,6 +509,7 @@ export class MessengerService {
     return task;
   }
   private async readOnce(id: string, mode: "worker" | "live"): Promise<boolean> {
+    const run = this.signInRun;
     const c = this.conversationById(id);
     if (!c) return false;
     let observed: Omit<Message, "baseline">[];
@@ -364,6 +517,7 @@ export class MessengerService {
     try {
       observed = mode === "live" && c.initialized ? await this.browsers.readLiveConversation(c) : await this.browsers.readConversation(c);
     } catch (error) {
+      if (run !== this.signInRun || this.stopped) return false;
       const message = error instanceof Error ? error.message : String(error);
       const repeated = this.errors.get(id) === message;
       this.errors.set(id, message);
@@ -372,18 +526,24 @@ export class MessengerService {
       return false;
     }
     const recovered = this.errors.delete(id);
+    if (run !== this.signInRun || this.stopped) return false;
     const { changed, arrived } = await this.vault.mutate((state) => {
-      const saved = state.conversations.find((x) => x.id === id)!;
-      const before = JSON.stringify(saved.messages);
+      const saved = state.conversations.find((x) => x.id === id && x.accountId === ACCOUNT);
+      if (!saved || run !== this.signInRun || this.stopped) return { changed: false, arrived: false };
+      const before = JSON.stringify([saved.messages, saved.kind, saved.group]);
       const known = new Set(saved.messages.map((m) => m.id));
-      ingest(saved, observed);
+      const upgrading = saved.groupIdentityVersion !== 1;
+      this.applyThreadInfo(saved);
+      ingestLatest(saved, observed);
       if (saved.messages.length > KEEP_MESSAGES) saved.messages = saved.messages.slice(-KEEP_MESSAGES);
-      return { changed: JSON.stringify(saved.messages) !== before, arrived: arrivedWhileOnline(saved.messages, known, this.onlineSince) };
+      return { changed: JSON.stringify([saved.messages, saved.kind, saved.group]) !== before, arrived: !(upgrading && saved.kind === "group") && arrivedWhileOnline(saved.messages, known, this.onlineSince) };
     });
+    if (run !== this.signInRun || this.stopped) return false;
     const last = observed.at(-1);
     if (changed) log(`đọc "${c.name}" (${mode}${this.watched.has(id) ? ", đang mở" : ""}) ${Date.now() - started}ms: ${observed.length} tin, ${changed ? "CÓ thay đổi" : "không đổi"}, tin cuối ${last ? `${last.direction} ${last.timestamp ? new Date(last.timestamp).toISOString().slice(11, 16) : "không rõ giờ"}` : "-"}, arrived=${arrived}`);
     // Chỉ gửi giao diện khi tin thật sự đổi (vòng live 1s, mỗi lần gửi tới 500 tin qua IPC tới mọi cửa sổ).
     if (changed || recovered) this.events.conversation(id, this.view(this.conversationById(id)!));
+    if (changed && this.conversationById(id)?.kind !== c.kind) this.events.contacts(this.contacts());
     // Đang online + có tin đến mới + chưa mở cửa sổ với người này → bật cửa sổ (như Y!M).
     if (arrived && !this.watched.has(id)) {
       log("bật cửa sổ: có tin đến mới");
@@ -395,11 +555,43 @@ export class MessengerService {
   private conversationById(id: string): Conversation | undefined {
     return this.vault.read().conversations.find((c) => c.id === id && c.accountId === ACCOUNT);
   }
+  private applyThreadInfo(c: Conversation) {
+    const info = this.browsers.threadInfo(c);
+    if (!info) return;
+    c.kind = info.kind;
+    if (info.kind === "group" && info.group && JSON.stringify({ ...c.group, updatedAt: 0 }) !== JSON.stringify({ ...info.group, updatedAt: 0 })) c.group = info.group;
+  }
+  async groupMembers(id: string, cursor?: string): Promise<GroupMembersResult> {
+    const run = this.signInRun;
+    if (this.stopped || this.session.phase !== "signedIn") return { ok: false, error: "Cần đăng nhập Messenger." };
+    const c = this.conversationById(id);
+    if (!c || (cursor && !/^\d+$/.test(cursor))) return { ok: false, error: "Danh sách thành viên không hợp lệ." };
+    try {
+      const page = await this.browsers.readGroupMembers(c, cursor);
+      if (run !== this.signInRun || this.stopped || this.session.phase !== "signedIn") throw new Error("Phiên Messenger đã thay đổi.");
+      const group = await this.vault.mutate(state => {
+        if (run !== this.signInRun || this.stopped || this.session.phase !== "signedIn") throw new Error("Phiên Messenger đã thay đổi.");
+        const saved = state.conversations.find(x => x.id === id && x.accountId === ACCOUNT);
+        if (!saved) throw new Error("Hội thoại không tồn tại.");
+        if (cursor) return page;
+        saved.kind = "group";
+        saved.group = page;
+        return saved.group;
+      });
+      if (run !== this.signInRun || this.stopped) throw new Error("Phiên Messenger đã thay đổi.");
+      const saved = this.conversationById(id);
+      if (saved) this.events.conversation(id, this.view(saved));
+      this.events.contacts(this.contacts());
+      return { ok: true, group };
+    } catch (error) { return { ok: false, error: error instanceof Error ? error.message : "Không đọc được thành viên nhóm." }; }
+  }
 
   private contactView(c: Conversation): ContactView {
     return {
       id: c.id,
       name: c.name,
+      kind: c.kind,
+      memberCount: c.group?.memberCount,
       // Messenger chỉ cho biết "đang hoạt động"; không có thì xem như offline (không đoán).
       status: c.active ? "online" : "offline",
       avatar: c.avatar,
@@ -408,7 +600,7 @@ export class MessengerService {
     };
   }
   private view(c: Conversation): ConversationView {
-    return { contact: this.contactView(c), messages: c.messages, error: this.errors.get(c.id) };
+    return { contact: this.contactView(c), messages: c.messages, group: c.group, error: this.errors.get(c.id) };
   }
 
   contacts(): ContactView[] {
@@ -471,6 +663,27 @@ export class MessengerService {
       if (this.media.size > 40) this.media.delete(this.media.keys().next().value!);
     }
     return task.catch((error) => ({ error: error instanceof Error ? error.message : String(error) }));
+  }
+
+  async sendFiles(id: string, files: { path: string; name: string; image: boolean }[], text: string) {
+    const c = this.conversationById(id), run = this.signInRun, attempt = { started: false };
+    if (!c || this.session.phase !== "signedIn" || this.stopped) return { ok: false, attempted: false, error: "Cần đăng nhập đúng hội thoại." };
+    if (this.sending.has(id)) return { ok: false, attempted: false, error: "Đang gửi tin khác. Hãy chờ hoàn tất." };
+    this.sending.add(id);
+    const deadline = Date.now() + 120_000;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let expired = false;
+    try {
+      await Promise.race([
+        this.browsers.sendFiles(c, files, text, () => !expired && !this.stopped && run === this.signInRun && Date.now() < deadline, attempt),
+        new Promise((_, reject) => { timer = setTimeout(() => { expired = true; reject(new Error("Quá thời gian gửi tệp. Kiểm tra Messenger trước khi thử lại.")); }, 120_000); }),
+      ]);
+      this.sending.delete(id);
+      await this.read(id, "live");
+      return { ok: true, attempted: attempt.started };
+    } catch (error) {
+      return { ok: false, attempted: attempt.started, error: error instanceof Error ? error.message : "Không gửi được tệp." };
+    } finally { if (timer) clearTimeout(timer); this.sending.delete(id); }
   }
 
   async send(id: string, text: string): Promise<{ ok: boolean; error?: string }> {

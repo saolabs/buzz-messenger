@@ -48,15 +48,19 @@ Screenshots show the app with sample contacts and messages, without a Facebook a
 - 95 Yahoo emoticons, including shortcuts such as `:))`, `=))`, `:-*`, and `>:D<`.
 - BUZZ! window shaking, message sounds, and flashing tabs for incoming messages.
 - Text messaging, image and sticker viewing, and voice message playback.
+- File/image sending through the attachment picker or drag and drop, with a preview before sending.
+- Paginated contacts and chat history, Messenger contact search, group author nicknames, and a member list that opens verified private chats.
 - Vietnamese and English interfaces, with separate controls for zoom and text size.
 
 BUZZ! is sent through Messenger as the text `BUZZ!!!`. Buzz! Messenger recognizes it and plays the sound and window effect; regular Messenger displays the text. Emoticon shortcuts are also sent as text and rendered as Yahoo icons inside Buzz! Messenger.
 
 ## Current status
 
-The project is under development at version `0.1.2`, with real Messenger sign-in and messaging connected. It uses Electron, React, and TypeScript, reading and interacting with Messenger's web interface through embedded Chromium. It doesn't require a separate Buzz! Messenger server.
+The project is under development at version `0.2.0`, with real Messenger sign-in and messaging connected. It uses Electron, React, and TypeScript, reading and interacting with Messenger's web interface through embedded Chromium. It doesn't require a separate Buzz! Messenger server.
 
-Video/voice calling, file sending, IMVironment, Activities, and some other classic controls currently have a visual presence only. Choose **Conversation → Open in Messenger** to use Messenger features that aren't available in the app.
+The voice/video buttons open the selected conversation in an embedded Messenger window and activate its matching call control. Allow microphone/camera access when requested. This integration has automated fixture coverage; live call audio/video still needs testing with another person.
+
+The composer includes bundled sound clips and local font styling; Messenger receives plain text. IMVironment, Activities, and some other classic controls currently have a visual presence only. Choose **Conversation → Open in Messenger** to use Messenger features that aren't available in the app.
 
 The development log records testing on macOS. Windows and Linux packaging targets are configured, but runtime behavior on those platforms hasn't been confirmed. Sync depends on Facebook's web interface and may need adjustments when Messenger changes.
 
@@ -89,6 +93,8 @@ npm test
 npm run build
 ```
 
+On a desktop session, `npm run test:calls`, `test:composer`, `test:pagination`, `test:search` and `test:groups` cover the Electron integrations with offline Messenger fixtures. They make no real calls, send no real messages/files, and do not access camera/microphone devices.
+
 Available packaging configurations:
 
 | Command | Formats |
@@ -106,6 +112,7 @@ The detailed guides are currently in Vietnamese:
 - [User guide](docs/HUONG-DAN.md): sign-in, messaging, customization, and troubleshooting.
 - [Development](docs/PHAT-TRIEN.md): code structure, data flow, checks, and packaging.
 - [Releases](docs/PHAT-HANH.md): build installers on GitHub Actions and publish downloads.
+- [Next implementation plan](docs/ROADMAP.md): priorities and acceptance criteria after v0.2.0.
 - [Ideas and decisions](docs/Y-TUONG.md): product direction, asset sources, and implementation notes.
 
 ## Credits and assets

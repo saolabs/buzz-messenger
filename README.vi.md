@@ -48,15 +48,19 @@ Từ `0.1.1`, bản thử nghiệm macOS được ký ad-hoc và chưa notarize.
 - 95 emoticon Yahoo với các mã gõ như `:))`, `=))`, `:-*`, `>:D<`.
 - BUZZ! rung cửa sổ, âm báo tin nhắn và tab nhấp nháy khi có tin đến.
 - Đọc, gửi tin nhắn văn bản; xem ảnh, sticker và nghe tin thoại.
+- Gửi tệp/ảnh bằng nút đính kèm hoặc kéo thả, có khay xem trước khi gửi.
+- Tải thêm danh bạ/lịch sử, tìm liên hệ qua Messenger; nhóm có biệt danh tác giả, bảng thành viên và mở chat riêng đúng người.
 - Tiếng Việt và English; chỉnh độ phóng giao diện và cỡ chữ riêng.
 
 BUZZ! được gửi qua Messenger dưới dạng chữ `BUZZ!!!`. Người dùng Buzz! Messenger nhận tin này sẽ thấy hiệu ứng rung và nghe âm thanh; trên Messenger thông thường, người nhận thấy chữ. Mã emoticon cũng được gửi dưới dạng văn bản và hiển thị thành icon Yahoo trong Buzz! Messenger.
 
 ## Tình trạng hiện tại
 
-Dự án đang ở giai đoạn phát triển, phiên bản `0.1.2`. Luồng đăng nhập và nhắn tin Messenger thật đã được nối; ứng dụng dùng Electron + React + TypeScript, đọc và thao tác trên trang Messenger bằng Chromium nhúng, không cần server riêng của Buzz! Messenger.
+Dự án đang ở giai đoạn phát triển, phiên bản `0.2.0`. Luồng đăng nhập và nhắn tin Messenger thật đã được nối; ứng dụng dùng Electron + React + TypeScript, đọc và thao tác trên trang Messenger bằng Chromium nhúng, không cần server riêng của Buzz! Messenger.
 
-Các nút gọi video/thoại, gửi tệp, IMVironment, Activities và một số công cụ cổ điển hiện chỉ có giao diện. Chọn **Hội thoại → Mở trong Messenger** để dùng những chức năng Messenger chưa được đưa vào app.
+Nút gọi video/thoại mở đúng hội thoại trong cửa sổ Messenger nhúng và kích hoạt nút gọi tương ứng. Cho phép camera/microphone khi hệ điều hành yêu cầu. Luồng này đã được kiểm tra bằng dữ liệu giả lập; âm thanh/hình ảnh cuộc gọi thật vẫn cần thử với người nhận.
+
+Thanh soạn có âm thanh vui đi kèm và định dạng chữ cục bộ; Messenger nhận văn bản thuần. IMVironment, Activities và một số công cụ cổ điển hiện chỉ có giao diện. Chọn **Hội thoại → Mở trong Messenger** để dùng những chức năng Messenger chưa được đưa vào app.
 
 Ứng dụng đã được thử trên macOS theo nhật ký phát triển. Windows và Linux có cấu hình đóng gói nhưng chưa được xác nhận qua thử nghiệm thực tế. Việc đồng bộ phụ thuộc giao diện web của Facebook và có thể cần sửa khi Messenger thay đổi.
 
@@ -89,6 +93,8 @@ npm test
 npm run build
 ```
 
+Trong môi trường desktop, các lệnh `npm run test:calls`, `test:composer`, `test:pagination`, `test:search` và `test:groups` kiểm tra tích hợp Electron bằng Messenger giả lập ngoại tuyến. Không gọi/gửi tin/tệp thật và không mở camera/microphone.
+
 Các cấu hình đóng gói hiện có:
 
 | Lệnh | Định dạng |
@@ -104,6 +110,7 @@ Các cấu hình đóng gói hiện có:
 - [Hướng dẫn sử dụng](docs/HUONG-DAN.md): đăng nhập, chat, tùy chỉnh và xử lý sự cố.
 - [Phát triển](docs/PHAT-TRIEN.md): cấu trúc mã nguồn, luồng dữ liệu, kiểm tra và đóng gói.
 - [Phát hành](docs/PHAT-HANH.md): build bộ cài bằng GitHub Actions và công bố bản tải về.
+- [Kế hoạch tiếp theo](docs/ROADMAP.md): thứ tự ưu tiên và tiêu chí hoàn thành sau v0.2.0.
 - [Ý tưởng và quyết định](docs/Y-TUONG.md): định hướng sản phẩm, nguồn tài nguyên và nhật ký triển khai.
 
 ## Ghi nhận và tài nguyên
