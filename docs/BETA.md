@@ -1,6 +1,6 @@
 # Beta tích hợp API Messenger web
 
-Nhật ký thử nghiệm nhánh `beta`, phiên bản `0.2.0-beta.1`, ngày 2026-10-21. Các thay đổi đã được chuẩn bị hợp nhất vào bản phát hành `0.2.0`; kế hoạch sau bản này nằm ở [ROADMAP.md](ROADMAP.md).
+Nhật ký thử nghiệm nhánh `beta`, phiên bản `0.2.0-beta.1`, ngày 2026-10-21. Các thay đổi đã được chuẩn bị hợp nhất vào bản phát hành `0.2.1`; kế hoạch sau bản này nằm ở [ROADMAP.md](ROADMAP.md).
 
 ## Cửa sổ và chuyển màn hình đăng nhập
 

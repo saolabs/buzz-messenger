@@ -1,6 +1,6 @@
-# Kế hoạch sau v0.2.0
+# Kế hoạch sau v0.2.1
 
-Ngày cập nhật: 2026-10-21. Đây là kế hoạch triển khai tiếp theo; các mục bên dưới chưa nằm trong v0.2.0. Thứ tự ưu tiên có thể điều chỉnh theo phản hồi sử dụng, chưa ấn định ngày phát hành.
+Ngày cập nhật: 2026-10-21. Đây là kế hoạch triển khai tiếp theo; các mục bên dưới chưa nằm trong v0.2.1. Thứ tự ưu tiên có thể điều chỉnh theo phản hồi sử dụng, chưa ấn định ngày phát hành.
 
 ## 1. Tiện ích nhắn tin hằng ngày
 

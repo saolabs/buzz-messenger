@@ -1,4 +1,4 @@
-# Buzz! Messenger v0.2.0
+# Buzz! Messenger v0.2.1
 
 ## What's new
 
@@ -10,6 +10,10 @@
 - Improved message identity reconciliation prevents duplicate group rows when Messenger switches between names/nicknames or reloads history. Existing media and encrypted repair backups are retained.
 - Corrected multiline message rendering, composer layout, toolbar hover/pressed states and contact search width. The buddy window starts centered along the right screen edge; successful sign-in displays its connected icon for two seconds.
 - Added guarded Messenger web API enrichment for supported conversations, with DOM fallback before a send is attempted and no automatic resend after an uncertain result.
+
+## Release validation fix
+
+The v0.2.0 build was not published: CI caught a group fixture checking the buddy list before its contacts IPC response arrived. v0.2.1 waits for the actual group row and adds a delayed contacts response to reproduce that ordering. The application features are unchanged from the prepared v0.2.0 build.
 
 ## Verification and limits
 
