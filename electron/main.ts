@@ -28,7 +28,7 @@ const SETTINGS = join(app.getPath("userData"), "settings.json");
 type Settings = { skin: string; lang: string; zoom: number; textSize: number; tabbed: boolean };
 // zoom: Y!M gốc thiết kế cho màn hình 96dpi (chữ 11px) — nhỏ so với app hiện nay, nên mặc định phóng 125%.
 // Hệ số này nhân thêm vào scale của hệ điều hành (Electron đã tự xử lý 125–200% của Win/Mac).
-const DEFAULTS: Settings = { skin: "Purple", lang: "vi", zoom: 1.25, textSize: 0.92, tabbed: false };
+const DEFAULTS: Settings = { skin: "Purple", lang: "en", zoom: 1.25, textSize: 0.92, tabbed: false };
 const settings: Settings = (() => {
   try {
     return { ...DEFAULTS, ...JSON.parse(readFileSync(SETTINGS, "utf8")) };

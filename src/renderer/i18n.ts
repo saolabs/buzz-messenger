@@ -300,7 +300,7 @@ export const LANGS = { vi: "Tiếng Việt", en: "English" } as const;
 export type Lang = keyof typeof LANGS;
 const dicts: Record<Lang, Record<Key, string>> = { vi, en };
 
-export const LangContext = createContext<Lang>("vi");
+export const LangContext = createContext<Lang>("en");
 
 export function useT() {
   const lang = useContext(LangContext);
