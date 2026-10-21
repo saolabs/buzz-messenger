@@ -1,15 +1,23 @@
 import { randomUUID } from "node:crypto";
 import type { Conversation, InboxScan, Message, State } from "./types.ts";
+import { canonicalMessageId, reconcileMessageIdentities } from "./message-identity.ts";
+import { sameSender } from "./groups.ts";
 
 // Gộp tin vừa đọc từ DOM vào lịch sử (thuật toán của master-chat, bỏ phần hàng đợi AI).
 // Trả về các tin mới (chưa từng thấy) để báo âm/ bật cửa sổ.
 export function ingest(conversation: Conversation, observed: Omit<Message, "baseline">[]): Message[] {
+  const groupUpgrade = conversation.kind === "group" && conversation.groupIdentityVersion !== 1;
+  if (groupUpgrade && conversation.messages.length) conversation.groupRepairBackup ??= { createdAt: Date.now(), messages: structuredClone(conversation.messages) };
+  observed = reconcileMessageIdentities(conversation, observed);
   const ids = new Set(conversation.messages.map((m) => m.id));
   for (const raw of observed) {
     const saved = conversation.messages.find((m) => m.id === raw.id);
     if (!saved) continue;
     saved.text = raw.text;
-    if (saved.timestamp === null && raw.timestamp !== null) {
+    if (raw.sender && !(saved.sender?.id && !raw.sender.id && (raw.direction === "outgoing" || sameSender(saved.sender, raw.sender)))) saved.sender = raw.sender;
+    if (raw.platformMessageId) saved.platformMessageId = raw.platformMessageId;
+    if (raw.aliasIds?.length) saved.aliasIds = raw.aliasIds;
+    if (raw.timestamp !== null && (saved.timestamp === null || (raw.platformMessageId && raw.precision === "exact" && saved.precision !== "exact"))) {
       saved.timestamp = raw.timestamp;
       saved.precision = raw.precision;
     }
@@ -17,12 +25,11 @@ export function ingest(conversation: Conversation, observed: Omit<Message, "base
     if (raw.attachments?.length) saved.attachments = raw.attachments;
     else delete saved.attachments;
   }
-  const initial = !conversation.initialized;
+  const initial = !conversation.initialized || groupUpgrade;
   const fresh = observed.filter((m) => !ids.has(m.id) && (ids.add(m.id), true)).map((m) => ({ ...m, baseline: initial }));
   conversation.messages.push(...fresh);
   // Bộ đọc giữ thứ tự dòng thời gian; tin chưa rõ giờ không được nhảy ra sau tin mới nhất.
-  if (conversation.messages.every((m) => m.timestamp !== null)) conversation.messages.sort((a, b) => a.timestamp! - b.timestamp!);
-  else {
+  {
     // Lần đọc chồng lấn: neo tin cũ vừa lộ ra vào trước tin mới hơn đã biết.
     const ordered = [...new Set(observed.map((m) => m.id))];
     const freshIds = new Set(fresh.map((m) => m.id));
@@ -45,11 +52,52 @@ export function ingest(conversation: Conversation, observed: Omit<Message, "base
       }
     }
   }
+  // Stable sorting must start from DOM chronology: a whole group can share one
+  // minute, including a saved row whose previously unknown timestamp just arrived.
+  if (conversation.messages.every((m) => m.timestamp !== null)) conversation.messages.sort((a, b) => a.timestamp! - b.timestamp!);
   conversation.initialized = true;
+  if (conversation.kind === "group") conversation.groupIdentityVersion = 1;
   return initial ? [] : fresh;
 }
 
 export const latestId = (c: Conversation) => c.messages.at(-1)?.id ?? null;
+
+// A live snapshot is taken at the bottom of Messenger's timeline. A verified
+// API timestamp on its final row anchors that window after older cached rows,
+// including fingerprint aliases left over from changing date labels. Keep all
+// cached data, and preserve positively dated newer rows if the page is stale.
+export function ingestLatest(conversation: Conversation, observed: Omit<Message, "baseline">[]): Message[] {
+  const fresh = ingest(conversation, observed);
+  const last = observed.at(-1);
+  if (!last?.platformMessageId || last.precision !== "exact" || last.timestamp === null) return fresh;
+  const ordered = [...new Set(observed.map(m => canonicalMessageId(conversation, m)))];
+  const current = new Map(conversation.messages.map(m => [m.id, m]));
+  const seen = new Set(ordered);
+  const undated: Message[] = [];
+  const merged = ordered.map(id => current.get(id)!);
+  for (const message of conversation.messages) {
+    if (seen.has(message.id)) continue;
+    if (message.timestamp === null) undated.push(message);
+    else {
+      const before = merged.findIndex(m => m.timestamp !== null && m.timestamp > message.timestamp!);
+      merged.splice(before < 0 ? merged.length : before, 0, message);
+    }
+  }
+  conversation.messages = [...undated, ...merged];
+  return fresh;
+}
+
+// Backfilled rows are history, even when Messenger provides no absolute date.
+export function ingestHistory(conversation: Conversation, observed: Omit<Message, "baseline">[]): number {
+  const known = new Set(conversation.messages.map(m => m.id));
+  ingest(conversation, observed);
+  let added = 0;
+  for (const message of conversation.messages) if (!known.has(message.id)) {
+    message.baseline = true;
+    added++;
+  }
+  return added;
+}
 
 // Có tin đến "mới thật" không: tin chưa từng lưu, chiều đến, giờ gửi (theo Messenger) từ lúc đăng nhập trở đi.
 // Giờ chỉ chính xác tới phút nên so với đầu phút đăng nhập.

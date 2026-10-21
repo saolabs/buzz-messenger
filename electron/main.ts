@@ -5,6 +5,8 @@ import { TEXT_SIZES, ZOOMS, type ContactView, type ConversationView, type Sessio
 import { MessengerService } from "./messenger-service.ts";
 import { Vault } from "./vault.ts";
 import { runStartupSmoke } from "./startup-smoke.ts";
+import { Uploads } from "./uploads.ts";
+import { AUDIBLES } from "../src/core/uploads.ts";
 
 // Smoke runs use an isolated profile and never start the Messenger service.
 const smokeTest = process.argv.includes("--smoke-test");
@@ -95,8 +97,11 @@ function scaledSize(view: View, zoom: number) {
 const ICON = join(ROOT, "icon.png");
 
 function createWindow(view: View, inactive = false) {
+  const size = scaledSize(view, settings.zoom);
+  const area = screen.getPrimaryDisplay().workArea;
   const win = new BrowserWindow({
-    ...scaledSize(view, settings.zoom),
+    ...size,
+    ...(view === "buddy" ? { x: area.x + area.width - size.width, y: area.y + Math.round((area.height - size.height) / 2) } : {}),
     ...(existsSync(ICON) ? { icon: ICON } : {}),
     frame: false,
     backgroundColor: "#f9f9f2",
@@ -236,15 +241,58 @@ const broadcast = (channel: string, ...args: unknown[]) => {
 const signedOut: SessionView = { phase: "signedOut", username: "", remember: false, autoSignIn: false, hasPin: false, autoPin: false };
 ipcMain.handle("ym:session", () => service?.sessionView() ?? { ...signedOut, error: vaultError ? "vault" : undefined });
 ipcMain.on("ym:signIn", (_e, input: SignIn) => {
-  if (typeof input?.username === "string" && typeof input.password === "string") void service?.signIn(input);
+  if (typeof input?.username === "string" && typeof input.password === "string") { uploads.clear(); void service?.signIn(input); }
 });
-ipcMain.on("ym:signOut", () => void service?.signOut());
-ipcMain.on("ym:cancelSignIn", () => void service?.cancelSignIn());
+ipcMain.on("ym:signOut", () => { uploads.clear(); void service?.signOut(); });
+ipcMain.on("ym:cancelSignIn", () => { uploads.clear(); void service?.cancelSignIn(); });
 ipcMain.on("ym:setDisplayName", (_e, name: string) => typeof name === "string" && void service?.setDisplayName(name));
 ipcMain.on("ym:showMessenger", () => service?.showMessenger());
 ipcMain.on("ym:openInMessenger", (_e, id: string) => typeof id === "string" && service?.openInMessenger(id));
+ipcMain.handle("ym:startCall", (e, id: string, kind: unknown) => {
+  const win = BrowserWindow.fromWebContents(e.sender);
+  if (!win || !views.has(win) || e.senderFrame !== e.sender.mainFrame || typeof id !== "string" || (kind !== "voice" && kind !== "video"))
+    return { ok: false, error: "invalid" };
+  return service?.startCall(id, kind) ?? { ok: false, error: "Messenger chưa sẵn sàng." };
+});
 ipcMain.handle("ym:contacts", () => service?.contacts() ?? []);
-ipcMain.handle("ym:loadMore", () => service?.loadMore());
+ipcMain.handle("ym:groupMembers", (e, id: unknown, cursor: unknown) => {
+  const win = BrowserWindow.fromWebContents(e.sender);
+  if (!win || views.get(win) !== "im" || e.senderFrame !== e.sender.mainFrame || typeof id !== "string" || (cursor !== undefined && (typeof cursor !== "string" || !/^\d+$/.test(cursor))))
+    return { ok: false, error: "Yêu cầu thành viên nhóm không hợp lệ." };
+  return service?.groupMembers(id, cursor as string | undefined) ?? { ok: false, error: "Messenger chưa sẵn sàng." };
+});
+ipcMain.handle("ym:openGroupMember", async (e, id: unknown, memberId: unknown) => {
+  const win = BrowserWindow.fromWebContents(e.sender);
+  if (!win || views.get(win) !== "im" || e.senderFrame !== e.sender.mainFrame || typeof id !== "string" || typeof memberId !== "string" || !/^\d{1,30}$/.test(memberId) || !service)
+    return { ok: false, error: "Thành viên nhóm không hợp lệ." };
+  const result = await service.openGroupMember(id, memberId);
+  if (!result.id) return { ok: false, error: result.error };
+  if (win.isDestroyed()) return { ok: false, error: "Cửa sổ nhóm đã đóng." };
+  openIm(result.id);
+  return { ok: true };
+});
+const buddySender = (e: Electron.IpcMainInvokeEvent) => {
+  const win = BrowserWindow.fromWebContents(e.sender);
+  return !!win && views.get(win) === "buddy" && e.senderFrame === e.sender.mainFrame;
+};
+ipcMain.handle("ym:searchContacts", (e, query: unknown) => {
+  if (!buddySender(e) || typeof query !== "string" || query.length > 100) return { ok: false, contacts: [], error: "Tên tìm kiếm không hợp lệ (tối đa 100 ký tự)." };
+  return service?.searchContacts(query) ?? { ok: false, contacts: [], error: "Messenger chưa sẵn sàng." };
+});
+ipcMain.handle("ym:openSearchContact", async (e, id: unknown) => {
+  if (!buddySender(e) || typeof id !== "string" || !service) return { ok: false, error: "Liên hệ không hợp lệ." };
+  const result = await service.openSearchContact(id);
+  if (!result.id) return { ok: false, error: result.error };
+  openIm(result.id);
+  return { ok: true };
+});
+ipcMain.handle("ym:loadMore", () => service?.loadMore() ?? { ok: false, added: 0, error: "Messenger chưa sẵn sàng." });
+ipcMain.handle("ym:loadHistory", (e, id: unknown) => {
+  const win = BrowserWindow.fromWebContents(e.sender);
+  if (!win || !views.has(win) || e.senderFrame !== e.sender.mainFrame || typeof id !== "string")
+    return { ok: false, added: 0, error: "invalid" };
+  return service?.loadHistory(id) ?? { ok: false, added: 0, error: "Messenger chưa sẵn sàng." };
+});
 ipcMain.handle("ym:attachment", (_e, id: string, messageId: string, attachmentId: string) =>
   [id, messageId, attachmentId].every((x) => typeof x === "string") ? (service?.attachment(id, messageId, attachmentId) ?? { error: "not-ready" }) : { error: "invalid" },
 );
@@ -259,6 +307,43 @@ ipcMain.on("ym:watch", (e, ids: string[]) => Array.isArray(ids) && service?.watc
 ipcMain.handle("ym:send", (_e, id: string, text: string) =>
   typeof text === "string" && text.trim() && text.length <= 5000 ? service?.send(id, text) : { ok: false, error: "invalid" },
 );
+
+const uploads = new Uploads();
+const composerSender = (e: Electron.IpcMainInvokeEvent) => {
+  const wc = e.sender;
+  const win = BrowserWindow.fromWebContents(wc);
+  return !!win && views.get(win) === "im" && e.senderFrame === wc.mainFrame && new URL(wc.getURL()).hash === "#im";
+};
+ipcMain.handle("ym:stageFiles", async (e, id: string, paths: string[]) => {
+  if (!composerSender(e) || typeof id !== "string" || !service?.conversation(id)) return { error: "Hội thoại không hợp lệ." };
+  try { return { files: await uploads.stage(e.sender.id, id, paths) }; }
+  catch (error) { return { error: error instanceof Error ? error.message : "Không đọc được tệp." }; }
+});
+ipcMain.handle("ym:stageAudible", async (e, id: string, audibleId: string) => {
+  const audible = AUDIBLES.find(a => a.id === audibleId);
+  if (!composerSender(e) || !audible || typeof id !== "string" || !service?.conversation(id)) return { error: "Âm thanh không hợp lệ." };
+  return { files: await uploads.stage(e.sender.id, id, [join(ROOT, "Media", audible.file)]) };
+});
+ipcMain.on("ym:discardFiles", (e, ids: string[]) => {
+  if (Array.isArray(ids) && ids.every(id => typeof id === "string")) uploads.discard(e.sender.id, ids);
+});
+ipcMain.handle("ym:sendFiles", async (e, id: string, ids: string[], text: string) => {
+  if (!composerSender(e) || typeof id !== "string" || typeof text !== "string" || text.length > 5000 || !service)
+    return { ok: false, error: "Yêu cầu gửi tệp không hợp lệ." };
+  let claimed = false;
+  try {
+    const files = await uploads.claim(e.sender.id, id, ids);
+    claimed = true;
+    const result = await service.sendFiles(id, files, text.trim());
+    uploads.finish(ids, !!result.attempted);
+    return result;
+  } catch (error) {
+    if (claimed) uploads.finish(ids, false);
+    return { ok: false, error: error instanceof Error ? error.message : "Không gửi được tệp." };
+  }
+});
+app.on("web-contents-created", (_e, wc) => wc.once("destroyed", () => uploads.discard(wc.id)));
+app.on("before-quit", () => uploads.clear());
 
 async function startService(host: BrowserWindow) {
   const vault = new Vault(join(app.getPath("userData"), "secure"), safeStorage);

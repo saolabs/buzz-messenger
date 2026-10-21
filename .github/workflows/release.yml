@@ -115,6 +115,16 @@ jobs:
       - name: Verify macOS signatures and visible renderer
         if: matrix.platform == 'mac'
         run: node scripts/verify-mac-signatures.mjs ${{ matrix.arch }} --launch
+      - name: Test Messenger call windows with offline fixtures
+        if: matrix.platform == 'mac'
+        run: npm run test:calls
+      - name: Test messaging integrations with offline fixtures
+        if: matrix.platform == 'mac' && matrix.arch == 'arm64'
+        run: |
+          npm run test:composer
+          npm run test:pagination
+          npm run test:search
+          npm run test:groups
       - uses: actions/upload-artifact@v7
         with:
           name: installers-${{ matrix.platform }}-${{ matrix.arch }}

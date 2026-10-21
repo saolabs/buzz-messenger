@@ -1,3 +1,4 @@
+import type { FileSendResult, StagedFile } from "./uploads.ts";
 // Kiểu dữ liệu Messenger lấy từ master-chat (bộ đọc DOM, vault) + kiểu cho giao diện Y!M.
 export type Platform = "messenger-personal";
 
@@ -39,6 +40,11 @@ export type Attachment = {
 
 export type Message = {
   id: string;
+  // Beta: internal Messenger ID, while id retains the existing local/DOM identity.
+  platformMessageId?: string;
+  aliasIds?: string[];
+  sender?: { id?: string; name: string; nickname?: string };
+  legacyFingerprintId?: string;
   text: string;
   direction: "incoming" | "outgoing" | "system";
   timestamp: number | null;
@@ -56,6 +62,13 @@ export type Conversation = {
   name: string;
   url: string;
   messages: Message[];
+  kind?: "direct" | "group";
+  group?: GroupInfo;
+  groupIdentityVersion?: 1;
+  groupRepairBackup?: { createdAt: number; messages: Message[] };
+  groupIdentityBackup?: { createdAt: number; messages: Message[] };
+  // Encrypted with the conversation; retained before repairing legacy aliases.
+  messageRepairBackup?: { createdAt: number; messages: Message[] };
   initialized: boolean;
   discoveredAt?: number;
   lastInboxSignature?: string;
@@ -124,6 +137,9 @@ export type Status = "online" | "busy" | "idle" | "offline";
 
 export type ContactView = {
   id: string;
+  kind?: "direct" | "group";
+  memberCount?: number;
+  searchResult?: boolean;
   name: string;
   status: Status;
   avatar?: string;
@@ -150,7 +166,13 @@ export type SessionView = {
 
 export type SignIn = { username: string; password: string; remember: boolean; autoSignIn: boolean };
 
-export type ConversationView = { contact: ContactView; messages: Message[]; error?: string };
+export type GroupMember = { id: string; name: string; nickname?: string; avatar?: string; role: "admin" | "member" | "unknown"; isSelf: boolean };
+export type GroupInfo = { members: GroupMember[]; memberCount?: number; complete: boolean; nextCursor?: string; updatedAt: number };
+export type GroupMembersResult = { ok: boolean; group?: GroupInfo; error?: string };
+export type ConversationView = { contact: ContactView; messages: Message[]; group?: GroupInfo; error?: string };
+export type LoadMoreResult = { ok: boolean; added: number; error?: string };
+export type ContactSearchResult = { ok: boolean; contacts: ContactView[]; error?: string };
+export type CallKind = "voice" | "video";
 
 export type Settings = { skin: string; lang: "vi" | "en"; zoom: number; textSize: number; tabbed: boolean };
 export const ZOOMS = [1, 1.25, 1.5, 1.75, 2];
@@ -180,13 +202,19 @@ export type Bridge = {
   setPin(pin: string | null, auto: boolean): Promise<{ ok: boolean }>;
   setDisplayName(name: string): void;
   contacts(): Promise<ContactView[]>;
+  searchContacts(query: string): Promise<ContactSearchResult>;
+  openSearchContact(id: string): Promise<{ ok: boolean; error?: string }>;
   // Buddy list cuộn tới đáy → quét inbox sâu hơn để hiện thêm người.
-  loadMore(): Promise<void>;
+  loadMore(): Promise<LoadMoreResult>;
+  loadHistory(contactId: string): Promise<LoadMoreResult>;
+  groupMembers(contactId: string, cursor?: string): Promise<GroupMembersResult>;
+  openGroupMember(contactId: string, memberId: string): Promise<{ ok: boolean; error?: string }>;
   // Ảnh/ âm thanh trong tin (base64) — dùng khi nguồn không tải trực tiếp được.
   attachment(contactId: string, messageId: string, attachmentId: string): Promise<{ kind: "image" | "audio"; mimeType: string; data: string } | { error: string }>;
   openProfile(): void;
   // Mở đúng hội thoại trong một cửa sổ Messenger thật (gọi điện, thả cảm xúc… mà app chưa có)
   openInMessenger(contactId: string): void;
+  startCall(contactId: string, kind: CallKind): Promise<{ ok: boolean; error?: string }>;
   onContacts(cb: (c: ContactView[]) => void): () => void;
   // Cửa sổ chat báo đang hiển thị những người nào để main đọc tin định kỳ.
   watch(contactIds: string[]): void;
@@ -195,6 +223,10 @@ export type Bridge = {
   conversation(contactId: string): Promise<ConversationView | null>;
   onConversation(cb: (contactId: string, view: ConversationView) => void): () => void;
   send(contactId: string, text: string): Promise<{ ok: boolean; error?: string }>;
+  stageFiles(contactId: string, files: File[]): Promise<{ files?: StagedFile[]; error?: string }>;
+  stageAudible(contactId: string, audibleId: string): Promise<{ files?: StagedFile[]; error?: string }>;
+  discardFiles(ids: string[]): void;
+  sendFiles(contactId: string, ids: string[], text: string): Promise<FileSendResult>;
 };
 
 declare global {

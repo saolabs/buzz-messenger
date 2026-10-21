@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from "electron";
+import { contextBridge, ipcRenderer, webUtils } from "electron";
 import type { Bridge } from "../src/core/types.ts";
 
 const on = <T>(channel: string, cb: (value: T) => void) => {
@@ -34,10 +34,16 @@ const api: Bridge = {
   showMessenger: () => ipcRenderer.send("ym:showMessenger"),
   setPin: (pin, auto) => ipcRenderer.invoke("ym:setPin", pin, auto),
   contacts: () => ipcRenderer.invoke("ym:contacts"),
+  searchContacts: (query) => ipcRenderer.invoke("ym:searchContacts", query),
+  openSearchContact: (id) => ipcRenderer.invoke("ym:openSearchContact", id),
   loadMore: () => ipcRenderer.invoke("ym:loadMore"),
+  loadHistory: (id) => ipcRenderer.invoke("ym:loadHistory", id),
+  groupMembers: (id, cursor) => ipcRenderer.invoke("ym:groupMembers", id, cursor),
+  openGroupMember: (id, memberId) => ipcRenderer.invoke("ym:openGroupMember", id, memberId),
   attachment: (id, messageId, attachmentId) => ipcRenderer.invoke("ym:attachment", id, messageId, attachmentId),
   openProfile: () => ipcRenderer.send("ym:openProfile"),
   openInMessenger: (id) => ipcRenderer.send("ym:openInMessenger", id),
+  startCall: (id, kind) => ipcRenderer.invoke("ym:startCall", id, kind),
   onContacts: (cb) => on("ym:contacts", cb),
   watch: (ids) => ipcRenderer.send("ym:watch", ids),
   seen: (id) => ipcRenderer.send("ym:seen", id),
@@ -48,5 +54,12 @@ const api: Bridge = {
     return () => void ipcRenderer.removeListener("ym:conversation", listener);
   },
   send: (id, text) => ipcRenderer.invoke("ym:send", id, text),
+  stageFiles: (id, files) => {
+    try { return ipcRenderer.invoke("ym:stageFiles", id, files.map(file => webUtils.getPathForFile(file))); }
+    catch { return Promise.resolve({ error: "Không đọc được tệp kéo thả." }); }
+  },
+  stageAudible: (id, audible) => ipcRenderer.invoke("ym:stageAudible", id, audible),
+  discardFiles: (ids) => ipcRenderer.send("ym:discardFiles", ids),
+  sendFiles: (id, ids, text) => ipcRenderer.invoke("ym:sendFiles", id, ids, text),
 };
 contextBridge.exposeInMainWorld("ym", api);

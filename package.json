@@ -1,6 +1,6 @@
 {
   "name": "buzz-messenger",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "private": true,
   "description": "Buzz! Messenger — Facebook Messenger với giao diện chat cổ điển, BUZZ! và emoticon",
   "author": "SaoLabs",
@@ -15,7 +15,12 @@
     "dev": "electron-vite dev --watch",
     "build": "electron-vite build",
     "typecheck": "tsc --noEmit",
-    "test": "node --import tsx --test tests/*.test.ts",
+    "test": "node --import tsx --test --test-concurrency=1 tests/*.test.ts",
+    "test:calls": "electron scripts/test-calls-electron.cjs",
+    "test:pagination": "electron scripts/test-pagination-electron.cjs",
+    "test:composer": "electron scripts/test-composer-electron.cjs",
+    "test:search": "electron scripts/test-search-electron.cjs",
+    "test:groups": "electron scripts/test-groups-electron.cjs",
     "extract": "python3 -I scripts/extract_installer.py 10.0.0.1102_ymsgr1000_1102_us.exe _extracted && python3 -I scripts/swf_to_svg.py _extracted/Messenger/login.swf _extracted/Messenger/Media/login && python3 -I scripts/bmp_to_png.py _extracted/Messenger/skins && python3 -I scripts/brand_logo.py _extracted/Messenger/Media/login/connected.svg _extracted/icon.svg && electron scripts/render-icon.mjs _extracted/icon.svg _extracted/icon.png && npm run assets:prepare",
     "assets:prepare": "node scripts/prepare-assets.mjs",
     "dist:mac": "npm run build && electron-builder --config electron-builder.config.cjs --mac",
@@ -55,6 +60,10 @@
     ],
     "mac": {
       "artifactName": "buzz-messenger-${version}-mac-${arch}.${ext}",
+      "extendInfo": {
+        "NSCameraUsageDescription": "Buzz! Messenger uses your camera for Messenger video calls.",
+        "NSMicrophoneUsageDescription": "Buzz! Messenger uses your microphone for Messenger voice and video calls."
+      },
       "category": "public.app-category.social-networking",
       "target": [
         "dmg",
