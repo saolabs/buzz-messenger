@@ -56,7 +56,7 @@ BUZZ! is sent through Messenger as the text `BUZZ!!!`. Buzz! Messenger recognize
 
 ## Current status
 
-The project is under development at version `0.2.0`, with real Messenger sign-in and messaging connected. It uses Electron, React, and TypeScript, reading and interacting with Messenger's web interface through embedded Chromium. It doesn't require a separate Buzz! Messenger server.
+The project is under development at version `0.2.1`, with real Messenger sign-in and messaging connected. It uses Electron, React, and TypeScript, reading and interacting with Messenger's web interface through embedded Chromium. It doesn't require a separate Buzz! Messenger server.
 
 The voice/video buttons open the selected conversation in an embedded Messenger window and activate its matching call control. Allow microphone/camera access when requested. This integration has automated fixture coverage; live call audio/video still needs testing with another person.
 
@@ -112,7 +112,7 @@ The detailed guides are currently in Vietnamese:
 - [User guide](docs/HUONG-DAN.md): sign-in, messaging, customization, and troubleshooting.
 - [Development](docs/PHAT-TRIEN.md): code structure, data flow, checks, and packaging.
 - [Releases](docs/PHAT-HANH.md): build installers on GitHub Actions and publish downloads.
-- [Next implementation plan](docs/ROADMAP.md): priorities and acceptance criteria after v0.2.0.
+- [Next implementation plan](docs/ROADMAP.md): priorities and acceptance criteria after v0.2.1.
 - [Ideas and decisions](docs/Y-TUONG.md): product direction, asset sources, and implementation notes.
 
 ## Credits and assets

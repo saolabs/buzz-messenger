@@ -56,7 +56,7 @@ BUZZ! được gửi qua Messenger dưới dạng chữ `BUZZ!!!`. Người dùn
 
 ## Tình trạng hiện tại
 
-Dự án đang ở giai đoạn phát triển, phiên bản `0.2.0`. Luồng đăng nhập và nhắn tin Messenger thật đã được nối; ứng dụng dùng Electron + React + TypeScript, đọc và thao tác trên trang Messenger bằng Chromium nhúng, không cần server riêng của Buzz! Messenger.
+Dự án đang ở giai đoạn phát triển, phiên bản `0.2.1`. Luồng đăng nhập và nhắn tin Messenger thật đã được nối; ứng dụng dùng Electron + React + TypeScript, đọc và thao tác trên trang Messenger bằng Chromium nhúng, không cần server riêng của Buzz! Messenger.
 
 Nút gọi video/thoại mở đúng hội thoại trong cửa sổ Messenger nhúng và kích hoạt nút gọi tương ứng. Cho phép camera/microphone khi hệ điều hành yêu cầu. Luồng này đã được kiểm tra bằng dữ liệu giả lập; âm thanh/hình ảnh cuộc gọi thật vẫn cần thử với người nhận.
 
@@ -110,7 +110,7 @@ Các cấu hình đóng gói hiện có:
 - [Hướng dẫn sử dụng](docs/HUONG-DAN.md): đăng nhập, chat, tùy chỉnh và xử lý sự cố.
 - [Phát triển](docs/PHAT-TRIEN.md): cấu trúc mã nguồn, luồng dữ liệu, kiểm tra và đóng gói.
 - [Phát hành](docs/PHAT-HANH.md): build bộ cài bằng GitHub Actions và công bố bản tải về.
-- [Kế hoạch tiếp theo](docs/ROADMAP.md): thứ tự ưu tiên và tiêu chí hoàn thành sau v0.2.0.
+- [Kế hoạch tiếp theo](docs/ROADMAP.md): thứ tự ưu tiên và tiêu chí hoàn thành sau v0.2.1.
 - [Ý tưởng và quyết định](docs/Y-TUONG.md): định hướng sản phẩm, nguồn tài nguyên và nhật ký triển khai.
 
 ## Ghi nhận và tài nguyên
