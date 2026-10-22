@@ -115,7 +115,7 @@ export class Browsers {
       this.betaStatus(wc, "read:dom-fallback");
       return read;
     }
-    const enriched = enrichBetaMessages(read.messages, cached.result.messages, cached.result.media);
+    const enriched = enrichBetaMessages(read.messages, cached.result.messages, cached.result.media, cached.result.total);
     this.betaStatus(wc, enriched.matched ? "read:mps+dom-media" : "read:dom-no-overlap");
     return { ...read, messages: enriched.messages, invalid: enriched.messages.filter(m => m.timestamp === null).length };
   }

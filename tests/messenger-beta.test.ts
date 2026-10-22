@@ -245,3 +245,43 @@ test("equal repeated-text occurrences keep distinct API IDs; a partial window ca
   assert.deepEqual(enrichBetaMessages(dom, api).messages.map(m => m.platformMessageId), ["first", "second"]);
   assert.equal(enrichBetaMessages(dom.slice(1), api).matched, 0);
 });
+
+test("a complete API tail identifies weekday-labelled sent and received messages and repairs cached copies", () => {
+  for (const direction of ["incoming", "outgoing"] as const) {
+    const dom = [domMessage({ id: "anchor", text: "anchor", timestamp: 60_000 }),
+      domMessage({ id: "weekday-label", text: "latest message", direction })];
+    const api = [{ id: "api-anchor", text: "anchor", direction: "incoming" as const, timestamp: 60_100, order: 0 },
+      { id: "api-latest", text: "latest message", direction, timestamp: 120_100, order: 1 }];
+    const c: Conversation = { id: "c", accountId: "a", platformId: "123", name: "fixture", url: "", initialized: true,
+      messages: [{ ...dom[0], platformMessageId: "api-anchor", observedAt: 0, baseline: true },
+        { ...dom[1], observedAt: 100, baseline: false },
+        { ...dom[1], id: "original-dated-label", platformMessageId: "api-latest", timestamp: 120_100, precision: "exact", observedAt: 0, baseline: false }] };
+    const result = enrichBetaMessages(dom, api, [], 2);
+    assert.equal(result.matched, 2);
+    assert.equal(result.messages.at(-1)?.platformMessageId, "api-latest");
+    assert.deepEqual(ingest(c, result.messages.map(m => ({ ...m, observedAt: 200 }))), []);
+    assert.equal(c.messages.length, 2);
+    assert.equal(c.messageRepairBackup?.messages.length, 3);
+    ingest(c, dom.map(m => ({ ...m, observedAt: 300 })));
+    assert.equal(c.messages.length, 2, "DOM fallback must retain the repaired identity");
+  }
+});
+
+test("tail alignment requires the entire server suffix, preserves repeated sends and rejects unsupported rows", () => {
+  const anchor = domMessage({ id: "anchor", text: "anchor", timestamp: 60_000 });
+  const tail = [domMessage({ id: "one", text: "ok" }), domMessage({ id: "two", text: "ok" })];
+  const api = [{ id: "api-anchor", text: "anchor", direction: "incoming" as const, timestamp: 60_100, order: 0 },
+    { id: "api-one", text: "ok", direction: "incoming" as const, timestamp: 120_100, order: 1 },
+    { id: "api-two", text: "ok", direction: "incoming" as const, timestamp: 121_100, order: 2 }];
+  assert.deepEqual(enrichBetaMessages([anchor, ...tail], api, [], 3).messages.map(m => m.platformMessageId), ["api-anchor", "api-one", "api-two"]);
+  for (const [dom, rows, total] of [
+    [[anchor, tail[0]], api, 3],
+    [[anchor, ...tail], api.slice(0, 2), 3],
+    [[anchor, ...tail], api, 4],
+    [[anchor, ...tail], api, undefined],
+    [[...tail], api, 3],
+  ] as const) {
+    const result = enrichBetaMessages([...dom], [...rows], [], total);
+    assert.ok(result.messages.filter(m => m.id !== "anchor").every(m => !m.platformMessageId));
+  }
+});

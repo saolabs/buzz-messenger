@@ -40,6 +40,88 @@ test("a duplicate server ID is coalesced while an encrypted-state backup retains
   assert.ok(c.messages[0].aliasIds?.includes("b"));
 });
 
+test("a verified DOM-to-server bridge repairs a cached fallback copy and preserves its aliases", () => {
+  const saved = bound("saved", "same");
+  const fallback = row("fallback", "same", { aliasIds: ["older-fallback"] });
+  const c = conversation([saved, fallback]);
+  const before = structuredClone(c.messages);
+  assert.deepEqual(ingest(c, [{ ...saved, id: fallback.id }]), []);
+  assert.equal(c.messages.length, 1);
+  assert.equal(c.messages[0].id, "saved");
+  assert.deepEqual(c.messageRepairBackup?.messages, before);
+  assert.ok(c.messages[0].aliasIds?.includes("fallback"));
+  assert.ok(c.messages[0].aliasIds?.includes("older-fallback"));
+  ingest(c, [row("older-fallback", "same")]);
+  assert.equal(c.messages.length, 1, "a later DOM-only read must not reinsert the copy");
+});
+
+test("a later row in a history capture can bind an earlier changed fingerprint to the saved message", () => {
+  const c = conversation([row("saved-dom", "same")]);
+  const verified = bound("new-dom", "same");
+  assert.deepEqual(ingestLatest(c, [verified, { ...verified, id: "saved-dom" }]), []);
+  assert.equal(c.messages.length, 1);
+  assert.equal(c.messages[0].id, "saved-dom");
+  assert.equal(c.messages[0].platformMessageId, verified.platformMessageId);
+});
+
+test("two server anchors upgrade a changed direct-message fingerprint before inserting a duplicate", () => {
+  const left = bound("left"), right = bound("right", "right", 180_000);
+  const middle = row("old-middle", "middle", { timestamp: 120_000 });
+  const c = conversation([left, middle, right]);
+  const observed = [left, bound("new-middle", "middle", 120_100), right];
+  assert.deepEqual(ingestLatest(c, observed), []);
+  assert.deepEqual(c.messages.map(m => m.id), ["left", "old-middle", "right"]);
+  assert.equal(c.messages[1].platformMessageId, "server-new-middle");
+  assert.ok(c.messages[1].aliasIds?.includes("new-middle"));
+  ingestLatest(c, observed);
+  ingest(c, [row("new-middle", "middle")]);
+  assert.equal(c.messages.length, 3);
+});
+
+test("sent and received messages stay single across history refreshes and DOM fallback", () => {
+  const left = bound("left"), right = bound("right", "right", 180_000);
+  const incoming = row("received", "hello", { timestamp: 120_000 });
+  const outgoing = row("sent", "hello", { direction: "outgoing", timestamp: 120_000 });
+  const c = conversation([left, incoming, outgoing, right]);
+  const refreshed = [left, bound("received-new-dom", "hello", 120_100),
+    { ...bound("sent-new-dom", "hello", 120_200), direction: "outgoing" as const }, right];
+  for (let pass = 0; pass < 3; pass++) {
+    assert.deepEqual(ingestLatest(c, refreshed), []);
+    assert.deepEqual(ingest(c, refreshed.map(m => ({ ...m, platformMessageId: undefined }))), []);
+    assert.deepEqual(c.messages.map(m => m.id), ["left", "received", "sent", "right"]);
+    assert.equal(c.messages.filter(m => m.text === "hello" && m.direction === "incoming").length, 1);
+    assert.equal(c.messages.filter(m => m.text === "hello" && m.direction === "outgoing").length, 1);
+  }
+});
+
+test("a conflicting server ID on a cached DOM copy is never folded into another message", () => {
+  const a = bound("a", "same"), b = bound("b", "same");
+  const c = conversation([a, b]);
+  ingest(c, [{ ...a, id: "b" }]);
+  assert.equal(c.messages.length, 2);
+  assert.deepEqual(c.messages.map(m => m.platformMessageId), [a.platformMessageId, b.platformMessageId]);
+});
+
+test("bounded fingerprint repair rejects partial spans, changed dates, directions and server IDs", () => {
+  const left = bound("left"), right = bound("right", "right", 180_000);
+  for (const patch of [{ timestamp: 60_000 }, { direction: "outgoing" as const }, { platformMessageId: "different-server" }]) {
+    const c = conversation([left, row("old", "same", { timestamp: 120_000, ...patch }), right]);
+    ingestLatest(c, [left, bound("new", "same", 120_100), right]);
+    assert.equal(c.messages.length, 4);
+  }
+  const c = conversation([left, row("old", "same"), row("not-rendered"), right]);
+  ingestLatest(c, [left, bound("new", "same", 120_100), right]);
+  assert.equal(c.messages.length, 5);
+});
+
+test("a DOM fingerprint claimed by two different server messages cannot bridge their cached copies", () => {
+  const a = bound("a", "same"), b = bound("b", "same");
+  const c = conversation([a, b, row("shared-dom", "same")]);
+  ingest(c, [{ ...a, id: "shared-dom" }, { ...b, id: "shared-dom" }]);
+  assert.equal(c.messages.length, 3);
+  assert.equal(c.messages.find(m => m.id === "shared-dom")?.platformMessageId, undefined);
+});
+
 test("legacy copied blocks and bounded media aliases are repaired without losing older history or real photos", () => {
   const image = (id: string, ts: number) => bound(id, "[Image]", ts);
   const photoA = { ...image("photo-a", 10_000), attachments: [{ id: "photo-a-file", kind: "image" as const }] };

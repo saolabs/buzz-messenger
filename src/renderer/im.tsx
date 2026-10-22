@@ -1,5 +1,6 @@
 import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { Attachment, CallKind, ConversationView, Message } from "../core/types.ts";
+import { confirmPendingMessages, type PendingMessage } from "../core/pending-messages.ts";
 import { GroupIcon, statusIcon, useAvatar, useSession } from "./buddy.tsx";
 import { Composer } from "./composer.tsx";
 import { GroupMembers } from "./group-members.tsx";
@@ -37,7 +38,7 @@ function ToolbarButton({ icon, w, h, label, onClick, disabled = false }: { icon:
   );
 }
 
-type Pending = { key: number; text: string; error?: string };
+type Pending = PendingMessage;
 
 // Chữ thay thế bộ đọc tự tạo cho tin chỉ có ảnh/âm thanh — đã hiện tệp thì ẩn chữ này.
 const PLACEHOLDER = /^(?:\[(?:Hình ảnh|Tin nhắn thoại)\]|Ảnh(?:\s+\d+)?|Photo(?:\s+\d+)?|Image(?:\s+\d+)?|Tin nhắn thoại|Voice message)$/iu;
@@ -331,8 +332,7 @@ export function ImWindow() {
     setPending((p) => {
       const list = p[id];
       if (!list?.length) return p;
-      const sent = view.messages.filter((m) => m.direction === "outgoing").map((m) => m.text);
-      return { ...p, [id]: list.filter((x) => x.error || !sent.includes(x.text)) };
+      return { ...p, [id]: confirmPendingMessages(list, view.messages) };
     });
     if (!fresh.length) return;
     if (fresh.some(isBuzz)) buzz();
@@ -365,12 +365,13 @@ export function ImWindow() {
 
   const send = (id: string, text: string) => {
     const key = Date.now() + Math.random();
-    setPending((p) => ({ ...p, [id]: [...(p[id] ?? []), { key, text }] }));
+    const knownIds = new Set(seen.current.get(id));
+    setPending((p) => ({ ...p, [id]: [...(p[id] ?? []), { key, text, knownIds }] }));
     if (text === BUZZ) buzz();
+    const fail = (error: string) => setPending((p) => ({ ...p, [id]: (p[id] ?? []).map((x) => x.key === key ? { ...x, error } : x) }));
     window.ym.send(id, text).then((result) => {
-      if (!result.ok)
-        setPending((p) => ({ ...p, [id]: (p[id] ?? []).map((x) => (x.key === key ? { ...x, error: result.error ?? "?" } : x)) }));
-    });
+      if (!result.ok) fail(result.error ?? t("im.sendUncertain"));
+    }).catch(() => fail(t("im.sendUncertain")));
   };
 
   const close = (id: string) => {
@@ -402,7 +403,7 @@ export function ImWindow() {
     { label: t("menu.edit"), items: [{ label: t("menu.copy"), onClick: () => document.execCommand("copy") }, { label: t("menu.selectAll"), onClick: () => document.execCommand("selectAll") }] },
     { label: t("menu.view"), items: [{ label: t("menu.showImages"), checked: true, disabled: true }, "-", ...zoomItems] },
     { label: t("menu.actions"), items: [{ label: t("menu.buzz"), onClick: () => active && send(active, BUZZ) }] },
-    { label: t("menu.help"), items: [{ label: t("app.about"), disabled: true }] },
+    { label: t("menu.help"), items: [{ label: t("menu.about"), onClick: () => window.ym.showAbout() }] },
   ];
 
   return (

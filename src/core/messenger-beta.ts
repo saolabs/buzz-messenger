@@ -155,9 +155,9 @@ export function messengerBetaScript(input: BetaRequest): string {
 }
 
 // Keep DOM media and local IDs. Match dated rows first, then fill only complete
-// ordered spans bounded by two known server IDs. A partial repeated-text window
-// cannot borrow another occurrence's identity.
-export function enrichBetaMessages(dom: NativeMessage[], api: BetaText[], media: BetaMedia[] = []): { messages: NativeMessage[]; matched: number } {
+// ordered spans bounded by known server IDs or the verified end of the API
+// window. A partial repeated-text window cannot borrow another occurrence's ID.
+export function enrichBetaMessages(dom: NativeMessage[], api: BetaText[], media: BetaMedia[] = [], total?: number): { messages: NativeMessage[]; matched: number } {
   const signature = (m: { direction: string; text: string }) => JSON.stringify([m.direction, m.text.normalize("NFC")]);
   type Candidate = BetaText | BetaMedia;
   const domGroups = new Map<string, number[]>(), groups = new Map<string, BetaText[]>();
@@ -195,6 +195,25 @@ export function enrichBetaMessages(dom: NativeMessage[], api: BetaText[], media:
     }
     if (span.length !== right - left - 1 || new Set(span.map(([, c]) => c.id)).size !== span.length) continue;
     for (const [i, c] of span) { proposals.set(i, c); counts.set(c.id, 1); }
+  }
+  // Weekday labels have no reliable absolute date. At the timeline's end we
+  // can still bind them when every row after a dated anchor agrees with the
+  // entire remaining API window. `total` includes unsupported/system rows so
+  // missing rows, partial history and stale API snapshots cannot shorten it.
+  const lastAnchor = anchors.at(-1);
+  if (lastAnchor && Number.isSafeInteger(total)) {
+    const [left, a] = lastAnchor;
+    const length = dom.length - left - 1;
+    if (a.order !== undefined && length > 0 && a.order + length === total! - 1) {
+      const tail: [number, Candidate][] = [];
+      for (let i = left + 1; i < dom.length; i++) {
+        const c = byOrder.get(a.order + i - left);
+        if (!c || !compatible(dom[i], c) || (dom[i].timestamp !== null && !dated(dom[i], c)) || counts.has(c.id)) { tail.length = 0; break; }
+        tail.push([i, c]);
+      }
+      if (tail.length === length && new Set(tail.map(([, c]) => c.id)).size === length)
+        for (const [i, c] of tail) proposals.set(i, c);
+    }
   }
   return { matched: proposals.size, messages: dom.map((m, i) => {
     const c = proposals.get(i);

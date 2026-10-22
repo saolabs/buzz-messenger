@@ -7,6 +7,7 @@ import { Vault } from "./vault.ts";
 import { runStartupSmoke } from "./startup-smoke.ts";
 import { Uploads } from "./uploads.ts";
 import { AUDIBLES } from "../src/core/uploads.ts";
+import { showAboutWindow } from "./about.ts";
 
 // Smoke runs use an isolated profile and never start the Messenger service.
 const smokeTest = process.argv.includes("--smoke-test");
@@ -228,6 +229,10 @@ ipcMain.on("win:close", (e) => BrowserWindow.fromWebContents(e.sender)?.close())
 ipcMain.on("win:buzz", (e) => {
   const w = BrowserWindow.fromWebContents(e.sender);
   if (w) shake(w);
+});
+ipcMain.on("app:about", (e) => {
+  const parent = BrowserWindow.fromWebContents(e.sender);
+  if (parent) showAboutWindow(parent, app.getVersion(), settings.lang, ICON);
 });
 ipcMain.on("im:open", (_e, contactId: string) => openIm(contactId));
 ipcMain.on("im:detach", (_e, contactId: string) => openIm(contactId, true));

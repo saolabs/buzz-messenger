@@ -11,7 +11,7 @@ const image=path.join(dir,'fixture.png'),text=path.join(dir,'fixture.txt');fs.wr
 const c={id:'fixture',accountId:'fb',platformId:'123',name:'Fixture',url:'https://www.facebook.com/messages/t/123/',initialized:true,messages:[]};
 const account={id:'fb',name:'Fixture',platform:'messenger-personal',facebookUserId:'1',cookies:[{domain:'.facebook.com',path:'/',name:'c_user',value:'1',secure:true,httpOnly:true,sameSite:'no_restriction'}]};
 const state={version:1,accounts:[account],conversations:[c]},vault={read:()=>structuredClone(state),mutate:async fn=>fn(state)};
-let drift=false,received=[],lastResult,plainSends=0;
+let drift=false,received=[],lastResult,plainSends=0,plainReply='ok';
 const chat=()=>`<!doctype html><div role="grid" aria-label="Chats"><a aria-current="page" href="/messages/t/123/"><span dir="auto">Fixture</span></a></div><main role="main"><section aria-label="Conversation with Fixture"><div role="log" id="history"><div role="article" data-message-id="old"><div role="button" aria-label="Message sent by Fixture at 10:19: Offline old message"></div></div></div><input type="file" multiple accept="*/*"><div id="draft-files"></div><div contenteditable="true" role="textbox" aria-label="Message Fixture"></div><button aria-label="Press Enter to send">Send</button></section></main><script>
 let selectedFiles=[];const input=document.querySelector('input'),box=document.querySelector('[contenteditable]'),button=document.querySelector('button');
 input.addEventListener('change',()=>{selectedFiles=[...input.files];input.value='';const drafts=document.querySelector('#draft-files');drafts.replaceChildren();for(const f of selectedFiles){const node=f.type.startsWith('image/')?new Image():document.createElement('span');if(node instanceof HTMLImageElement){node.width=80;node.height=80;node.src=URL.createObjectURL(f)}else node.textContent=f.name;drafts.append(node)}if(${drift})history.replaceState({},'', '/messages/t/999/')});
@@ -34,13 +34,14 @@ app.whenReady().then(async()=>{
  ipcMain.handle('ym:session',()=>loginSession);
  const emitSession=phase=>{loginSession={...loginSession,phase};wc.send('ym:session',loginSession)};
  ipcMain.handle('ym:contacts',()=>[{id:c.id,name:c.name,status:'offline',unread:false}]);
+ ipcMain.handle('ym:searchContacts',()=>({ok:true,contacts:[]}));
  ipcMain.handle('ym:conversation',()=>({contact:{id:c.id,name:c.name,status:'offline',unread:false},messages:[]}));
  ipcMain.on('im:ready',e=>e.sender.send('im:open',c.id,true));
  ipcMain.handle('ym:stageFiles',async(e,id,paths)=>({files:await uploads.stage(e.sender.id,id,paths)}));
  ipcMain.handle('ym:stageAudible',async(e,id,a)=>({files:await uploads.stage(e.sender.id,id,[path.join(repo,'resources/ym/Media',AUDIBLES.find(x=>x.id===a).file)])}));
  ipcMain.on('ym:discardFiles',(e,ids)=>uploads.discard(e.sender.id,ids));
  ipcMain.handle('ym:sendFiles',async(e,id,ids,caption)=>{const files=await uploads.claim(e.sender.id,id,ids);lastResult=await service.sendFiles(id,files,caption);uploads.finish(ids,!!lastResult.attempted);return lastResult});
- ipcMain.handle('ym:send',()=>{plainSends++;return {ok:true}});
+ ipcMain.handle('ym:send',()=>{plainSends++;if(plainReply==='reject')throw new Error('Offline IPC failure');return plainReply==='uncertain'?{ok:false,error:'Offline uncertain send'}:{ok:true}});
  await win.loadFile(path.join(repo,'out/renderer/index.html'),{hash:'buddy'});
  await wait(()=>wc.executeJavaScript("!!document.querySelector('.login-logo')"),'login rendered');
  await wc.executeJavaScript(`window.loginProof={};new MutationObserver(()=>{const connected=document.querySelector('.login-logo')?.getAttribute('src')?.endsWith('/connected.svg');if(connected&&!window.loginProof.connected)window.loginProof.connected=performance.now();if(document.querySelector('.search-area')&&!window.loginProof.revealed)window.loginProof.revealed=performance.now()}).observe(document.body,{childList:true,subtree:true,attributes:true})`);
@@ -108,5 +109,19 @@ app.whenReady().then(async()=>{
  await wait(()=>wc.executeJavaScript("document.querySelectorAll('.queued-file').length===0"),'sent queue cleared');
  assert.equal(browsers.uploadWindows.size,0,'successful upload leaked a page');
  drift=true;const attempt={started:false};await assert.rejects(browsers.sendFiles(c,[{path:text,name:'fixture.txt',image:false}],'',()=>true,attempt),/thay đổi/);assert.equal(attempt.started,true);assert.equal(received.length,1,'thread drift sent a file');
- browsers.shutdown();win.destroy();clearTimeout(timer);console.log('COMPOSER_INTEGRATION_OK: 2s success hold, cancelled/retried login, hover/pressed sprites, aligned search, formatting, audibles, backed File drop, image preview, real file bytes, caption, no auto/double send, thread drift, page cleanup');app.exit(0);
+ const echoed=[];
+ const emitMessages=()=>wc.send('ym:conversation',c.id,{contact:{id:c.id,name:c.name,status:'offline',unread:false},messages:echoed});
+ const echo=(id,baseline=false)=>echoed.push({id,text:'Offline repeated message',direction:'outgoing',timestamp:Date.now(),observedAt:Date.now(),baseline});
+ const submitText=async()=>{await wc.executeJavaScript("document.querySelector('textarea').focus()");await wc.debugger.sendCommand('Input.insertText',{text:'Offline repeated message'});await wc.executeJavaScript("document.querySelector('.send-button').click()")};
+ echo('old-echo',true);emitMessages();await wait(()=>wc.executeJavaScript("!!document.querySelector('[data-message-id=old-echo]')"),'old outgoing history');
+ for(const mode of ['uncertain','reject']){
+  plainReply=mode;await submitText();await wait(()=>wc.executeJavaScript("document.querySelectorAll('.pending.failed').length===1"),'send failure displayed');
+  emitMessages();await pause(150);assert.equal(await wc.executeJavaScript("document.querySelectorAll('.pending').length"),1,'old repeated text acknowledged a new send');
+  echo('confirmed-'+mode);emitMessages();await wait(()=>wc.executeJavaScript("document.querySelectorAll('.pending').length===0"),'late echo removed failed duplicate');
+ }
+ plainReply='ok';await submitText();await submitText();await wait(()=>wc.executeJavaScript("document.querySelectorAll('.pending').length===2"),'two pending sends');
+ echo('repeated-one');emitMessages();await wait(()=>wc.executeJavaScript("document.querySelectorAll('.pending').length===1"),'one echo acknowledges one send');
+ emitMessages();await pause(150);assert.equal(await wc.executeJavaScript("document.querySelectorAll('.pending').length"),1,'same echo reused on next poll');
+ echo('repeated-two');emitMessages();await wait(()=>wc.executeJavaScript("document.querySelectorAll('.pending').length===0"),'second distinct echo');
+ browsers.shutdown();win.destroy();clearTimeout(timer);console.log('COMPOSER_INTEGRATION_OK: login hold/cancellation, sprites, formatting, audibles, real attachment bytes, no double send, thread drift, late echo after errors/IPC rejection, repeated sends acknowledged once, page cleanup');app.exit(0);
 }).catch(e=>{console.error(e.stack);clearTimeout(timer);app.exit(1)});

@@ -69,6 +69,29 @@ export function reconcileMessageIdentities(c: Conversation, input: Observation[]
     }
     compact();
   }
+  // Resolve explicit DOM-to-server bridges for the entire capture first. A
+  // history capture can contain the new fingerprint before the cached one;
+  // processing those rows in order would otherwise create a second message.
+  const cachedByLocal = new Map<string, Message[]>();
+  for (const saved of c.messages) for (const id of [saved.id, ...(saved.aliasIds ?? [])]) {
+    const rows = cachedByLocal.get(id) ?? [];
+    rows.push(saved);
+    cachedByLocal.set(id, rows);
+  }
+  const claims = new Map<Message, Set<string>>();
+  for (const raw of input) if (raw.platformMessageId) {
+    for (const saved of cachedByLocal.get(raw.id) ?? []) {
+      if (sig(saved) !== sig(raw)) continue;
+      const ids = claims.get(saved) ?? new Set<string>();
+      ids.add(raw.platformMessageId);
+      claims.set(saved, ids);
+    }
+  }
+  const bindings = [...claims].flatMap(([saved, ids]) => !saved.platformMessageId && ids.size === 1 ? [{ saved, api: [...ids][0] }] : []);
+  if (bindings.some(({ saved, api }) => c.messages.some(m => m !== saved && m.platformMessageId === api) ||
+    bindings.some(other => other.saved !== saved && other.api === api))) backup();
+  for (const { saved, api } of bindings) saved.platformMessageId = api;
+
   const byApi = new Map<string, Message>();
   for (const m of c.messages) if (m.platformMessageId) {
     const existing = byApi.get(m.platformMessageId);
@@ -111,10 +134,10 @@ export function reconcileMessageIdentities(c: Conversation, input: Observation[]
   }
   compact();
   const source = [...observed.values()];
-  if (c.kind === "group") {
-    // A complete unchanged span between two server anchors can retain legacy
-    // media IDs even when that media has no LS text. Never match a partial span
-    // or a repeated legacy fingerprint from two different authors.
+  {
+    // A complete unchanged span between two server anchors can retain cached
+    // fingerprints before the newly verified IDs are inserted. Group media
+    // still requires its original legacy fingerprint and sender proof.
     const anchors = source.flatMap((m, i) => {
       const cached = c.messages.findIndex(old => m.platformMessageId && old.platformMessageId === m.platformMessageId);
       return cached < 0 ? [] : [{ source: i, cached }];
@@ -123,15 +146,22 @@ export function reconcileMessageIdentities(c: Conversation, input: Observation[]
       const left = anchors[n - 1], right = anchors[n];
       const old = c.messages.slice(left.cached + 1, right.cached), fresh = source.slice(left.source + 1, right.source);
       if (!old.length || old.length !== fresh.length || right.cached <= left.cached || old.length > 100) continue;
-      if (!fresh.every((raw, i) => raw.id === old[i].id ||
-        (!old[i].platformMessageId && raw.identity === "fingerprint" && raw.legacyFingerprintId === old[i].id &&
+      if (!fresh.every((raw, i) => {
+        const saved = old[i];
+        if (raw.id === saved.id) return true;
+        if (saved.platformMessageId || raw.identity !== "fingerprint") return false;
+        if (c.kind !== "group") return saved.identity === "fingerprint" && sig(saved) === sig(raw) &&
+          (saved.timestamp === null || raw.timestamp === null || Math.floor(saved.timestamp / 60_000) === Math.floor(raw.timestamp / 60_000));
+        return raw.legacyFingerprintId === saved.id &&
           source.filter(m => m.legacyFingerprintId === raw.legacyFingerprintId).length === 1 &&
-          old[i].direction === raw.direction && old[i].text.normalize("NFC") === raw.text.normalize("NFC") &&
-          sameSender(old[i].sender, raw.sender) && JSON.stringify((old[i].attachments ?? []).map(a => [a.kind, !!a.sticker])) === JSON.stringify((raw.attachments ?? []).map(a => [a.kind, !!a.sticker]))))) continue;
+          saved.direction === raw.direction && saved.text.normalize("NFC") === raw.text.normalize("NFC") &&
+          sameSender(saved.sender, raw.sender) && JSON.stringify((saved.attachments ?? []).map(a => [a.kind, !!a.sticker])) === JSON.stringify((raw.attachments ?? []).map(a => [a.kind, !!a.sticker]));
+      })) continue;
       fresh.forEach((raw, i) => {
         if (raw.id === old[i].id) return;
         backup();
         const ids = aliases(old[i].id, old[i].aliasIds, raw.aliasIds, [raw.id]);
+        if (raw.platformMessageId) old[i].platformMessageId = raw.platformMessageId;
         old[i].aliasIds = ids;
         source[left.source + 1 + i] = { ...raw, id: old[i].id, aliasIds: ids };
       });

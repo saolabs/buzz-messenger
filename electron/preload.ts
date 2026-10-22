@@ -13,6 +13,7 @@ const api: Bridge = {
   maximize: () => ipcRenderer.send("win:maximize"),
   close: () => ipcRenderer.send("win:close"),
   buzz: () => ipcRenderer.send("win:buzz"),
+  showAbout: () => ipcRenderer.send("app:about"),
   openIm: (contactId) => ipcRenderer.send("im:open", contactId),
   detachIm: (contactId) => ipcRenderer.send("im:detach", contactId),
   onImOpen: (cb) => {

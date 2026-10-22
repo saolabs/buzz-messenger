@@ -9,6 +9,8 @@ import type { Conversation } from '../src/core/types.ts';
 
 function fixture(count=3) {
  const stamp=new Date().setHours(10,19,0,0),state={user:'42',badMember:false,flip:false,calls:[] as string[],reads:0};
+ // Keep the fixture's 10:19 messages in the past even when CI runs in the morning.
+ const clock=Math.max(Date.now(),stamp),FixtureDate=class extends Date {static now(){return clock}};
  const rows=Array.from({length:count},(_,i)=>({threadKey:'123',contactId:String(1000+i),nickname:`sealed:Nick ${i}`,isAdmin:i===0}));
  const messages=[{threadKey:'123',messageId:'mid-a',senderId:'1000',text:'sealed:Hello',timestampMs:String(stamp)},{threadKey:'123',messageId:'mid-b',senderId:'1001',text:'sealed:Hello',timestampMs:String(stamp)}];
  const I={of_string:String,of_float:(n:number)=>String(Math.floor(n)),to_string:String};
@@ -23,8 +25,8 @@ function fixture(count=3) {
     return {next:async()=>{if(state.flip)state.user='99';const row=ordered[i++];return row?{done:false,value:[[],row]}:{done:true}}};
    },
  })};
- const ctx=vm.createContext({location:{protocol:'https:',hostname:'www.facebook.com',port:'',pathname:'/messages/t/123/'},require:(name:string)=>({CurrentUser:{getID:()=>state.user},I64:I,MAWVault:{unvault:(text:string)=>text.startsWith('sealed:')?text.slice(7):text},LSDatabaseSingleton:{getLSDatabaseSingletonPromiseOrValue:async()=>db},LSMessagingThreadTypeUtil:{isGroup:()=>true}} as any)[name],URL,Date,Map,Set,BigInt});
- const run=(patch:object={})=>vm.runInContext(messengerGroupScript({threadId:'123',userId:'42',deadline:Date.now()+5000,...patch}),ctx) as Promise<GroupSnapshot>;
+ const ctx=vm.createContext({location:{protocol:'https:',hostname:'www.facebook.com',port:'',pathname:'/messages/t/123/'},require:(name:string)=>({CurrentUser:{getID:()=>state.user},I64:I,MAWVault:{unvault:(text:string)=>text.startsWith('sealed:')?text.slice(7):text},LSDatabaseSingleton:{getLSDatabaseSingletonPromiseOrValue:async()=>db},LSMessagingThreadTypeUtil:{isGroup:()=>true}} as any)[name],URL,Date:FixtureDate,Map,Set,BigInt});
+ const run=(patch:object={})=>vm.runInContext(messengerGroupScript({threadId:'123',userId:'42',deadline:clock+5000,...patch}),ctx) as Promise<GroupSnapshot>;
  return {state,run,ctx,stamp};
 }
 test('bounded group read joins only participants and their message authors, keeps nicknames and roles',async()=>{

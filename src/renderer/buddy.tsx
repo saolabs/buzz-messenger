@@ -573,7 +573,7 @@ export function BuddyWindow({ skins }: { skins: string[] }) {
           { label: t("menu.actions"), items: [{ label: t("menu.sendIm"), disabled: true }] },
         ]
       : []),
-    { label: t("menu.help"), items: [{ label: t("app.about"), disabled: true }] },
+    { label: t("menu.help"), items: [{ label: t("menu.about"), onClick: () => window.ym.showAbout() }] },
   ];
   return (
     <Frame main menus={menus} onSkinButton={() => setPicker(!picker)}>

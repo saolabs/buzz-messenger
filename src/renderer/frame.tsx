@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState, type ReactNode } from "react";
+import { useContext, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { TEXT_SIZES, ZOOMS } from "../core/types.ts";
 import { useT } from "./i18n.ts";
 import { Icon, Slice, ViewContext } from "./skin.tsx";
@@ -62,11 +62,29 @@ function WindowButtons({ onSkinButton }: { onSkinButton?: () => void }) {
 export function MenuBar({ menus, main }: { menus: Menu[]; main?: boolean }) {
   const [open, setOpen] = useState<number | null>(null);
   const ref = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    if (open === null) return;
+    const fit = () => {
+      const popup = ref.current?.querySelector<HTMLElement>(".menu-popup");
+      if (!popup) return;
+      popup.style.left = "0px";
+      const bounds = popup.getBoundingClientRect();
+      popup.style.left = `${Math.max(4 - bounds.left, Math.min(0, window.innerWidth - bounds.right - 4))}px`;
+    };
+    fit();
+    window.addEventListener("resize", fit);
+    return () => window.removeEventListener("resize", fit);
+  }, [open, menus]);
   useEffect(() => {
     if (open === null) return;
     const close = (e: MouseEvent) => !ref.current?.contains(e.target as Node) && setOpen(null);
+    const escape = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(null); };
     window.addEventListener("mousedown", close);
-    return () => window.removeEventListener("mousedown", close);
+    window.addEventListener("keydown", escape);
+    return () => {
+      window.removeEventListener("mousedown", close);
+      window.removeEventListener("keydown", escape);
+    };
   }, [open]);
   return (
     <div className={`menubar ${main ? "main" : ""}`} ref={ref}>

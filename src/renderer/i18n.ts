@@ -12,6 +12,7 @@ const en = {
   "menu.contacts": "Contacts",
   "menu.actions": "Actions",
   "menu.help": "Help",
+  "menu.about": "About Buzz! Messenger",
   "menu.signIn": "Sign In",
   "menu.signOut": "Sign Out",
   "menu.skin": "Change Skin...",
@@ -145,6 +146,7 @@ const en = {
   "me.renameHint": "Name shown in your chat windows. Leave empty to use your Facebook name (or your ID {id}).",
   "im.you": "You",
   "im.sendFailed": "Not sent: {error}",
+  "im.sendUncertain": "Could not confirm sending. Check Messenger before trying again.",
   "notYet": "(not supported yet)",
 };
 type Key = keyof typeof en;
@@ -160,6 +162,7 @@ const vi: Record<Key, string> = {
   "menu.contacts": "Liên hệ",
   "menu.actions": "Hành động",
   "menu.help": "Trợ giúp",
+  "menu.about": "Giới thiệu",
   "menu.signIn": "Đăng nhập",
   "menu.signOut": "Đăng xuất",
   "menu.skin": "Đổi giao diện...",
@@ -293,6 +296,7 @@ const vi: Record<Key, string> = {
   "me.renameHint": "Tên hiện trong cửa sổ chat. Để trống thì dùng tên Facebook (hoặc ID {id}).",
   "im.you": "Bạn",
   "im.sendFailed": "Chưa gửi được: {error}",
+  "im.sendUncertain": "Chưa xác nhận được đã gửi. Kiểm tra Messenger trước khi thử lại.",
   "notYet": "(chưa hỗ trợ)",
 };
 

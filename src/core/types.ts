@@ -185,6 +185,7 @@ export type Bridge = {
   maximize(): void;
   close(): void;
   buzz(): void;
+  showAbout(): void;
   openIm(contactId: string): void;
   detachIm(contactId: string): void;
   onImOpen(cb: (contactId: string, focus: boolean) => void): () => void;
