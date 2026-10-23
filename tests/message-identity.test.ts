@@ -179,3 +179,47 @@ test("media lookup follows server identity or a unique local alias and rejects a
   assert.equal(findObservedMessage(saved, [{ id: "old-dom" }, { id: "saved" }], saved.id), undefined);
   assert.equal(findObservedMessage(saved, [{ id: "old-dom", platformMessageId: "different" }], saved.id), undefined);
 });
+
+test("tin vừa gửi: ID tạm toàn chữ số rồi ID thật mid.$… là một tin, kể cả bản sao đã lưu từ trước", () => {
+  const sent = (patch: Partial<Message>) => row("dom:sent", "hả?", { direction: "outgoing", timestamp: 60_000, precision: "exact", ...patch });
+  // Lần đọc ngay sau khi gửi: ID tạm; vài giây sau: ID thật.
+  const c = conversation([]);
+  ingestLatest(c, [sent({ platformMessageId: "7519219052806936568" })]);
+  ingestLatest(c, [sent({ platformMessageId: "mid.$gAA2yur7ybc2nl8zZTWhZoePW6Bf4" })]);
+  assert.equal(c.messages.length, 1);
+  assert.equal(c.messages[0].platformMessageId, "mid.$gAA2yur7ybc2nl8zZTWhZoePW6Bf4");
+  // Đọc lại thấy ID tạm cũng không hạ cấp ID thật.
+  ingestLatest(c, [sent({ platformMessageId: "7519219052806936568" })]);
+  assert.equal(c.messages.length, 1);
+  assert.equal(c.messages[0].platformMessageId, "mid.$gAA2yur7ybc2nl8zZTWhZoePW6Bf4");
+
+  // Bản sao đã lưu từ bản cũ (bản thật nhận bản tạm làm alias) được gộp ở lần đọc kế tiếp.
+  const d = conversation([
+    sent({ platformMessageId: "7519219052806936568" }),
+    sent({ id: "api:mid.$x", platformMessageId: "mid.$x", aliasIds: ["dom:sent"] }),
+  ]);
+  ingestLatest(d, [sent({ id: "dom:sent", platformMessageId: "mid.$x" })]);
+  assert.equal(d.messages.length, 1);
+  assert.equal(d.messages[0].platformMessageId, "mid.$x");
+
+  // Hai tin khác nhau, cùng nội dung, đều có ID thật: vẫn giữ riêng.
+  const e = conversation([]);
+  ingestLatest(e, [sent({ platformMessageId: "mid.$a" }), sent({ id: "dom:other", platformMessageId: "mid.$b", timestamp: 61_000 })]);
+  assert.equal(e.messages.length, 2);
+});
+
+test("tin không ID máy chủ đổi ID tạm giữa hai lượt đọc (lúc có giờ lúc không) không bị thêm lại, tin mới vẫn ở cuối", () => {
+  const msg = (id: string, text: string, direction: Message["direction"], timestamp: number | null) =>
+    row(id, text, { direction, timestamp, precision: "minute", baseline: false });
+  const c = conversation([]);
+  // Lượt 1: Messenger chưa ghi giờ → ID suy từ chữ giờ thô.
+  ingestLatest(c, [msg("dom:b1", "BUZZ!!!", "outgoing", null), msg("dom:b1#2", "BUZZ!!!", "outgoing", null), msg("dom:b1#3", "BUZZ!!!", "outgoing", null), msg("dom:x1", ":x", "outgoing", null), msg("dom:i1", "BUZZ!!!", "incoming", null)]);
+  // Lượt 2: có giờ → toàn bộ ID đổi; thêm tin mới "p", "o".
+  ingestLatest(c, [msg("dom:b2", "BUZZ!!!", "outgoing", 60_000), msg("dom:b2#2", "BUZZ!!!", "outgoing", 60_000), msg("dom:b2#3", "BUZZ!!!", "outgoing", 60_000), msg("dom:x2", ":x", "outgoing", 60_000), msg("dom:i2", "BUZZ!!!", "incoming", 120_000), msg("dom:p", "p", "outgoing", 180_000), msg("dom:o", "o", "outgoing", 180_000)]);
+  assert.deepEqual(c.messages.map(m => m.text), ["BUZZ!!!", "BUZZ!!!", "BUZZ!!!", ":x", "BUZZ!!!", "p", "o"]);
+  assert.equal(c.messages[0].id, "dom:b1");
+  assert.ok(c.messages[0].aliasIds?.includes("dom:b2"));
+  // Lượt 3 với ID của lượt 2: vẫn không thêm.
+  ingestLatest(c, [msg("dom:x2", ":x", "outgoing", 60_000), msg("dom:i2", "BUZZ!!!", "incoming", 120_000), msg("dom:p", "p", "outgoing", 180_000), msg("dom:o", "o", "outgoing", 180_000)]);
+  assert.equal(c.messages.length, 7);
+});

@@ -450,6 +450,13 @@ export function messengerDOM(
         ...(label ? { label } : {}),
       });
     };
+    // Buzz!: tin trả lời hiện tin gốc (ảnh, tin thoại…) trong nút "Đi đến tin nhắn đã trả lời" → không phải tệp
+    // của tin này (bản cũ gắn ảnh người khác gửi vào tin trả lời).
+    const quoted = (e: Element) => {
+      for (let p = e.parentElement; p && p !== article.parentElement; p = p.parentElement)
+        if (/di den tin nhan da tra loi|go to replied message|replied message|original message/.test(plain(p.getAttribute("aria-label") ?? ""))) return true;
+      return false;
+    };
     // Buzz!: tìm ảnh trong cả khung tin (article). Messenger hiện đặt nút nhãn "Tin nhắn do…" cạnh khung tin,
     // không bao lấy nó, nên tìm trong `node` không bao giờ thấy ảnh. Bỏ avatar người gửi (ảnh nhỏ trong nút).
     for (const img of Array.from(
@@ -458,13 +465,14 @@ export function messengerDOM(
       // Avatar người thả cảm xúc / "đã xem" là ảnh 200×200 nhưng hiển thị 14–28px: xét kích thước HIỂN THỊ,
       // không xét naturalWidth (bản cũ coi avatar người thả cảm xúc là ảnh gửi trong tin).
       const alt = norm(img.alt || img.getAttribute("aria-label") || "");
-      if (/avatar|profile picture|anh dai dien|da xem|seen by|cam xuc|reacted|reaction/.test(plain(alt))) continue;
+      if (/avatar|profile picture|anh dai dien|da xem|seen by|cam xuc|reacted|reaction|hinh anh goc|original image/.test(plain(alt)) || quoted(img)) continue;
       if (img.width > 40 || img.height > 40)
         addMedia("image", img.currentSrc || img.src, alt);
     }
     for (const audio of Array.from(
       article.querySelectorAll<HTMLAudioElement>("audio"),
     )) {
+      if (quoted(audio)) continue;
       addMedia(
         "audio",
         audio.currentSrc ||
@@ -478,7 +486,7 @@ export function messengerDOM(
     let pictogram = "";
     for (const pic of Array.from(article.querySelectorAll<HTMLElement>('[role="img"][aria-label]'))) {
       const label = norm(pic.getAttribute("aria-label") ?? "");
-      if (!label || /avatar|anh dai dien|profile/.test(plain(label))) continue;
+      if (!label || /avatar|anh dai dien|profile/.test(plain(label)) || quoted(pic)) continue;
       const bg = getComputedStyle(pic).backgroundImage.match(/url\(["']?(https:[^"')]+)["']?\)/)?.[1];
       if (bg) {
         addMedia("image", bg, label);

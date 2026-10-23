@@ -658,3 +658,18 @@ test("ảnh, sticker (ảnh nền) và Like trong khung tin được nhận dù 
     d.window.close();
   }
 });
+
+test("Buzz!: tin trả lời không nhận ảnh của tin gốc trong khung trích dẫn", () => {
+  const markup = message("Trang Đinh", "10:05", "Yahoo luôn", "reply").replace(
+    "</div></div>",
+    `<div role="button" aria-label="${"Đi đến tin nhắn đã trả lời".normalize("NFD")}"><img alt="${"Hình ảnh gốc".normalize("NFD")}" width="240" src="https://scontent.fbcdn.net/original.jpg"></div></div></div>`,
+  );
+  const { d, run } = fixture(markup);
+  try {
+    const read = run("read");
+    assert.equal(read.messages[0].text, "Yahoo luôn");
+    assert.equal(read.messages[0].attachments, undefined);
+  } finally {
+    d.window.close();
+  }
+});

@@ -9,13 +9,16 @@ export function ingest(conversation: Conversation, observed: Omit<Message, "base
   const groupUpgrade = conversation.kind === "group" && conversation.groupIdentityVersion !== 1;
   if (groupUpgrade && conversation.messages.length) conversation.groupRepairBackup ??= { createdAt: Date.now(), messages: structuredClone(conversation.messages) };
   observed = reconcileMessageIdentities(conversation, observed);
+  observed = alignBySequence(conversation, observed);
   const ids = new Set(conversation.messages.map((m) => m.id));
   for (const raw of observed) {
     const saved = conversation.messages.find((m) => m.id === raw.id);
     if (!saved) continue;
     saved.text = raw.text;
-    if (raw.sender && !(saved.sender?.id && !raw.sender.id && (raw.direction === "outgoing" || sameSender(saved.sender, raw.sender)))) saved.sender = raw.sender;
-    if (raw.platformMessageId) saved.platformMessageId = raw.platformMessageId;
+    const keepFullName = !saved.sender?.id && !raw.sender?.id && saved.sender && raw.sender && saved.sender.name.length >= raw.sender.name.length && shortNameOf(raw.sender.name, saved.sender.name);
+    if (raw.sender && !keepFullName && !(saved.sender?.id && !raw.sender.id && (raw.direction === "outgoing" || sameSender(saved.sender, raw.sender)))) saved.sender = raw.sender;
+    // ID tạm toàn chữ số (tin vừa gửi) không được ghi đè ID thật "mid.$…" đã lưu.
+    if (raw.platformMessageId && !(/^\d+$/.test(raw.platformMessageId) && saved.platformMessageId && !/^\d+$/.test(saved.platformMessageId))) saved.platformMessageId = raw.platformMessageId;
     if (raw.aliasIds?.length) saved.aliasIds = raw.aliasIds;
     if (raw.timestamp !== null && (saved.timestamp === null || (raw.platformMessageId && raw.precision === "exact" && saved.precision !== "exact"))) {
       saved.timestamp = raw.timestamp;
@@ -61,6 +64,35 @@ export function ingest(conversation: Conversation, observed: Omit<Message, "base
 }
 
 export const latestId = (c: Conversation) => c.messages.at(-1)?.id ?? null;
+
+// Tin không có ID máy chủ mang ID suy từ nội dung + giờ; giờ lúc đọc được lúc không ("Thứ bảy 3:53sáng",
+// "1 phút trước"…) nên cùng một tin đổi ID giữa các lượt đọc → bị thêm lại cả khối, sai thứ tự. Lượt đọc là một
+// đoạn liên tục của dòng thời gian: khớp ≥ MIN_RUN tin liên tiếp (chiều + nội dung) với đoạn đã lưu thì đó là
+// cùng các tin → dùng lại ID đã lưu. Không đụng tin có ID máy chủ khác nhau.
+const MIN_RUN = 3;
+function alignBySequence(c: Conversation, observed: Omit<Message, "baseline">[]): Omit<Message, "baseline">[] {
+  const known = new Set(c.messages.flatMap((m) => [m.id, ...(m.aliasIds ?? [])]));
+  if (!observed.some((m) => !m.platformMessageId && !known.has(m.id))) return observed;
+  const key = (m: Pick<Message, "direction" | "text">) => `${m.direction}\u0000${m.text.normalize("NFC")}`;
+  const saved = c.messages.map(key),
+    seen = observed.map(key);
+  let best = { at: -1, length: 0 };
+  for (let at = 0; at < saved.length; at++) {
+    const length = Math.min(saved.length - at, seen.length);
+    if (length < MIN_RUN || length <= best.length) continue;
+    let same = true;
+    for (let i = 0; same && i < length; i++) same = saved[at + i] === seen[i];
+    if (same) best = { at, length };
+  }
+  if (best.at < 0) return observed;
+  return observed.map((raw, i) => {
+    const old = i < best.length ? c.messages[best.at + i] : undefined;
+    if (!old || old.id === raw.id || old.aliasIds?.includes(raw.id)) return raw;
+    if (raw.platformMessageId && old.platformMessageId && raw.platformMessageId !== old.platformMessageId) return raw;
+    old.aliasIds = [...new Set([...(old.aliasIds ?? []), raw.id])];
+    return { ...raw, id: old.id };
+  });
+}
 
 // A live snapshot is taken at the bottom of Messenger's timeline. A verified
 // API timestamp on its final row anchors that window after older cached rows,
@@ -113,8 +145,28 @@ export function arrivedWhileOnline(messages: Message[], knownIds: Set<string>, o
   return Boolean(knownIds.size && last && !knownIds.has(last.id) && last.direction === "incoming" && last.timestamp === null);
 }
 
-// Nội dung tin trong dòng xem trước, bỏ thời gian tương đối ở cuối ("… · 5 phút" → "…").
-export const previewMessage = (preview?: string) => (preview ?? "").replace(/\s*·\s*[^·]*$/u, "").trim();
+// Messenger hiện tên người lúc ngắn lúc đầy đủ, đổi qua lại giữa các lần tải ("Anh Tuấn" ↔ "Hoàng Anh Tuấn").
+// Tên ngắn là phần đuôi (các chữ cuối) của tên đầy đủ.
+export function shortNameOf(short: string, full: string) {
+  const words = (s: string) => s.normalize("NFC").trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
+  const a = words(short),
+    b = words(full);
+  return a.length > 0 && a.length <= b.length && a.every((w, i) => w === b[b.length - a.length + i]);
+}
+
+// Nội dung tin trong dòng xem trước: bỏ các đoạn đuôi "· 5 phút", "· 18 thg 10", "· Trả lời?", "· Trao đổi thêm?".
+export const previewMessage = (preview?: string) => {
+  const parts = (preview ?? "").split(/\s+·\s+|\s*·\s*$|^\s*·\s*/u);
+  while (parts.length > 1 && /^(\d[^·]{0,14}|vừa xong|just now|[^·]{1,24}\?)?$/iu.test(parts.at(-1)!.trim())) parts.pop();
+  return parts.join(" · ").trim();
+};
+// Hai dòng xem trước chỉ khác ở tên người đầu dòng (ngắn ↔ đầy đủ): "Anh Tuấn đã gửi…" ~ "Hoàng Anh Tuấn đã gửi…".
+function samePreview(a: string, b: string, name: string) {
+  if (a === b) return true;
+  const [long, short] = a.length > b.length ? [a, b] : [b, a];
+  const extra = long.slice(0, long.length - short.length).trim();
+  return long.endsWith(short) && Boolean(extra) && name.normalize("NFC").toLocaleLowerCase().startsWith(extra.normalize("NFC").toLocaleLowerCase());
+}
 // Dòng hệ thống của mã hóa đầu cuối: Messenger đổi qua lại giữa hai câu này khi đang khôi phục lịch sử → không phải tin.
 const E2EE_PLACEHOLDER = /mã hóa đầu cuối|không khôi phục được tin nhắn|end-to-end encrypt|restore messages/i;
 // Nội dung xem trước dùng để so sánh; rỗng = chưa biết (dòng chưa vẽ xong, chỉ có giờ, hay dòng hệ thống).
@@ -150,7 +202,7 @@ export function reconcileInbox(state: State, accountId: string, scan: InboxScan)
       c.url = thread.url;
       if (thread.name) c.name = thread.name;
       // Preview chưa biết (xem realPreview) không phải tin mới; không thì mỗi lượt quét đọc lại cả loạt hội thoại.
-      const previewChanged = Boolean(realPreview(thread.preview)) && realPreview(c.inboxPreview) !== realPreview(thread.preview);
+      const previewChanged = Boolean(realPreview(thread.preview)) && !samePreview(realPreview(c.inboxPreview), realPreview(thread.preview), thread.name || c.name);
       if (previewChanged || (thread.unread && !c.inboxUnread)) changed.push(c.id);
       if (previewChanged) hinted.push(c.id);
     }

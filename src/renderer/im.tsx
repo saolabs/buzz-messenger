@@ -356,9 +356,18 @@ export function ImWindow() {
   const activeView = active ? views[active] : undefined;
   useEffect(() => {
     const report = () => document.hasFocus() && activeRef.current && window.ym.seen(activeRef.current);
+    // Cửa sổ mở bằng bấm đúp có focus trước khi effect gắn listener, bấm vào cửa sổ đã có focus thì không phát
+    // "focus" → báo cả khi người dùng bấm chuột/ gõ phím trong cửa sổ (tương tác = đang nhìn).
+    const interact = () => activeRef.current && window.ym.seen(activeRef.current);
     report();
     window.addEventListener("focus", report);
-    return () => window.removeEventListener("focus", report);
+    window.addEventListener("pointerdown", interact);
+    window.addEventListener("keydown", interact);
+    return () => {
+      window.removeEventListener("focus", report);
+      window.removeEventListener("pointerdown", interact);
+      window.removeEventListener("keydown", interact);
+    };
   }, [active, activeView]);
   // Báo main những người đang hiển thị để đọc tin định kỳ.
   useEffect(() => window.ym.watch(tabs), [tabs]);

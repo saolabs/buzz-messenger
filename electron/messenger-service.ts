@@ -491,7 +491,13 @@ export class MessengerService {
   private async refreshWatched() {
     // Đang gửi trên trang live thì không đọc chen vào (lần đọc có thể tải lại trang giữa lúc gửi).
     // Mỗi hội thoại một trang riêng → đọc song song, cửa sổ này chậm không kéo cửa sổ khác.
-    await Promise.all([...this.watched].filter((id) => !this.sending.has(id) && !this.histories.has(id)).map((id) => this.read(id, "live")));
+    await Promise.all(
+      [...this.watched]
+        .filter((id) => !this.sending.has(id) && !this.histories.has(id))
+        .map(async (id) => {
+          if (await this.read(id, "live")) this.markSeenIfWanted(id);
+        }),
+    );
   }
   private sending = new Set<string>();
 
@@ -639,9 +645,19 @@ export class MessengerService {
 
   // Facebook chỉ đánh dấu "đã xem" khi trang hội thoại có focus; trang live của Buzz chạy ẩn nên phải báo riêng.
   // Chỉ khi Messenger còn báo chưa đọc (khỏi gửi lặp mỗi lần cửa sổ được focus).
+  // Giao diện báo lúc vừa mở tab (trước cả watch(), trang live còn đang tải) → ghi nhớ rồi làm sau lượt đọc live
+  // thành công kế tiếp. Giữ 15s để kịp lượt quét inbox cập nhật "chưa đọc" khi tin vừa tới lúc đang nhìn.
+  private seenWanted = new Map<string, number>();
   seen(id: string) {
+    this.seenWanted.set(id, Date.now());
+  }
+  private markSeenIfWanted(id: string) {
+    const at = this.seenWanted.get(id);
+    if (at === undefined) return;
+    if (Date.now() - at > 15_000) return void this.seenWanted.delete(id);
     const c = this.conversationById(id);
-    if (!c?.inboxUnread || !this.watched.has(id)) return;
+    if (!c?.inboxUnread) return;
+    this.seenWanted.delete(id);
     void this.browsers
       .markSeen(c)
       .then((state) => log(`đánh dấu đã xem "${c.name}": ${JSON.stringify(state)}`))

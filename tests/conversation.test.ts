@@ -96,3 +96,24 @@ test("half-rendered or e2ee-placeholder inbox preview is not a change and keeps 
   assert.equal(s.conversations[0].inboxPreview, "chào · 1 phút");
   assert.equal(reconcileInbox(s, "fb", scan([{ platformId: "a", preview: "BUZZ!!! · 2 phút" }])).changed.length, 1);
 });
+
+test("tên người ngắn ↔ đầy đủ và gợi ý '· Trả lời?' không làm inbox/ tin bị coi là đổi", async () => {
+  const { previewMessage, shortNameOf } = await import("../src/core/conversation.ts");
+  assert.equal(previewMessage("BUZZ!!! · 12 giờ · Trả lời?"), "BUZZ!!!");
+  assert.equal(previewMessage("Bạn: À check tele ấy · Trao đổi thêm?"), "Bạn: À check tele ấy");
+  assert.equal(previewMessage("· 14 giờ · Trả lời?"), "");
+  assert.equal(shortNameOf("Anh Tuấn", "Hoàng Anh Tuấn"), true);
+  assert.equal(shortNameOf("Hoàng Anh", "Hoàng Anh Tuấn"), false);
+
+  const s = state();
+  reconcileInbox(s, "fb", scan([{ platformId: "a", name: "Hoàng Anh Tuấn", preview: "Anh Tuấn đã gửi một nhãn dán. · 1 tuần" }]));
+  assert.deepEqual(reconcileInbox(s, "fb", scan([{ platformId: "a", name: "Hoàng Anh Tuấn", preview: "Hoàng Anh Tuấn đã gửi một nhãn dán. · 1 tuần" }])).changed, []);
+  assert.deepEqual(reconcileInbox(s, "fb", scan([{ platformId: "a", name: "Hoàng Anh Tuấn", preview: "Anh Tuấn đã gửi một nhãn dán. · 1 tuần · Trả lời?" }])).changed, []);
+  assert.equal(reconcileInbox(s, "fb", scan([{ platformId: "a", name: "Hoàng Anh Tuấn", preview: "Anh Tuấn: chào · 1 phút" }])).changed.length, 1);
+
+  const c = s.conversations[0];
+  const m = { ...msg("1"), sender: { name: "Hoàng Anh Tuấn" } };
+  ingest(c, [m]);
+  ingest(c, [{ ...m, sender: { name: "Anh Tuấn" } }]);
+  assert.equal(c.messages[0].sender?.name, "Hoàng Anh Tuấn");
+});

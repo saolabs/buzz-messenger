@@ -7,6 +7,10 @@ const signature = (m: Observation, group = false) => JSON.stringify([
   (m.attachments ?? []).map(a => [a.kind, Boolean(a.sticker)]),
   group ? m.sender?.id ?? m.sender?.name.normalize("NFC") ?? null : null,
 ]);
+// Tin vừa gửi mang ID tạm toàn chữ số (Messenger gán trước khi máy chủ xác nhận); vài giây sau thành ID thật
+// "mid.$…". ID tạm không được chặn việc nhận ra đó là cùng một tin.
+const provisional = (id?: string) => Boolean(id && /^\d+$/.test(id));
+const conflicting = (a?: string, b?: string) => Boolean(a && b && a !== b && provisional(a) === provisional(b));
 const aliases = (primary: string, ...ids: (string[] | undefined)[]) =>
   [...new Set(ids.flatMap(x => x ?? []))].filter(id => id !== primary);
 
@@ -28,7 +32,7 @@ export function reconcileMessageIdentities(c: Conversation, input: Observation[]
   };
   const fold = (old: Message, target: Message) => {
     if (old.id === target.id || removed.has(old.id)) return;
-    if (old.platformMessageId && old.platformMessageId !== target.platformMessageId) return;
+    if (old.platformMessageId && old.platformMessageId !== target.platformMessageId && !(provisional(old.platformMessageId) && target.platformMessageId && !provisional(target.platformMessageId))) return;
     backup();
     target.aliasIds = aliases(target.id, target.aliasIds, [old.id], old.aliasIds);
     removed.add(old.id);
@@ -99,6 +103,13 @@ export function reconcileMessageIdentities(c: Conversation, input: Observation[]
     else byApi.set(m.platformMessageId, m);
   }
   compact();
+  // Bản sao do ID tạm để lại: tin có ID thật nhận bản tạm làm alias (cùng chiều, cùng nội dung) → gộp làm một.
+  for (const m of c.messages) if (m.platformMessageId && !provisional(m.platformMessageId))
+    for (const alias of m.aliasIds ?? []) {
+      const old = c.messages.find(x => x.id === alias);
+      if (old && old !== m && provisional(old.platformMessageId) && sig(old) === sig(m)) fold(old, m);
+    }
+  compact();
   const byId = new Map<string, Observation>();
   for (const m of c.messages) {
     byId.set(m.id, m);
@@ -120,12 +131,12 @@ export function reconcileMessageIdentities(c: Conversation, input: Observation[]
       if (candidates.length === 1 && sameSender(candidates[0].sender, raw.sender)) match = candidates[0];
     }
     if (c.kind === "group" && match && !sameSender(match.sender, raw.sender) && !(raw.direction === "outgoing" && !raw.sender?.id)) match = undefined;
-    if (raw.platformMessageId && match?.platformMessageId && raw.platformMessageId !== match.platformMessageId) match = undefined;
+    if (conflicting(raw.platformMessageId, match?.platformMessageId)) match = undefined;
     const id = match?.id ?? (byId.has(raw.id) && raw.platformMessageId ? `api:${raw.platformMessageId}` : raw.id);
     const ids = aliases(id, match?.aliasIds, raw.aliasIds, raw.id !== id ? [raw.id] : []);
     const row = { ...raw, id, ...(ids.length ? { aliasIds: ids } : {}) };
     if (match) {
-      if (raw.platformMessageId) match.platformMessageId = raw.platformMessageId;
+      if (raw.platformMessageId && !(provisional(raw.platformMessageId) && match.platformMessageId && !provisional(match.platformMessageId))) match.platformMessageId = raw.platformMessageId;
       if (ids.length) match.aliasIds = ids;
     }
     if (raw.platformMessageId) byApi.set(raw.platformMessageId, (match ?? row) as Message);
